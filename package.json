@@ -1,0 +1,19 @@
+{
+  "name": "owd-theme-nova",
+  "private": true,
+  "version": "3.0.0-alpha.0",
+  "description": "Open Web Desktop theme",
+  "homepage": "https://github.com/owdproject/theme-nova#readme",
+  "bugs": {
+    "url": "https://github.com/owdproject/theme-nova/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owdproject/theme-nova.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": {
+    "name": "dxlliv",
+    "url": "https://github.com/dxlliv"
+  }
+}
