@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
-    "@owdproject/app-classic-audioplayer": "workspace:*",
-    "@owdproject/core": "workspace:*",
+    "@owdproject/app-classic-audioplayer": "latest",
+    "@owdproject/core": "3.2.0",
     "@owdproject/module-fs": "workspace:*",
     "@owdproject/module-persistence": "workspace:*",
     "nuxt": "^4.3.0",
