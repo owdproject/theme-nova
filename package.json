@@ -1,9 +1,9 @@
 {
   "name": "@owdproject/theme-nova",
   "version": "0.0.1",
-  "description": "Open Web Desktop theme (reference shell)",
+  "description": "Open Web Desktop theme",
   "homepage": "https://github.com/owdproject/theme-nova#readme",
-  "license": "OWD-1.0-reserved",
+  "license": "MIT",
   "author": {
     "name": "Open Web Desktop Team",
     "url": "https://github.com/owdproject"
