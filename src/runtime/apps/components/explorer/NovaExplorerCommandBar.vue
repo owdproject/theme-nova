@@ -1,69 +1,58 @@
-<script setup lang="ts">
-import type { IWindowController } from '@owdproject/core'
-import type { MenuItem } from 'primevue/menuitem'
-import Button from 'primevue/button'
-import Menu from 'primevue/menu'
-import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import NovaExplorerOverflowMenu from './NovaExplorerOverflowMenu.vue'
-
-const props = defineProps<{
-  window: IWindowController
-  fsExplorer: NonNullable<IWindowController['fsExplorer']>
-  overflowMenu: MenuItem[]
-}>()
-
-const { t } = useI18n()
-
-const viewMenu = ref<InstanceType<typeof Menu> | null>(null)
-const sortMenu = ref<InstanceType<typeof Menu> | null>(null)
-
-function toggleView(e: Event) {
-  viewMenu.value?.toggle(e)
+<script setup>
+import Button from "primevue/button";
+import Menu from "primevue/menu";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import NovaExplorerOverflowMenu from "./NovaExplorerOverflowMenu.vue";
+const props = defineProps({
+  window: { type: Object, required: true },
+  fsExplorer: { type: null, required: true },
+  overflowMenu: { type: Array, required: true }
+});
+const { t } = useI18n();
+const viewMenu = ref(null);
+const sortMenu = ref(null);
+function toggleView(e) {
+  viewMenu.value?.toggle(e);
 }
-
-function toggleSort(e: Event) {
-  sortMenu.value?.toggle(e)
+function toggleSort(e) {
+  sortMenu.value?.toggle(e);
 }
-
-const viewItems = computed<MenuItem[]>(() => [
+const viewItems = computed(() => [
   {
-    label: t('apps.explorer.layout.largeIcons'),
-    command: () => props.fsExplorer.setLayout('largeIcons'),
+    label: t("apps.explorer.layout.largeIcons"),
+    command: () => props.fsExplorer.setLayout("largeIcons")
   },
   {
-    label: t('apps.explorer.layout.smallIcons'),
-    command: () => props.fsExplorer.setLayout('smallIcons'),
+    label: t("apps.explorer.layout.smallIcons"),
+    command: () => props.fsExplorer.setLayout("smallIcons")
   },
   {
-    label: t('apps.explorer.layout.list'),
-    command: () => props.fsExplorer.setLayout('list'),
+    label: t("apps.explorer.layout.list"),
+    command: () => props.fsExplorer.setLayout("list")
   },
   {
-    label: t('apps.explorer.layout.details'),
-    command: () => props.fsExplorer.setLayout('details'),
-  },
-])
-
-/** Fluent popup panels (PrimeVue portals to body; styled in explorer-prime-overlays.scss) */
+    label: t("apps.explorer.layout.details"),
+    command: () => props.fsExplorer.setLayout("details")
+  }
+]);
 const explorerOverlayPt = {
-  root: { class: 'nova-explorer-popup-menu' },
-}
-
-const sortItems = computed<MenuItem[]>(() => [
+  root: { class: "nova-explorer-popup-menu" }
+};
+const sortItems = computed(() => [
   {
-    label: 'Sort by name',
+    label: "Sort by name",
     command: () => {
-      void props.fsExplorer.refreshDirectory()
-    },
+      void props.fsExplorer.refreshDirectory();
+    }
   },
   {
-    label: 'Sort by date modified',
+    label: "Sort by date modified",
     command: () => {
-      void props.fsExplorer.refreshDirectory()
-    },
-  },
-])
+      void props.fsExplorer.refreshDirectory();
+    }
+  }
+]);
 </script>
 
 <template>
@@ -115,7 +104,8 @@ const sortItems = computed<MenuItem[]>(() => [
         variant="text"
         severity="secondary"
         :aria-label="t('apps.explorer.action.rename')"
-        @click="() => {}"
+        @click="() => {
+}"
       >
         <Icon name="mdi:pencil-outline" size="20" />
       </Button>
@@ -167,7 +157,7 @@ const sortItems = computed<MenuItem[]>(() => [
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-explorer-command-bar {
   display: flex;
   align-items: center;

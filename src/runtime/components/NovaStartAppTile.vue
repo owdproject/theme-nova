@@ -1,12 +1,9 @@
-<script setup lang="ts">
-defineProps<{
-  entry: ApplicationEntryWithInherited
-  layout?: 'row' | 'grid'
-}>()
-
-const emit = defineEmits<{
-  select: [entry: ApplicationEntryWithInherited]
-}>()
+<script setup>
+defineProps({
+  entry: { type: null, required: true },
+  layout: { type: String, required: false }
+});
+const emit = defineEmits(["select"]);
 </script>
 
 <template>

@@ -1,9 +1,9 @@
-<script setup lang="ts">
-const props = defineProps<{
-  config?: WindowConfig
-  window?: IWindowController
-  src: string
-}>()
+<script setup>
+const props = defineProps({
+  config: { type: null, required: false },
+  window: { type: null, required: false },
+  src: { type: String, required: true }
+});
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const props = defineProps<{
   </Window>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 iframe {
   border: 0;
   width: 100%;

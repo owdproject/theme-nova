@@ -1,15 +1,11 @@
-<script setup lang="ts">
-const props = defineProps<{
-  categories: string[]
-  active?: string
-}>()
-
-const emit = defineEmits<{
-  select: [category: string]
-}>()
-
-function onCategorySelect(category: string) {
-  emit('select', category)
+<script setup>
+const props = defineProps({
+  categories: { type: Array, required: true },
+  active: { type: String, required: false }
+});
+const emit = defineEmits(["select"]);
+function onCategorySelect(category) {
+  emit("select", category);
 }
 </script>
 
@@ -27,7 +23,7 @@ function onCategorySelect(category: string) {
   </List>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-system-bar__category--active,
 .owd-list-item:hover {
   border-radius: 8px;

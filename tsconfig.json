@@ -1,6 +1,30 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["src/runtime", "src/module.ts", "src/i18n", "../../packages/core/types/index.d.ts"],
-  "exclude": ["dist", "node_modules", "playground"],
-  "compilerOptions": { "outDir": "dist" }
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "paths": {
+      "@owdproject/core/runtime/*": ["../../packages/core/runtime/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "../../packages/core/types/index.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "playground",
+    "src/**/*.d.vue.ts",
+    "src/**/*.vue.d.ts"
+  ]
 }

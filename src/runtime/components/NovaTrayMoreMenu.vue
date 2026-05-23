@@ -1,23 +1,18 @@
-<script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
-import { onClickOutside } from '@vueuse/core'
-
-const open = ref(false)
-const anchorRef = useTemplateRef('anchorRef')
-
+<script setup>
+import { ref, useTemplateRef } from "vue";
+import { onClickOutside } from "@vueuse/core";
+const open = ref(false);
+const anchorRef = useTemplateRef("anchorRef");
 onClickOutside(anchorRef, () => {
-  open.value = false
-})
-
+  open.value = false;
+});
 function toggle() {
-  open.value = !open.value
+  open.value = !open.value;
 }
-
 function close() {
-  open.value = false
+  open.value = false;
 }
-
-defineExpose({ close })
+defineExpose({ close });
 </script>
 
 <template>
@@ -45,7 +40,7 @@ defineExpose({ close })
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-tray-more {
   position: relative;
   display: inline-flex;
@@ -64,21 +59,19 @@ defineExpose({ close })
   border: 1px solid var(--nova-start-border, var(--owd-surface-700));
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   color: #f1f5f9;
-
-  :deep(.nova-tray-btn) {
-    width: 100%;
-    min-width: 0;
-    height: 36px;
-    padding: 0 10px;
-    justify-content: flex-start;
-    gap: 10px;
-    border-radius: 8px;
-  }
-
-  :deep(.nova-top-bar__status-percent) {
-    display: inline;
-    margin-left: auto;
-    font-size: 12px;
-  }
+}
+.nova-tray-more__panel :deep(.nova-tray-btn) {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 8px;
+}
+.nova-tray-more__panel :deep(.nova-top-bar__status-percent) {
+  display: inline;
+  margin-left: auto;
+  font-size: 12px;
 }
 </style>

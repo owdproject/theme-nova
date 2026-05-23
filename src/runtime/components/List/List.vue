@@ -1,19 +1,15 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-
-const props = defineProps<{
-  density?: string
-}>()
-
+<script setup>
+import { computed } from "vue";
+const props = defineProps({
+  density: { type: String, required: false }
+});
 const classes = computed(() => {
-  const list = ['owd-list']
-
+  const list = ["owd-list"];
   if (props.density) {
-    list.push(`owd-list--density-${props.density}`)
+    list.push(`owd-list--density-${props.density}`);
   }
-
-  return list
-})
+  return list;
+});
 </script>
 
 <template>
@@ -22,7 +18,7 @@ const classes = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-list {
   width: 100%;
   text-align: left;

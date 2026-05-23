@@ -1,7 +1,7 @@
-<script setup lang="ts">
-defineProps<{
-  entry: ApplicationEntryWithInherited
-}>()
+<script setup>
+defineProps({
+  entry: { type: null, required: true }
+});
 </script>
 
 <template>
@@ -11,7 +11,7 @@ defineProps<{
   </ListItem>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .iconify {
   vertical-align: -3px;
   font-size: 18px;

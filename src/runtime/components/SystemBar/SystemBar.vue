@@ -1,18 +1,14 @@
 <script setup>
-import { computed } from 'vue'
-import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeDesktopWorkspace'
-
-const desktopWorkspaceStore = useDesktopWorkspaceStore()
-
+import { computed } from "vue";
+import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const classes = computed(() => {
-  const list = ['owd-desktop__system-bar']
-
+  const list = ["owd-desktop__system-bar"];
   if (desktopWorkspaceStore.overview) {
-    list.push('owd-desktop__system-bar--workspace-overview-enabled')
+    list.push("owd-desktop__system-bar--workspace-overview-enabled");
   }
-
-  return list
-})
+  return list;
+});
 </script>
 
 <template>
@@ -34,7 +30,7 @@ const classes = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-desktop__system-bar {
   width: 100%;
   height: var(--owd-system-bar-height);
@@ -47,52 +43,40 @@ const classes = computed(() => {
   transition: background 0.2s ease-in-out;
   position: relative;
   z-index: 10050;
-
-  &--workspace-overview-enabled {
-    background: transparent;
-  }
-
-  > div {
-    > div {
-      display: inline-block;
-    }
-  }
-
-  &__left {
-    width: 20vw;
-
-    .owd-system-bar__button {
-      margin-right: 4px;
-    }
-  }
-
-  &__middle {
-    flex: 1;
-    text-align: center;
-  }
-
-  &__right {
-    width: 20vw;
-    text-align: right;
-
-    .owd-system-bar__button {
-      margin-left: 4px;
-    }
-
-    a {
-      font-size: 11px;
-
-      .v-icon {
-        display: inline-block;
-        margin-top: -4px;
-      }
-    }
-  }
-
-  &__activities {
-    @media(max-width: 800px) {
-      display: none;
-    }
+}
+.owd-desktop__system-bar--workspace-overview-enabled {
+  background: transparent;
+}
+.owd-desktop__system-bar > div > div {
+  display: inline-block;
+}
+.owd-desktop__system-bar__left {
+  width: 20vw;
+}
+.owd-desktop__system-bar__left .owd-system-bar__button {
+  margin-right: 4px;
+}
+.owd-desktop__system-bar__middle {
+  flex: 1;
+  text-align: center;
+}
+.owd-desktop__system-bar__right {
+  width: 20vw;
+  text-align: right;
+}
+.owd-desktop__system-bar__right .owd-system-bar__button {
+  margin-left: 4px;
+}
+.owd-desktop__system-bar__right a {
+  font-size: 11px;
+}
+.owd-desktop__system-bar__right a .v-icon {
+  display: inline-block;
+  margin-top: -4px;
+}
+@media (max-width: 800px) {
+  .owd-desktop__system-bar__activities {
+    display: none;
   }
 }
 </style>

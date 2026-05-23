@@ -1,12 +1,10 @@
 <script setup>
-import { useSettingsMenu } from '../../../composables/useSettingsMenu'
-import { useTemplateRef } from 'vue'
-import { onClickOutside } from '@vueuse/core'
-
-const settingsMenu = useSettingsMenu()
-const settingsMenuElement = useTemplateRef('settingsMenuElement')
-
-onClickOutside(settingsMenuElement, () => settingsMenu.enabled.value = false)
+import { useSettingsMenu } from "../../../composables/useSettingsMenu";
+import { useTemplateRef } from "vue";
+import { onClickOutside } from "@vueuse/core";
+const settingsMenu = useSettingsMenu();
+const settingsMenuElement = useTemplateRef("settingsMenuElement");
+onClickOutside(settingsMenuElement, () => settingsMenu.enabled.value = false);
 </script>
 
 <template>
@@ -31,7 +29,7 @@ onClickOutside(settingsMenuElement, () => settingsMenu.enabled.value = false)
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .owd-system-bar__settings-menu {
   right: var(--owd-system-bar-menu-spacing);
   min-height: 200px;

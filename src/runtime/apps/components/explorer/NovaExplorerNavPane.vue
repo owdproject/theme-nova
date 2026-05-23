@@ -1,319 +1,244 @@
-<script setup lang="ts">
-import type { IWindowController } from '@owdproject/core'
-import { useDesktopExplorerStore } from '@owdproject/core/runtime/stores/storeDesktopExplorer'
-import { useRuntimeConfig } from 'nuxt/app'
-import { computed, nextTick, onMounted, ref, withDefaults } from 'vue'
-import Tree from 'primevue/tree'
-import type { TreeNode } from 'primevue/treenode'
-import draggable from 'vuedraggable'
-import ContextMenu from 'primevue/contextmenu'
-import type { MenuItem } from 'primevue/menuitem'
-import { useI18n } from 'vue-i18n'
-
-const props = withDefaults(
-  defineProps<{
-    window: IWindowController
-    fsExplorer: NonNullable<IWindowController['fsExplorer']>
-    /** Nav column width in px (parent splitter controls). */
-    widthPx?: number
-  }>(),
-  { widthPx: 248 },
-)
-
-type ExplorerNavFolder = {
-  id: string
-  label: string
-  path: string
-  icon?: string
-}
-
-const { t } = useI18n()
-const desktopExplorerStore = useDesktopExplorerStore()
-const runtimeConfig = useRuntimeConfig()
-const selectedTreeKey = ref<string>('')
-
-/** Single context menu: Open + Pin/Unpin for every nav row (pins, shell folders, This PC tree). */
-const shellFolderCtxMenu = ref<InstanceType<typeof ContextMenu> | null>(null)
-const shellFolderCtxTarget = ref<ExplorerNavFolder | null>(null)
-
+<script setup>
+import { useDesktopExplorerStore } from "@owdproject/core/runtime/stores/storeDesktopExplorer";
+import { useRuntimeConfig } from "nuxt/app";
+import { computed, nextTick, onMounted, ref, withDefaults } from "vue";
+import Tree from "primevue/tree";
+import draggable from "vuedraggable";
+import ContextMenu from "primevue/contextmenu";
+import { useI18n } from "vue-i18n";
+const props = defineProps({
+  window: { type: Object, required: true },
+  fsExplorer: { type: null, required: true },
+  widthPx: { type: Number, required: false, default: 248 }
+});
+const { t } = useI18n();
+const desktopExplorerStore = useDesktopExplorerStore();
+const runtimeConfig = useRuntimeConfig();
+const selectedTreeKey = ref("");
+const shellFolderCtxMenu = ref(null);
+const shellFolderCtxTarget = ref(null);
 const explorerOverlayPt = {
-  root: { class: 'nova-explorer-popup-menu' },
-}
-
+  root: { class: "nova-explorer-popup-menu" }
+};
 const explorerConfig = computed(
-  () => runtimeConfig.public.desktop.explorer ?? {},
-)
-
-function normalizeFolderList(list: unknown): ExplorerNavFolder[] {
-  if (!Array.isArray(list)) return []
-
-  return list
-    .map((item): ExplorerNavFolder | null => {
-      if (!item || typeof item !== 'object') return null
-
-      const entry = item as Record<string, unknown>
-      const id = String(entry.id ?? '').trim()
-      const label = String(entry.label ?? '').trim()
-      const rawPath = String(entry.path ?? '').trim()
-      const icon = String(entry.icon ?? '').trim()
-
-      if (!id || !label || !rawPath) return null
-
-      return {
-        id,
-        label,
-        path: rawPath.startsWith('/') ? rawPath : `/${rawPath}`,
-        icon: icon || undefined,
-      }
-    })
-    .filter((entry): entry is ExplorerNavFolder => Boolean(entry))
+  () => runtimeConfig.public.desktop.explorer ?? {}
+);
+function normalizeFolderList(list) {
+  if (!Array.isArray(list)) return [];
+  return list.map((item) => {
+    if (!item || typeof item !== "object") return null;
+    const entry = item;
+    const id = String(entry.id ?? "").trim();
+    const label = String(entry.label ?? "").trim();
+    const rawPath = String(entry.path ?? "").trim();
+    const icon = String(entry.icon ?? "").trim();
+    if (!id || !label || !rawPath) return null;
+    return {
+      id,
+      label,
+      path: rawPath.startsWith("/") ? rawPath : `/${rawPath}`,
+      icon: icon || void 0
+    };
+  }).filter((entry) => Boolean(entry));
 }
-
-function resolveFolderConfig(
-  base: unknown,
-  extra: unknown,
-  override: unknown,
-): ExplorerNavFolder[] {
-  const normalizedOverride = normalizeFolderList(override)
-  const source = normalizedOverride.length > 0
-    ? normalizedOverride
-    : [...normalizeFolderList(base), ...normalizeFolderList(extra)]
-
-  const byId = new Map<string, ExplorerNavFolder>()
-  for (const entry of source) byId.set(entry.id, entry)
-  return [...byId.values()]
+function resolveFolderConfig(base, extra, override) {
+  const normalizedOverride = normalizeFolderList(override);
+  const source = normalizedOverride.length > 0 ? normalizedOverride : [...normalizeFolderList(base), ...normalizeFolderList(extra)];
+  const byId = /* @__PURE__ */ new Map();
+  for (const entry of source) byId.set(entry.id, entry);
+  return [...byId.values()];
 }
-
-const specialFolders = computed(() =>
-  resolveFolderConfig(
+const specialFolders = computed(
+  () => resolveFolderConfig(
     explorerConfig.value.specialFolders,
     explorerConfig.value.specialFoldersExtra,
-    explorerConfig.value.specialFoldersOverride,
-  ),
-)
-
-const quickAccessSeed = computed(() =>
-  resolveFolderConfig(
+    explorerConfig.value.specialFoldersOverride
+  )
+);
+const quickAccessSeed = computed(
+  () => resolveFolderConfig(
     explorerConfig.value.quickAccess,
     explorerConfig.value.quickAccessExtra,
-    explorerConfig.value.quickAccessOverride,
-  ),
-)
-
-/** ZenFS mount points → “drives” under This PC (Dropbox etc. appear when added to `desktop.fs.mounts`). */
+    explorerConfig.value.quickAccessOverride
+  )
+);
 const fsMounts = computed(() => {
-  const raw = runtimeConfig.public.desktop.fs?.mounts
-  if (!raw || typeof raw !== 'object') return {} as Record<string, unknown>
-  return raw as Record<string, unknown>
-})
-
+  const raw = runtimeConfig.public.desktop.fs?.mounts;
+  if (!raw || typeof raw !== "object") return {};
+  return raw;
+});
 const explorerMountLabels = computed(
-  () => explorerConfig.value.mountLabels ?? {},
-)
-
-function isHiddenMountPoint(path: string): boolean {
-  if (path === '/') return false
-  if (!path.startsWith('/')) return false
-  const segments = path.split('/').filter(Boolean)
-  const head = segments[0]
-  return Boolean(head?.startsWith('.'))
+  () => explorerConfig.value.mountLabels ?? {}
+);
+function isHiddenMountPoint(path) {
+  if (path === "/") return false;
+  if (!path.startsWith("/")) return false;
+  const segments = path.split("/").filter(Boolean);
+  const head = segments[0];
+  return Boolean(head?.startsWith("."));
 }
-
-function fallbackMountLabel(mountPath: string): string {
-  const segments = mountPath.split('/').filter(Boolean)
-  const last = segments[segments.length - 1]
-  if (!last) return mountPath
-  return last.charAt(0).toUpperCase() + last.slice(1)
+function fallbackMountLabel(mountPath) {
+  const segments = mountPath.split("/").filter(Boolean);
+  const last = segments[segments.length - 1];
+  if (!last) return mountPath;
+  return last.charAt(0).toUpperCase() + last.slice(1);
 }
-
-const volumeEntries = computed(() =>
-  Object.keys(fsMounts.value)
-    .filter((p) => !isHiddenMountPoint(p))
-    .sort((a, b) => a.localeCompare(b))
-    .map((path) => ({
-      path,
-      label:
-        explorerMountLabels.value[path] ?? fallbackMountLabel(path),
-      icon: 'mdi:harddisk' as const,
-    })),
-)
-
+const volumeEntries = computed(
+  () => Object.keys(fsMounts.value).filter((p) => !isHiddenMountPoint(p)).sort((a, b) => a.localeCompare(b)).map((path) => ({
+    path,
+    label: explorerMountLabels.value[path] ?? fallbackMountLabel(path),
+    icon: "mdi:harddisk"
+  }))
+);
 onMounted(() => {
   if (desktopExplorerStore.quickAccessPins.length === 0) {
-    desktopExplorerStore.setQuickAccessPins(quickAccessSeed.value)
+    desktopExplorerStore.setQuickAccessPins(quickAccessSeed.value);
   }
-})
-
+});
 const quickAccessPinsModel = computed({
   get() {
-    return desktopExplorerStore.quickAccessPins
+    return desktopExplorerStore.quickAccessPins;
   },
-  set(value: ExplorerNavFolder[]) {
-    desktopExplorerStore.setQuickAccessPins(value)
-  },
-})
-
-const expandedKeys = computed<Record<string, boolean>>({
+  set(value) {
+    desktopExplorerStore.setQuickAccessPins(value);
+  }
+});
+const expandedKeys = computed({
   get() {
     return Object.fromEntries(
-      desktopExplorerStore.navExpandedKeys.map((key) => [key, true]),
-    )
+      desktopExplorerStore.navExpandedKeys.map((key) => [key, true])
+    );
   },
   set(value) {
     desktopExplorerStore.setNavExpandedKeys(
-      Object.entries(value)
-        .filter(([, expanded]) => expanded)
-        .map(([key]) => key),
-    )
-  },
-})
-
-const treeNodes = computed<TreeNode[]>(() => [
+      Object.entries(value).filter(([, expanded]) => expanded).map(([key]) => key)
+    );
+  }
+});
+const treeNodes = computed(() => [
   {
-    key: 'thisPc',
-    label: 'This PC',
-    icon: 'mdi:monitor',
+    key: "thisPc",
+    label: "This PC",
+    icon: "mdi:monitor",
     selectable: false,
     children: volumeEntries.value.map((v) => ({
       key: `vol:${v.path}`,
       label: v.label,
       icon: v.icon,
       data: {
-        path: v.path,
+        path: v.path
       },
-      leaf: true,
-    })),
-  },
-])
-
-async function go(path: string) {
-  const target = path.startsWith('/') ? path : `/${path}`
-  props.fsExplorer.basePath.value = target
-  props.fsExplorer.fsDirectoryNavigation.push(target)
-  await props.fsExplorer.navigateToDirectory(target)
-}
-
-function unwrapTreeSelectPayload(
-  payload: TreeNode | { node?: TreeNode } | undefined,
-): TreeNode | undefined {
-  if (!payload || typeof payload !== 'object') return undefined
-  if ('node' in payload && (payload as { node?: TreeNode }).node) {
-    return (payload as { node: TreeNode }).node
+      leaf: true
+    }))
   }
-  return payload as TreeNode
+]);
+async function go(path) {
+  const target = path.startsWith("/") ? path : `/${path}`;
+  props.fsExplorer.basePath.value = target;
+  props.fsExplorer.fsDirectoryNavigation.push(target);
+  await props.fsExplorer.navigateToDirectory(target);
 }
-
-async function onNodeSelect(payload: TreeNode | { node?: TreeNode }) {
-  const node = unwrapTreeSelectPayload(payload)
-  const path = node?.data?.path
-  if (typeof path !== 'string') return
-  selectedTreeKey.value = String(node?.key ?? '')
-  await go(path)
+function unwrapTreeSelectPayload(payload) {
+  if (!payload || typeof payload !== "object") return void 0;
+  if ("node" in payload && payload.node) {
+    return payload.node;
+  }
+  return payload;
 }
-
-async function onNodeUnselect(payload: TreeNode | { node?: TreeNode }) {
-  const node = unwrapTreeSelectPayload(payload)
-  const path = node?.data?.path
-  if (typeof path !== 'string') return
-  await go(path)
+async function onNodeSelect(payload) {
+  const node = unwrapTreeSelectPayload(payload);
+  const path = node?.data?.path;
+  if (typeof path !== "string") return;
+  selectedTreeKey.value = String(node?.key ?? "");
+  await go(path);
 }
-
-function isPinned(path: string) {
-  return desktopExplorerStore.quickAccessPins.some((entry) => entry.path === path)
+async function onNodeUnselect(payload) {
+  const node = unwrapTreeSelectPayload(payload);
+  const path = node?.data?.path;
+  if (typeof path !== "string") return;
+  await go(path);
 }
-
-function pinFromSpecial(entry: ExplorerNavFolder) {
-  desktopExplorerStore.pinQuickAccess(entry)
+function isPinned(path) {
+  return desktopExplorerStore.quickAccessPins.some((entry) => entry.path === path);
 }
-
-function folderEntryFromTreeNode(node: TreeNode | undefined): ExplorerNavFolder | null {
-  if (!node) return null
-  const key = String(node.key ?? '')
-  if (key === 'thisPc') {
+function pinFromSpecial(entry) {
+  desktopExplorerStore.pinQuickAccess(entry);
+}
+function folderEntryFromTreeNode(node) {
+  if (!node) return null;
+  const key = String(node.key ?? "");
+  if (key === "thisPc") {
     return {
-      id: 'thispc',
-      label: typeof node.label === 'string' ? node.label : 'This PC',
-      path: '/',
-      icon: typeof node.icon === 'string' ? node.icon : 'mdi:monitor',
-    }
+      id: "thispc",
+      label: typeof node.label === "string" ? node.label : "This PC",
+      path: "/",
+      icon: typeof node.icon === "string" ? node.icon : "mdi:monitor"
+    };
   }
-  const path = node.data?.path
-  if (typeof path !== 'string' || !path.startsWith('/')) return null
+  const path = node.data?.path;
+  if (typeof path !== "string" || !path.startsWith("/")) return null;
   return {
     id: `nav:${path}`,
-    label: typeof node.label === 'string' ? node.label : path,
+    label: typeof node.label === "string" ? node.label : path,
     path,
-    icon: typeof node.icon === 'string' ? node.icon : 'mdi:harddisk',
-  }
+    icon: typeof node.icon === "string" ? node.icon : "mdi:harddisk"
+  };
 }
-
-function treePinVisible(node: TreeNode | undefined): boolean {
-  const e = folderEntryFromTreeNode(node)
-  return Boolean(e && !isPinned(e.path))
+function treePinVisible(node) {
+  const e = folderEntryFromTreeNode(node);
+  return Boolean(e && !isPinned(e.path));
 }
-
-function pinTreeNode(node: TreeNode) {
-  const e = folderEntryFromTreeNode(node)
-  if (!e) return
+function pinTreeNode(node) {
+  const e = folderEntryFromTreeNode(node);
+  if (!e) return;
   pinFromSpecial({
     id: `pin:${e.path}`,
     label: e.label,
     path: e.path,
-    icon: e.icon,
-  })
+    icon: e.icon
+  });
 }
-
-function unpin(path: string) {
-  desktopExplorerStore.unpinQuickAccess(path)
+function unpin(path) {
+  desktopExplorerStore.unpinQuickAccess(path);
 }
-
-const shellFolderMenuItems = computed<MenuItem[]>(() => {
-  const entry = shellFolderCtxTarget.value
-  if (!entry) return []
-
-  const pinRow: MenuItem = isPinned(entry.path)
-    ? {
-        label: t('apps.explorer.nav.unpinFromQuickAccess'),
-        icon: 'pi pi-times',
-        command: () => unpin(entry.path),
-      }
-    : {
-        label: t('apps.explorer.nav.pinToQuickAccess'),
-        icon: 'pi pi-thumbtack',
-        command: () => pinFromSpecial(entry),
-      }
-
+const shellFolderMenuItems = computed(() => {
+  const entry = shellFolderCtxTarget.value;
+  if (!entry) return [];
+  const pinRow = isPinned(entry.path) ? {
+    label: t("apps.explorer.nav.unpinFromQuickAccess"),
+    icon: "pi pi-times",
+    command: () => unpin(entry.path)
+  } : {
+    label: t("apps.explorer.nav.pinToQuickAccess"),
+    icon: "pi pi-thumbtack",
+    command: () => pinFromSpecial(entry)
+  };
   return [
     {
-      label: t('apps.explorer.nav.openFolder'),
-      icon: 'pi pi-folder-open',
-      command: () => void go(entry.path),
+      label: t("apps.explorer.nav.openFolder"),
+      icon: "pi pi-folder-open",
+      command: () => void go(entry.path)
     },
     { separator: true },
-    pinRow,
-  ]
-})
-
-async function openNavFolderContextMenu(entry: ExplorerNavFolder, event: MouseEvent) {
-  event.preventDefault()
-  shellFolderCtxTarget.value = entry
-  await nextTick()
-  shellFolderCtxMenu.value?.show(event)
+    pinRow
+  ];
+});
+async function openNavFolderContextMenu(entry, event) {
+  event.preventDefault();
+  shellFolderCtxTarget.value = entry;
+  await nextTick();
+  shellFolderCtxMenu.value?.show(event);
 }
-
-async function onTreeRowContextMenu(node: TreeNode | undefined, event: MouseEvent) {
-  const entry = folderEntryFromTreeNode(node)
-  if (!entry) return
-  await openNavFolderContextMenu(entry, event)
+async function onTreeRowContextMenu(node, event) {
+  const entry = folderEntryFromTreeNode(node);
+  if (!entry) return;
+  await openNavFolderContextMenu(entry, event);
 }
-
-const hasPinnedFolders = computed(() => quickAccessPinsModel.value.length > 0)
-
-const showBorderBeforeShellFolders = computed(() => hasPinnedFolders.value)
-
+const hasPinnedFolders = computed(() => quickAccessPinsModel.value.length > 0);
+const showBorderBeforeShellFolders = computed(() => hasPinnedFolders.value);
 const showBorderBeforeThisPc = computed(
-  () => hasPinnedFolders.value || specialFolders.value.length > 0,
-)
+  () => hasPinnedFolders.value || specialFolders.value.length > 0
+);
 </script>
 
 <template>
@@ -321,9 +246,9 @@ const showBorderBeforeThisPc = computed(
     class="nova-explorer-nav-pane"
     aria-label="Navigation"
     :style="{
-      width: `${props.widthPx}px`,
-      flex: `0 0 ${props.widthPx}px`,
-    }"
+  width: `${props.widthPx}px`,
+  flex: `0 0 ${props.widthPx}px`
+}"
   >
     <div class="nova-explorer-nav-pane__scroll">
       <draggable
@@ -358,8 +283,8 @@ const showBorderBeforeThisPc = computed(
         v-if="specialFolders.length"
         class="nova-explorer-nav-pane__section"
         :class="{
-          'nova-explorer-nav-pane__section--after-pins': showBorderBeforeShellFolders,
-        }"
+  'nova-explorer-nav-pane__section--after-pins': showBorderBeforeShellFolders
+}"
       >
         <div class="nova-explorer-nav-pane__shell-list">
           <button
@@ -387,8 +312,8 @@ const showBorderBeforeThisPc = computed(
       <div
         class="nova-explorer-nav-pane__section"
         :class="{
-          'nova-explorer-nav-pane__section--after-pins': showBorderBeforeThisPc,
-        }"
+  'nova-explorer-nav-pane__section--after-pins': showBorderBeforeThisPc
+}"
       >
         <div class="nova-explorer-nav-pane__title">This PC</div>
         <Tree
@@ -427,11 +352,11 @@ const showBorderBeforeThisPc = computed(
   </aside>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@charset "UTF-8";
 .nova-explorer-nav-pane {
   background: var(--nova-explorer-surface-elevated);
   border-inline-end: 1px solid var(--nova-explorer-border-subtle);
-
   --nova-explorer-nav-hover-bg: color-mix(
     in srgb,
     var(--nova-explorer-text) 10%,
@@ -447,7 +372,6 @@ const showBorderBeforeThisPc = computed(
     var(--nova-explorer-text, #fff) 8%,
     transparent
   );
-
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -469,8 +393,7 @@ const showBorderBeforeThisPc = computed(
   padding: 4px 4px 6px 6px;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: var(--nova-explorer-nav-scrollbar-thumb)
-    var(--nova-explorer-nav-scrollbar-track);
+  scrollbar-color: var(--nova-explorer-nav-scrollbar-thumb) var(--nova-explorer-nav-scrollbar-track);
 }
 
 .nova-explorer-nav-pane__scroll::-webkit-scrollbar {
@@ -491,18 +414,13 @@ const showBorderBeforeThisPc = computed(
 }
 
 .nova-explorer-nav-pane__scroll::-webkit-scrollbar-thumb:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--nova-explorer-text, #fff) 48%,
-    transparent
-  );
+  background-color: color-mix(in srgb, var(--nova-explorer-text, #fff) 48%, transparent);
 }
 
 .nova-explorer-nav-pane__section--after-pins {
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px solid
-    color-mix(in srgb, var(--nova-explorer-pane-divider, rgba(255, 255, 255, 0.12)) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--nova-explorer-pane-divider, rgba(255, 255, 255, 0.12)) 80%, transparent);
 }
 
 .nova-explorer-nav-pane__title {
@@ -664,9 +582,7 @@ const showBorderBeforeThisPc = computed(
 }
 
 .nova-explorer-nav-pane :deep(.p-tree-node-content:hover) .nova-explorer-nav-pane__action:not(.nova-explorer-nav-pane__action--unpin),
-.nova-explorer-nav-pane
-  :deep(.p-tree-node-content:focus-visible)
-  .nova-explorer-nav-pane__action:not(.nova-explorer-nav-pane__action--unpin) {
+.nova-explorer-nav-pane :deep(.p-tree-node-content:focus-visible) .nova-explorer-nav-pane__action:not(.nova-explorer-nav-pane__action--unpin) {
   opacity: 0.85;
 }
 

@@ -1,7 +1,6 @@
-<script setup lang="ts">
-import { useNovaStartMenu } from '../../composables/useNovaStartMenu'
-
-const { open, toggle } = useNovaStartMenu()
+<script setup>
+import { useNovaStartMenu } from "../../composables/useNovaStartMenu";
+const { open, toggle } = useNovaStartMenu();
 </script>
 
 <template>
@@ -17,19 +16,17 @@ const { open, toggle } = useNovaStartMenu()
   </DockBarButton>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-dock-bar__button-menu {
   width: 36px;
   height: 36px;
   border-radius: 10px;
   transition: background 0.15s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  &--active {
-    background: var(--nova-accent-muted, rgba(26, 108, 175, 0.35));
-  }
+}
+.owd-dock-bar__button-menu:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.owd-dock-bar__button-menu--active {
+  background: var(--nova-accent-muted, rgba(26, 108, 175, 0.35));
 }
 </style>

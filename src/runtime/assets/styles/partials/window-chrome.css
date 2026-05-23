@@ -1,0 +1,197 @@
+@charset "UTF-8";
+/* Nova generic window surfaces (About, Todo, … — not explorer frame). */
+.owd-desktop--nova {
+  --nova-window-radius: var(--owd-card-border-radius, 8px);
+  --nova-window-nav-height: var(--owd-system-bar-height, 32px);
+  --nova-window-control-size: 28px;
+  --nova-window-control-radius: 8px;
+  --nova-window-nav-padding-x: 8px;
+  --nova-window-nav-gap: 2px;
+  /* frame / header / body backgrounds are defined per accent in accent.scss */
+  --nova-window-text: var(--owd-color, #e8eef6);
+  --nova-window-text-muted: rgba(200, 212, 228, 0.52);
+  --nova-window-text-inactive: rgba(200, 212, 228, 0.42);
+  --nova-window-border: var(--owd-surface-700, #1d293d);
+  --nova-window-nav-divider: color-mix(
+    in srgb,
+    var(--nova-window-border) 20%,
+    transparent
+  );
+  --nova-window-border-focused: var(--nova-accent-focus-ring);
+  --nova-window-accent: var(--owd-button-primary-active-background);
+  --nova-window-accent-line: var(--owd-primary-color);
+  --nova-window-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+  --nova-window-shadow-focused:
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--nova-accent-muted);
+  --nova-window-control-hover: rgba(255, 255, 255, 0.12);
+  --nova-window-control-active: rgba(255, 255, 255, 0.16);
+  --nova-window-close-hover: rgba(196, 43, 52, 0.88);
+  --nova-window-close-hover-border: rgba(255, 120, 120, 0.35);
+  --nova-window-inactive-opacity: 0.94;
+}
+
+/*
+ * Generic app windows (About, Todo, …).
+ * Explorer uses `.nova-explorer-frame` in explorer-chrome.scss.
+ */
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 160px;
+  min-height: 160px;
+  border-radius: var(--nova-window-radius);
+  color: var(--nova-window-text);
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame):not(.owd-window--focused) {
+  opacity: var(--nova-window-inactive-opacity);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) > .p-card {
+  --p-card-background: var(--nova-window-frame-bg);
+  --p-card-border-color: var(--nova-window-border);
+  --p-card-color: var(--nova-window-text);
+  --p-content-background: var(--nova-window-frame-bg);
+  --p-content-border-color: var(--nova-window-border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  border-radius: inherit;
+  background: var(--nova-window-frame-bg);
+  border: 1px solid var(--nova-window-border);
+  box-shadow: var(--nova-window-shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) > .p-card > .p-card-header {
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) > .p-card > .p-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  padding: 0;
+  background: var(--nova-window-body-bg);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) > .p-card > .p-card-body > .p-card-content {
+  height: 100%;
+  min-height: 0;
+  color: var(--nova-window-text);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame).owd-window--focused {
+  opacity: 1;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame).owd-window--focused > .p-card {
+  border-color: var(--nova-window-border-focused);
+  box-shadow: var(--nova-window-shadow-focused);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-card-header .owd-window-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--nova-window-nav-height);
+  min-height: var(--nova-window-nav-height);
+  padding: 0;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: var(--nova-window-text-inactive);
+  background: var(--nova-window-header-bg);
+  border-bottom: 1px solid var(--nova-window-nav-divider);
+  border-radius: var(--nova-window-radius) var(--nova-window-radius) 0 0;
+  box-shadow: none;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-card-header .owd-window-nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: var(--nova-window-radius) var(--nova-window-radius) 0 0;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-card-header .owd-window-nav--focused {
+  color: var(--nova-window-text);
+  background: var(--nova-window-header-focused-bg);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-card-header .owd-window-nav--focused::before {
+  background: linear-gradient(90deg, var(--nova-window-accent-line), var(--nova-window-accent));
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-card-header .owd-window-nav .owd-window-nav__title-inner {
+  color: inherit;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__btn-group {
+  gap: var(--nova-window-nav-gap);
+  padding: 0 var(--nova-window-nav-padding-x);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button {
+  width: var(--nova-window-control-size);
+  height: var(--nova-window-control-size);
+  border-radius: var(--nova-window-control-radius);
+  background: transparent;
+  border: 0;
+  transition: background 0.15s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button .owd-window-nav__glyph,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button .owd-window-nav__glyph-icon,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button :deep(.iconify) {
+  opacity: 0.92;
+  color: var(--nova-window-text);
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button:hover {
+  background: var(--nova-window-control-hover);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button:hover .owd-window-nav__glyph,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button:hover .owd-window-nav__glyph-icon,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button:hover :deep(.iconify) {
+  opacity: 1;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__button:active {
+  background: var(--nova-window-control-active);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__btn-group--append .owd-window-nav__button--close:hover {
+  background: var(--nova-window-close-hover);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__btn-group--append .owd-window-nav__button--close:hover .owd-window-nav__glyph,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__btn-group--append .owd-window-nav__button--close:hover .owd-window-nav__glyph-icon,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window-nav__btn-group--append .owd-window-nav__button--close:hover :deep(.iconify) {
+  color: #fff;
+  opacity: 1;
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content--centered {
+  color: var(--nova-window-text);
+  background: var(--nova-window-body-bg);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content a,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content--centered a {
+  color: var(--owd-primary-color);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content a:hover,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content--centered a:hover {
+  color: var(--owd-primary-hover-color);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-button.p-button-primary,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-button--primary {
+  --p-button-primary-background: var(--owd-button-primary-active-background);
+  --p-button-primary-hover-background: var(--owd-primary-hover-color);
+  --p-button-primary-active-background: var(--owd-button-primary-active-background);
+  --p-button-primary-border-color: var(--owd-button-primary-active-border-color);
+}
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-inputtext:focus,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-select:focus,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-checkbox-box:focus-visible,
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .p-radiobutton-box:focus-visible {
+  border-color: var(--nova-window-accent-line);
+  box-shadow: 0 0 0 1px var(--nova-accent-focus-ring);
+}

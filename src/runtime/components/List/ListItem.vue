@@ -1,21 +1,16 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="owd-list-item">
     <slot />
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-list-item {
   width: 100%;
   cursor: pointer;
   padding: 8px 16px;
-
-  &:hover {
-    background: var(--owd-elevation-inactive);
-  }
+}
+.owd-list-item:hover {
+  background: var(--owd-elevation-inactive);
 }
 </style>

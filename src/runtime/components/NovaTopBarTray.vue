@@ -1,88 +1,76 @@
-<script setup lang="ts">
-import { computed, useTemplateRef, watch } from 'vue'
-import { onClickOutside, onKeyStroke } from '@vueuse/core'
-import { useBattery } from '@vueuse/core'
-import { useDesktopVolumeStore } from '@owdproject/core/runtime/stores/storeDesktopVolume'
-import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeDesktopWorkspace'
-import { useNovaQuickSettings } from '../composables/useNovaQuickSettings'
-import { useNovaAccentTheme, NOVA_ACCENT_META } from '../composables/useNovaAccentTheme'
-import { useNovaTrayClock } from '../composables/useNovaTrayClock'
-import { useNovaStartMenu } from '../composables/useNovaStartMenu'
-import { useNovaWorkspaces } from '../composables/useNovaWorkspaces'
-import { useNovaTrayLayout } from '../composables/useNovaTrayLayout'
-import NovaTrayWorkspaceButton from './NovaTrayWorkspaceButton.vue'
-import NovaQuickSettingsPanel from './NovaQuickSettingsPanel.vue'
-import NovaTrayMoreMenu from './NovaTrayMoreMenu.vue'
-
+<script setup>
+import { computed, useTemplateRef, watch } from "vue";
+import { onClickOutside, onKeyStroke } from "@vueuse/core";
+import { useBattery } from "@vueuse/core";
+import { useDesktopVolumeStore } from "@owdproject/core/runtime/stores/storeDesktopVolume";
+import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+import { useNovaQuickSettings } from "../composables/useNovaQuickSettings";
+import { useNovaAccentTheme, NOVA_ACCENT_META } from "../composables/useNovaAccentTheme";
+import { useNovaTrayClock } from "../composables/useNovaTrayClock";
+import { useNovaStartMenu } from "../composables/useNovaStartMenu";
+import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
+import { useNovaTrayLayout } from "../composables/useNovaTrayLayout";
+import NovaTrayWorkspaceButton from "./NovaTrayWorkspaceButton.vue";
+import NovaQuickSettingsPanel from "./NovaQuickSettingsPanel.vue";
+import NovaTrayMoreMenu from "./NovaTrayMoreMenu.vue";
 const {
   open: quickSettingsOpen,
   close: closeQuickSettings,
-  toggle: toggleQuickSettings,
-} = useNovaQuickSettings()
-const { accentId, cycleAccent } = useNovaAccentTheme()
-const { open: startMenuOpen } = useNovaStartMenu()
-const { enabled: workspacesEnabled } = useNovaWorkspaces()
-const { isCompact, isNarrow, isMedium } = useNovaTrayLayout()
-const desktopWorkspaceStore = useDesktopWorkspaceStore()
-
-const trayRef = useTemplateRef('trayRef')
-const panelRef = useTemplateRef('panelRef')
-const { time, dateLabel } = useNovaTrayClock()
-const { charging, level, isSupported: batterySupported } = useBattery()
-const desktopVolumeStore = useDesktopVolumeStore()
-
-const accentIcon = computed(() => NOVA_ACCENT_META[accentId.value].icon)
-
-const batteryPercent = computed(() =>
-  level.value != null ? Math.round(level.value * 100) : null,
-)
-
+  toggle: toggleQuickSettings
+} = useNovaQuickSettings();
+const { accentId, cycleAccent } = useNovaAccentTheme();
+const { open: startMenuOpen } = useNovaStartMenu();
+const { enabled: workspacesEnabled } = useNovaWorkspaces();
+const { isCompact, isNarrow, isMedium } = useNovaTrayLayout();
+const desktopWorkspaceStore = useDesktopWorkspaceStore();
+const trayRef = useTemplateRef("trayRef");
+const panelRef = useTemplateRef("panelRef");
+const { time, dateLabel } = useNovaTrayClock();
+const { charging, level, isSupported: batterySupported } = useBattery();
+const desktopVolumeStore = useDesktopVolumeStore();
+const accentIcon = computed(() => NOVA_ACCENT_META[accentId.value].icon);
+const batteryPercent = computed(
+  () => level.value != null ? Math.round(level.value * 100) : null
+);
 const showBattery = computed(
-  () => batterySupported.value && batteryPercent.value != null,
-)
-
+  () => batterySupported.value && batteryPercent.value != null
+);
 onClickOutside(
   panelRef,
   () => closeQuickSettings(),
-  { ignore: [trayRef] },
-)
-
-onKeyStroke('Escape', () => {
+  { ignore: [trayRef] }
+);
+onKeyStroke("Escape", () => {
   if (quickSettingsOpen.value) {
-    closeQuickSettings()
-    return
+    closeQuickSettings();
+    return;
   }
-})
-
+});
 watch(startMenuOpen, (isOpen) => {
-  if (isOpen) closeQuickSettings()
-})
-
+  if (isOpen) closeQuickSettings();
+});
 watch(
   () => desktopWorkspaceStore.overview,
   (isOpen) => {
-    if (isOpen) closeQuickSettings()
-  },
-)
-
+    if (isOpen) closeQuickSettings();
+  }
+);
 const batteryIcon = computed(() => {
-  if (batteryPercent.value == null) return 'mdi:battery-unknown'
-  const tens = Math.floor(batteryPercent.value / 10) * 10
-  const suffix = charging.value ? '-charging' : ''
-  return `mdi:battery${suffix}-${tens}`
-})
-
+  if (batteryPercent.value == null) return "mdi:battery-unknown";
+  const tens = Math.floor(batteryPercent.value / 10) * 10;
+  const suffix = charging.value ? "-charging" : "";
+  return `mdi:battery${suffix}-${tens}`;
+});
 const volumeIcon = computed(() => {
-  const v = desktopVolumeStore.master
-  if (v <= 0) return 'mdi:volume-off'
-  if (v < 35) return 'mdi:volume-low'
-  if (v < 70) return 'mdi:volume-medium'
-  return 'mdi:volume-high'
-})
-
+  const v = desktopVolumeStore.master;
+  if (v <= 0) return "mdi:volume-off";
+  if (v < 35) return "mdi:volume-low";
+  if (v < 70) return "mdi:volume-medium";
+  return "mdi:volume-high";
+});
 function onAccentClick() {
-  closeQuickSettings()
-  cycleAccent()
+  closeQuickSettings();
+  cycleAccent();
 }
 </script>
 
@@ -220,7 +208,7 @@ function onAccentClick() {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-top-bar__tray {
   display: flex;
   flex: 0 0 auto;
@@ -253,20 +241,16 @@ function onAccentClick() {
   font: inherit;
   flex-shrink: 0;
   transition: background 0.15s ease;
-
-  &:hover,
-  &--active {
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  &:disabled {
-    cursor: default;
-    opacity: 0.45;
-  }
-
-  &--accent:hover {
-    background: var(--nova-accent-muted, rgba(255, 255, 255, 0.12));
-  }
+}
+.nova-tray-btn:hover, .nova-tray-btn--active {
+  background: rgba(255, 255, 255, 0.12);
+}
+.nova-tray-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.nova-tray-btn--accent:hover {
+  background: var(--nova-accent-muted, rgba(255, 255, 255, 0.12));
 }
 
 .nova-top-bar__tray-divider {
@@ -275,11 +259,10 @@ function onAccentClick() {
   margin: 0 4px;
   background: rgba(255, 255, 255, 0.14);
   flex-shrink: 0;
-
-  &.nova-tray-item--compact-hide {
-    @media (max-width: 599px) {
-      display: none;
-    }
+}
+@media (max-width: 599px) {
+  .nova-top-bar__tray-divider.nova-tray-item--compact-hide {
+    display: none;
   }
 }
 
@@ -312,8 +295,8 @@ function onAccentClick() {
   margin-left: 2px;
 }
 
-.nova-tray-item--hide-narrow {
-  @media (max-width: 719px) {
+@media (max-width: 719px) {
+  .nova-tray-item--hide-narrow {
     display: none;
   }
 }

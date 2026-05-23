@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <Card
       class="owd-system-bar__menu"
@@ -10,7 +6,7 @@
   </Card>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-system-bar__menu {
   position: absolute;
   top: calc(var(--owd-system-bar-height) + var(--owd-system-bar-menu-spacing));

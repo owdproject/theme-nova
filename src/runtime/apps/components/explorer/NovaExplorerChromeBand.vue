@@ -1,21 +1,12 @@
-<script setup lang="ts">
-import ExplorerChromeBandBase from '@owdproject/kit-explorer/runtime/components/explorer/ExplorerChromeBandBase.vue'
-import NovaExplorerBreadcrumbBar from './NovaExplorerBreadcrumbBar.vue'
-import NovaExplorerNavRow from './NovaExplorerNavRow.vue'
-
-defineProps<{
-  arrowsDisabled: boolean
-  path: string
-}>()
-
-const emit = defineEmits<{
-  back: []
-  forward: []
-  up: []
-  refresh: []
-  navigate: [path: string]
-  commit: [path: string]
-}>()
+<script setup>
+import ExplorerChromeBandBase from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerChromeBandBase.vue";
+import NovaExplorerBreadcrumbBar from "./NovaExplorerBreadcrumbBar.vue";
+import NovaExplorerNavRow from "./NovaExplorerNavRow.vue";
+defineProps({
+  arrowsDisabled: { type: Boolean, required: true },
+  path: { type: String, required: true }
+});
+const emit = defineEmits(["back", "forward", "up", "refresh", "navigate", "commit"]);
 </script>
 
 <template>
@@ -44,14 +35,12 @@ const emit = defineEmits<{
   </ExplorerChromeBandBase>
 </template>
 
-<style scoped lang="scss">
-.nova-explorer-chrome-band__inner {
-  :deep([data-part='chrome-band-root']) {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    min-width: 0;
-  }
+<style scoped>
+.nova-explorer-chrome-band__inner :deep([data-part='chrome-band-root']) {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
 }
 
 .nova-explorer-chrome-band__nav {

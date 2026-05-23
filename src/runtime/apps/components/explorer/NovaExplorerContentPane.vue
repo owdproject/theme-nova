@@ -1,27 +1,21 @@
-<script setup lang="ts">
-import type { IWindowController } from '@owdproject/core'
-import DataTable from 'primevue/datatable'
-import NovaExplorerItemContextMenu from './NovaExplorerItemContextMenu.vue'
-import NovaExplorerFileIcon from './NovaExplorerFileIcon.vue'
-import { computed, inject } from 'vue'
-import { explorerEntryAbsolutePath } from '@owdproject/core/runtime/utils/explorerEntryPath'
-
-const props = defineProps<{
-  window: IWindowController
-  fsExplorer: NonNullable<IWindowController['fsExplorer']>
-}>()
-
+<script setup>
+import DataTable from "primevue/datatable";
+import NovaExplorerItemContextMenu from "./NovaExplorerItemContextMenu.vue";
+import NovaExplorerFileIcon from "./NovaExplorerFileIcon.vue";
+import { computed, inject } from "vue";
+import { explorerEntryAbsolutePath } from "@owdproject/core/runtime/utils/explorerEntryPath";
+const props = defineProps({
+  window: { type: Object, required: true },
+  fsExplorer: { type: null, required: true }
+});
 const browsePath = computed(
-  () =>
-    String(props.window.meta?.path ?? props.fsExplorer.basePath.value ?? '').trim(),
-)
-
-const isWebUrl = computed(() => /^https?:\/\//i.test(browsePath.value))
-
-const openPathInNewTab = inject<(path: string) => void>(
-  'novaExplorerOpenPathInNewTab',
-  undefined,
-)
+  () => String(props.window.meta?.path ?? props.fsExplorer.basePath.value ?? "").trim()
+);
+const isWebUrl = computed(() => /^https?:\/\//i.test(browsePath.value));
+const openPathInNewTab = inject(
+  "novaExplorerOpenPathInNewTab",
+  void 0
+);
 </script>
 
 <template>
@@ -40,21 +34,21 @@ const openPathInNewTab = inject<(path: string) => void>(
           :fileName="fileName"
           :layout="fsExplorer.layout.value"
           :selected="
-            fsExplorer.selectedFiles.value.includes(
-              explorerEntryAbsolutePath(
-                fsExplorer.basePath.value,
-                fileName,
-              ),
-            )
-          "
+  fsExplorer.selectedFiles.value.includes(
+    explorerEntryAbsolutePath(
+      fsExplorer.basePath.value,
+      fileName
+    )
+  )
+"
           :cutted="
-            fsExplorer.fsClipboard.clipboardFiles.value.includes(
-              explorerEntryAbsolutePath(
-                fsExplorer.basePath.value,
-                fileName,
-              ),
-            ) && fsExplorer.fsClipboard.clipboardType.value === 'cut'
-          "
+  fsExplorer.fsClipboard.clipboardFiles.value.includes(
+    explorerEntryAbsolutePath(
+      fsExplorer.basePath.value,
+      fileName
+    )
+  ) && fsExplorer.fsClipboard.clipboardType.value === 'cut'
+"
           :window="window"
           :open-path-in-new-tab="openPathInNewTab"
           :contextMenuComponent="NovaExplorerItemContextMenu"
@@ -77,7 +71,8 @@ const openPathInNewTab = inject<(path: string) => void>(
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@charset "UTF-8";
 .nova-explorer-content-pane {
   flex: 1;
   min-width: 0;

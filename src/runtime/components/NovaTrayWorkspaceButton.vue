@@ -1,21 +1,19 @@
-<script setup lang="ts">
-import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeDesktopWorkspace'
-import { useNovaStartMenu } from '../composables/useNovaStartMenu'
-import { useNovaQuickSettings } from '../composables/useNovaQuickSettings'
-import { useNovaWorkspaces } from '../composables/useNovaWorkspaces'
-
-const desktopWorkspaceStore = useDesktopWorkspaceStore()
-const { close: closeStartMenu } = useNovaStartMenu()
-const { close: closeQuickSettings } = useNovaQuickSettings()
-const { enabled } = useNovaWorkspaces()
-
+<script setup>
+import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+import { useNovaStartMenu } from "../composables/useNovaStartMenu";
+import { useNovaQuickSettings } from "../composables/useNovaQuickSettings";
+import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
+const desktopWorkspaceStore = useDesktopWorkspaceStore();
+const { close: closeStartMenu } = useNovaStartMenu();
+const { close: closeQuickSettings } = useNovaQuickSettings();
+const { enabled } = useNovaWorkspaces();
 function toggleOverview() {
-  const next = !desktopWorkspaceStore.overview
+  const next = !desktopWorkspaceStore.overview;
   if (next) {
-    closeStartMenu()
-    closeQuickSettings()
+    closeStartMenu();
+    closeQuickSettings();
   }
-  desktopWorkspaceStore.setOverview(next)
+  desktopWorkspaceStore.setOverview(next);
 }
 </script>
 
@@ -37,26 +35,24 @@ function toggleOverview() {
   </button>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-tray-workspace-icon {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-
-  &__wide {
-    width: 18px;
-    height: 6px;
-    border-radius: 3px;
-    background: currentColor;
-    opacity: 0.95;
-  }
-
-  &__dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.45;
-  }
+}
+.nova-tray-workspace-icon__wide {
+  width: 18px;
+  height: 6px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.95;
+}
+.nova-tray-workspace-icon__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
 }
 </style>

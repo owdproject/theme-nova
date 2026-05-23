@@ -1,3 +1,4 @@
+import type { Reactive } from 'vue'
 import { baseCategories } from '../consts'
 
 export function getSortedCategories(

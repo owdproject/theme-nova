@@ -4,7 +4,7 @@
   </Button>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .p-button {
   display: inline-block;
   cursor: pointer;
@@ -13,13 +13,11 @@
   font-weight: bold;
   font-size: 15px;
   background: none;
-
-  &-rounded {
-    border-radius: 16px;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
+}
+.p-button-rounded {
+  border-radius: 16px;
+}
+.p-button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 </style>

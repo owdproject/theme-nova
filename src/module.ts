@@ -12,7 +12,7 @@ import Material from '@primeuix/themes/material'
 import {
   NOVA_EXPLORER_QUICK_ACCESS_SEED,
   NOVA_EXPLORER_SPECIAL_FOLDERS,
-} from './runtime/apps/explorerNav.defaults'
+} from './explorerNav.defaults'
 
 export default defineNuxtModule({
   meta: {

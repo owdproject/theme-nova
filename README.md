@@ -24,7 +24,7 @@ pnpm desktop add @owdproject/theme-nova
 // desktop.config.ts
 export default defineDesktopConfig({
   theme: '@owdproject/theme-nova',
-  apps: ['@owdproject/app-about'],
+  apps: [],
 })
 ```
 

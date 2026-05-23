@@ -1,21 +1,16 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import TieredMenu from 'primevue/tieredmenu'
-import Button from 'primevue/button'
-import type { MenuItem } from 'primevue/menuitem'
-
-defineProps<{
-  model: MenuItem[]
-}>()
-
-const menu = ref<InstanceType<typeof TieredMenu> | null>(null)
-
+<script setup>
+import { ref } from "vue";
+import TieredMenu from "primevue/tieredmenu";
+import Button from "primevue/button";
+defineProps({
+  model: { type: Array, required: true }
+});
+const menu = ref(null);
 const explorerOverlayPt = {
-  root: { class: 'nova-explorer-popup-menu' },
-}
-
-function toggle(event: Event) {
-  menu.value?.toggle(event)
+  root: { class: "nova-explorer-popup-menu" }
+};
+function toggle(event) {
+  menu.value?.toggle(event);
 }
 </script>
 
@@ -37,7 +32,7 @@ function toggle(event: Event) {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-explorer-overflow {
   display: inline-flex;
   align-items: center;

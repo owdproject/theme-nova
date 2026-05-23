@@ -1,64 +1,54 @@
-<script setup lang="ts">
-import type { IWindowController, WindowConfig } from '@owdproject/core'
-import { useExplorerTabs } from '@owdproject/kit-explorer/runtime/composables/useExplorerTabs'
-import type { MenuItem } from 'primevue/menuitem'
-import { useFileSystemExplorer } from '@owdproject/module-fs/runtime/composables/useFileSystemExplorer'
-import createExplorerFsOperations from '@owdproject/kit-fs/runtime/composables/useExplorerFsOperations'
-import NovaExplorerFrame from './NovaExplorerFrame.vue'
-import NovaExplorerCommandBar from './NovaExplorerCommandBar.vue'
-import NovaExplorerChromeBand from './NovaExplorerChromeBand.vue'
-import NovaExplorerMainPane from './NovaExplorerMainPane.vue'
-import NovaExplorerStatusBar from './NovaExplorerStatusBar.vue'
-import NovaExplorerTabStrip from './NovaExplorerTabStrip.vue'
-import { useI18n } from 'vue-i18n'
-import { provide } from 'vue'
-
-const props = defineProps<{
-  config?: WindowConfig
-  window: IWindowController
-  overflowMenu: MenuItem[]
-}>()
-
-const { t } = useI18n()
-
+<script setup>
+import { useExplorerTabs } from "@owdproject/kit-explorer/runtime/composables/useExplorerTabs";
+import { useFileSystemExplorer } from "@owdproject/module-fs/runtime/composables/useFileSystemExplorer";
+import createExplorerFsOperations from "@owdproject/kit-fs/runtime/composables/useExplorerFsOperations";
+import NovaExplorerFrame from "./NovaExplorerFrame.vue";
+import NovaExplorerCommandBar from "./NovaExplorerCommandBar.vue";
+import NovaExplorerChromeBand from "./NovaExplorerChromeBand.vue";
+import NovaExplorerMainPane from "./NovaExplorerMainPane.vue";
+import NovaExplorerStatusBar from "./NovaExplorerStatusBar.vue";
+import NovaExplorerTabStrip from "./NovaExplorerTabStrip.vue";
+import { useI18n } from "vue-i18n";
+import { provide } from "vue";
+const props = defineProps({
+  config: { type: Object, required: false },
+  window: { type: Object, required: true },
+  overflowMenu: { type: Array, required: true }
+});
+const { t } = useI18n();
 const fsExplorer = useFileSystemExplorer(
   props.window,
   createExplorerFsOperations,
-  t,
-)
-
-props.window.fsExplorer = fsExplorer
-
+  t
+);
+props.window.fsExplorer = fsExplorer;
 const explorerTabs = useExplorerTabs(props.window, fsExplorer, {
-  metaKey: 'explorerTabs',
-  pathToLabel(path: string) {
-    const p = (path || '/').trim() || '/'
-    if (p === '/') return t('apps.explorer.tabs.thisPc')
-    const parts = p.split('/').filter(Boolean)
-    return parts[parts.length - 1] ?? p
+  metaKey: "explorerTabs",
+  pathToLabel(path) {
+    const p = (path || "/").trim() || "/";
+    if (p === "/") return t("apps.explorer.tabs.thisPc");
+    const parts = p.split("/").filter(Boolean);
+    return parts[parts.length - 1] ?? p;
   },
   closeLastTab: () => {
-    props.window.destroy()
-  },
-})
-
-provide('novaExplorerOpenPathInNewTab', (path: string) => {
-  void explorerTabs.openPathInNewTab(path)
-})
-
+    props.window.destroy();
+  }
+});
+provide("novaExplorerOpenPathInNewTab", (path) => {
+  void explorerTabs.openPathInNewTab(path);
+});
 void fsExplorer.initialize().then(() => {
-  explorerTabs.initTabs()
-})
-
-async function navigateExplorerTo(target: string) {
-  let normalized = (target || '/').trim()
-  if (!normalized.startsWith('/')) normalized = `/${normalized}`
-  fsExplorer.basePath.value = normalized
+  explorerTabs.initTabs();
+});
+async function navigateExplorerTo(target) {
+  let normalized = (target || "/").trim();
+  if (!normalized.startsWith("/")) normalized = `/${normalized}`;
+  fsExplorer.basePath.value = normalized;
   fsExplorer.fsDirectoryNavigation.hydrate({
     paths: [normalized],
-    index: 0,
-  })
-  await fsExplorer.navigateToDirectory(normalized)
+    index: 0
+  });
+  await fsExplorer.navigateToDirectory(normalized);
 }
 </script>
 
@@ -81,8 +71,8 @@ async function navigateExplorerTo(target: string) {
         <div class="nova-explorer-top-band">
           <NovaExplorerChromeBand
             :arrows-disabled="
-              fsExplorer.fsDirectoryNavigation.history.value.length <= 1
-            "
+  fsExplorer.fsDirectoryNavigation.history.value.length <= 1
+"
             :path="fsExplorer.basePath.value"
             @back="fsExplorer.directoryBack"
             @forward="fsExplorer.directoryForward"
@@ -112,7 +102,8 @@ async function navigateExplorerTo(target: string) {
   </NovaExplorerFrame>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@charset "UTF-8";
 .nova-explorer-shell.h-full {
   overflow-x: hidden;
 }

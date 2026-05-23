@@ -1,53 +1,40 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeDesktopWorkspace'
-
-const props = defineProps<{
-  application: IApplicationController
-}>()
-
-const desktopWorkspaceStore = useDesktopWorkspaceStore()
-
+<script setup>
+import { computed } from "vue";
+import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+const props = defineProps({
+  application: { type: null, required: true }
+});
+const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const openWindowCount = computed(
-  () => props.application.openWindowCount.value,
-)
-
-function getDockTargetWindow(): IWindowController | undefined {
-  const windows = [...props.application.windows.values()]
-  if (windows.length === 0) return undefined
-
-  const focused = windows.find((w) => w.state.focused && w.state.active)
-  if (focused) return focused
-
-  const active = windows.find((w) => w.state.active)
-  if (active) return active
-
-  return windows[windows.length - 1]
+  () => props.application.openWindowCount.value
+);
+function getDockTargetWindow() {
+  const windows = [...props.application.windows.values()];
+  if (windows.length === 0) return void 0;
+  const focused = windows.find((w) => w.state.focused && w.state.active);
+  if (focused) return focused;
+  const active = windows.find((w) => w.state.active);
+  if (active) return active;
+  return windows[windows.length - 1];
 }
-
-const isDockActive = computed(() =>
-  [...props.application.windows.values()].some(
-    (w) => w.state.active && w.state.focused,
-  ),
-)
-
+const isDockActive = computed(
+  () => [...props.application.windows.values()].some(
+    (w) => w.state.active && w.state.focused
+  )
+);
 function onApplicationClick() {
-  const window = getDockTargetWindow()
-  if (!window) return
-
-  desktopWorkspaceStore.setWorkspace(window.state.workspace)
-  desktopWorkspaceStore.setOverview(false)
-
+  const window = getDockTargetWindow();
+  if (!window) return;
+  desktopWorkspaceStore.setWorkspace(window.state.workspace);
+  desktopWorkspaceStore.setOverview(false);
   if (window.state.active && window.state.focused) {
-    window.actions.minimize()
-    return
+    window.actions.minimize();
+    return;
   }
-
   if (!window.state.active) {
-    window.actions.setActive(true)
+    window.actions.setActive(true);
   }
-
-  window.actions.bringToFront()
+  window.actions.bringToFront();
 }
 </script>
 
@@ -80,7 +67,7 @@ function onApplicationClick() {
   </DockBarButton>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-dock-bar__button-app {
   position: relative;
   display: inline-flex;
@@ -90,18 +77,15 @@ function onApplicationClick() {
   height: 36px;
   border-radius: 10px;
   transition: background 0.15s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  &--active {
-    background: var(--nova-accent-muted, rgba(26, 108, 175, 0.35));
-  }
-
-  &__icon {
-    flex-shrink: 0;
-  }
+}
+.owd-dock-bar__button-app:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.owd-dock-bar__button-app--active {
+  background: var(--nova-accent-muted, rgba(26, 108, 175, 0.35));
+}
+.owd-dock-bar__button-app__icon {
+  flex-shrink: 0;
 }
 
 .owd-dock-bar__windows {
@@ -113,14 +97,13 @@ function onApplicationClick() {
   transform: translateX(-50%);
   margin: 0 auto;
   gap: 3px;
-
-  &__window-dot {
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: white;
-    opacity: 0.8;
-  }
+}
+.owd-dock-bar__windows__window-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0.8;
 }
 </style>

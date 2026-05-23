@@ -1,14 +1,10 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="owd-dock-bar__button">
     <slot />
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-dock-bar__button {
   position: relative;
   display: inline-flex;

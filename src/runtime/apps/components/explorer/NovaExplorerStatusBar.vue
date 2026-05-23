@@ -1,16 +1,14 @@
-<script setup lang="ts">
-import type { IWindowController } from '@owdproject/core'
-import ExplorerViewModeSwitch from '@owdproject/kit-explorer/runtime/components/explorer/ExplorerViewModeSwitch.vue'
-
-defineProps<{
-  count: number
-  fsExplorer: NonNullable<IWindowController['fsExplorer']>
-}>()
+<script setup>
+import ExplorerViewModeSwitch from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerViewModeSwitch.vue";
+defineProps({
+  count: { type: Number, required: true },
+  fsExplorer: { type: null, required: true }
+});
 </script>
 
 <template>
   <footer class="nova-explorer-status-bar" role="status">
-    <span>{{ count }} {{ count === 1 ? 'item' : 'items' }}</span>
+    <span>{{ count }} {{ count === 1 ? "item" : "items" }}</span>
     <div class="nova-explorer-status-bar__spacer" />
     <ExplorerViewModeSwitch
       class="nova-explorer-status-bar__view"
@@ -21,7 +19,7 @@ defineProps<{
   </footer>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-explorer-status-bar {
   flex-shrink: 0;
   display: flex;
@@ -37,33 +35,28 @@ defineProps<{
   flex: 1;
 }
 
-.nova-explorer-status-bar__view {
-  :deep([data-part='viewmode-root']) {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-  }
-
-  :deep(.explorer-view-mode-switch__btn) {
-    width: 22px;
-    height: 22px;
-    border: none;
-    border-radius: var(--nova-window-control-radius, 8px);
-    background: transparent;
-    color: inherit;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background: var(--nova-window-control-hover);
-      color: var(--nova-explorer-text);
-    }
-
-    &.is-active {
-      background: var(--nova-accent-muted);
-      color: var(--nova-explorer-accent);
-    }
-  }
+.nova-explorer-status-bar__view :deep([data-part='viewmode-root']) {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.nova-explorer-status-bar__view :deep(.explorer-view-mode-switch__btn) {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: var(--nova-window-control-radius, 8px);
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nova-explorer-status-bar__view :deep(.explorer-view-mode-switch__btn):hover {
+  background: var(--nova-window-control-hover);
+  color: var(--nova-explorer-text);
+}
+.nova-explorer-status-bar__view :deep(.explorer-view-mode-switch__btn).is-active {
+  background: var(--nova-accent-muted);
+  color: var(--nova-explorer-accent);
 }
 </style>

@@ -1,32 +1,26 @@
-<script setup lang="ts">
-import { inject } from 'vue'
-import ContextMenu from 'primevue/contextmenu'
-import type { IWindowController } from '@owdproject/core'
-import ButtonWindowNavMinimize from '../Button/ButtonWindowNavMinimize.vue'
-import ButtonWindowNavMaximize from '../Button/ButtonWindowNavMaximize.vue'
-import ButtonWindowNavClose from '../Button/ButtonWindowNavClose.vue'
-import { useWindowNavContextMenu } from '../../composables/useWindowNavContextMenu'
-
-const windowController = inject<IWindowController>('windowController')
-const { menu, items, onNavContextMenu } = useWindowNavContextMenu(windowController)
-
+<script setup>
+import { inject } from "vue";
+import ContextMenu from "primevue/contextmenu";
+import ButtonWindowNavMinimize from "../Button/ButtonWindowNavMinimize.vue";
+import ButtonWindowNavMaximize from "../Button/ButtonWindowNavMaximize.vue";
+import ButtonWindowNavClose from "../Button/ButtonWindowNavClose.vue";
+import { useWindowNavContextMenu } from "../../composables/useWindowNavContextMenu";
+const windowController = inject("windowController");
+const { menu, items, onNavContextMenu } = useWindowNavContextMenu(windowController);
 const windowNavContextMenuPt = {
-  root: { class: 'nova-window-nav-context-menu' },
-}
-
+  root: { class: "nova-window-nav-context-menu" }
+};
 function onWindowMinimize() {
-  if (!windowController?.instanced) return
-  windowController.actions.minimize()
+  if (!windowController?.instanced) return;
+  windowController.actions.minimize();
 }
-
 function onWindowMaximize() {
-  if (!windowController?.instanced) return
-  windowController.actions.toggleMaximize()
+  if (!windowController?.instanced) return;
+  windowController.actions.toggleMaximize();
 }
-
 function onWindowNavDestroy() {
-  if (!windowController?.instanced) return
-  windowController.actions.destroy()
+  if (!windowController?.instanced) return;
+  windowController.actions.destroy();
 }
 </script>
 
@@ -76,29 +70,26 @@ function onWindowNavDestroy() {
   <ContextMenu ref="menu" :model="items" :pt="windowNavContextMenuPt" />
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@charset "UTF-8";
 /* Layout only — colors in window-chrome.scss */
-.owd-window-nav {
-  &__btn-group {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    gap: var(--nova-window-nav-gap, 2px);
-    padding: 0 var(--nova-window-nav-padding-x, 8px);
-  }
-
-  &__title {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 0 8px;
-    text-align: center;
-
-    &-inner {
-      margin: 0 auto;
-      max-width: 100%;
-    }
-  }
+.owd-window-nav__btn-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--nova-window-nav-gap, 2px);
+  padding: 0 var(--nova-window-nav-padding-x, 8px);
+}
+.owd-window-nav__title {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 8px;
+  text-align: center;
+}
+.owd-window-nav__title-inner {
+  margin: 0 auto;
+  max-width: 100%;
 }
 </style>

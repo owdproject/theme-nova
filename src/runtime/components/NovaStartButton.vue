@@ -1,7 +1,6 @@
-<script setup lang="ts">
-import { useNovaStartMenu } from '../composables/useNovaStartMenu'
-
-const { open, toggle } = useNovaStartMenu()
+<script setup>
+import { useNovaStartMenu } from "../composables/useNovaStartMenu";
+const { open, toggle } = useNovaStartMenu();
 </script>
 
 <template>
@@ -19,6 +18,6 @@ const { open, toggle } = useNovaStartMenu()
       class="nova-start-btn__icon"
       aria-hidden="true"
     />
-    <span class="nova-start-btn__label">{{ $t('systemBar.start.button') }}</span>
+    <span class="nova-start-btn__label">{{ $t("systemBar.start.button") }}</span>
   </button>
 </template>

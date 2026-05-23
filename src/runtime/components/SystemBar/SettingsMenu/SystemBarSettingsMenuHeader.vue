@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="owd-system-bar__settings-menu__header">
 
@@ -31,23 +27,20 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-system-bar__settings-menu__header {
   display: flex;
   flex-direction: row;
   width: 100%;
-
-  > div {
-    &:nth-child(1) {
-      text-align: left;
-      flex: 1;
-    }
-    &:nth-child(2) {
-      display: flex;
-      flex-direction: row;
-      gap: 12px;
-      flex: 0;
-    }
-  }
+}
+.owd-system-bar__settings-menu__header > div:nth-child(1) {
+  text-align: left;
+  flex: 1;
+}
+.owd-system-bar__settings-menu__header > div:nth-child(2) {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex: 0;
 }
 </style>

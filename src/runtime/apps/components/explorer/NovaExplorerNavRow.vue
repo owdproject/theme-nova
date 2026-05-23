@@ -1,16 +1,9 @@
-<script setup lang="ts">
-import Button from 'primevue/button'
-
-defineProps<{
-  arrowsDisabled: boolean
-}>()
-
-defineEmits<{
-  back: []
-  forward: []
-  up: []
-  refresh: []
-}>()
+<script setup>
+import Button from "primevue/button";
+defineProps({
+  arrowsDisabled: { type: Boolean, required: true }
+});
+defineEmits(["back", "forward", "up", "refresh"]);
 </script>
 
 <template>
@@ -60,7 +53,7 @@ defineEmits<{
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-explorer-nav-row {
   display: flex;
   align-items: center;

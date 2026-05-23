@@ -1,8 +1,8 @@
-<script setup lang="ts">
-defineProps<{
-  iconPrepend?: string;
-  iconAppend?: string;
-}>()
+<script setup>
+defineProps({
+  iconPrepend: { type: String, required: false },
+  iconAppend: { type: String, required: false }
+});
 </script>
 
 <template>
@@ -19,28 +19,24 @@ defineProps<{
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-system-bar__settings-menu__slider {
   display: flex;
   flex-direction: row;
-
-  &__icon-prepend {
-    flex: 0;
-    padding-right: 16px;
-  }
-
-  &__icon-append {
-    flex: 0;
-    padding-left: 16px;
-  }
-
-  &__content {
-    flex: 1;
-    align-content: center;
-  }
-
-  .iconify {
-    vertical-align: -3px;
-  }
+}
+.owd-system-bar__settings-menu__slider__icon-prepend {
+  flex: 0;
+  padding-right: 16px;
+}
+.owd-system-bar__settings-menu__slider__icon-append {
+  flex: 0;
+  padding-left: 16px;
+}
+.owd-system-bar__settings-menu__slider__content {
+  flex: 1;
+  align-content: center;
+}
+.owd-system-bar__settings-menu__slider .iconify {
+  vertical-align: -3px;
 }
 </style>

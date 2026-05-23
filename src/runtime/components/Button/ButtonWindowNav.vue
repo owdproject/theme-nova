@@ -1,7 +1,7 @@
-<script setup lang="ts">
-defineProps<{
-  title?: string
-}>()
+<script setup>
+defineProps({
+  title: { type: String, required: false }
+});
 </script>
 
 <template>
@@ -16,7 +16,8 @@ defineProps<{
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@charset "UTF-8";
 /* Sizing only — hover/focus colors in window-chrome.scss */
 .owd-window-nav__button {
   position: relative;
@@ -28,10 +29,9 @@ defineProps<{
   height: var(--nova-window-control-size, 28px);
   padding: 0;
   cursor: pointer;
-
-  :deep(.iconify) {
-    position: relative;
-    pointer-events: none;
-  }
+}
+.owd-window-nav__button :deep(.iconify) {
+  position: relative;
+  pointer-events: none;
 }
 </style>

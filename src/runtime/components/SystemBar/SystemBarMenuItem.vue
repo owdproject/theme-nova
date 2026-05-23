@@ -1,7 +1,7 @@
-<script setup lang="ts">
-defineProps<{
-  application: ApplicationController
-}>()
+<script setup>
+defineProps({
+  application: { type: null, required: true }
+});
 </script>
 
 <template>
@@ -9,7 +9,3 @@ defineProps<{
     {{application.config.name}}
   </ListItem>
 </template>
-
-<style scoped lang="scss">
-
-</style>

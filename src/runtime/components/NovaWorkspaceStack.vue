@@ -1,70 +1,61 @@
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useApplicationManager } from '@owdproject/core/runtime/composables/useApplicationManager'
-import { useWorkspaceOverview } from '@owdproject/core/runtime/composables/useWorkspaceOverview'
-import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeDesktopWorkspace'
-import { useNovaWorkspaceReconcile } from '../composables/useNovaWorkspaceReconcile'
-
-const applicationManager = useApplicationManager()
-const desktopWorkspaceStore = useDesktopWorkspaceStore()
-const { reconcileOrphanWindows } = useNovaWorkspaceReconcile()
-const { t } = useI18n()
-const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceOverview()
-
-function desktopLabel(index: number) {
-  return t('systemBar.workspaces.desktopN', { n: index + 1 })
+<script setup>
+import { onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
+import { useWorkspaceOverview } from "@owdproject/core/runtime/composables/useWorkspaceOverview";
+import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+import { useNovaWorkspaceReconcile } from "../composables/useNovaWorkspaceReconcile";
+const applicationManager = useApplicationManager();
+const desktopWorkspaceStore = useDesktopWorkspaceStore();
+const { reconcileOrphanWindows } = useNovaWorkspaceReconcile();
+const { t } = useI18n();
+const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceOverview();
+function desktopLabel(index) {
+  return t("systemBar.workspaces.desktopN", { n: index + 1 });
 }
-
 function closeOverview() {
-  desktopWorkspaceStore.setOverview(false)
+  desktopWorkspaceStore.setOverview(false);
 }
-
-function onWorkspacePanelClick(workspaceId: string, e: MouseEvent) {
-  if (!desktopWorkspaceStore.overview) return
-  const target = e.target as HTMLElement | null
-  if (target?.closest('.owd-window')) return
-  desktopWorkspaceStore.setWorkspace(workspaceId)
-  closeOverview()
+function onWorkspacePanelClick(workspaceId, e) {
+  if (!desktopWorkspaceStore.overview) return;
+  const target = e.target;
+  if (target?.closest(".owd-window")) return;
+  desktopWorkspaceStore.setWorkspace(workspaceId);
+  closeOverview();
 }
-
-function selectWorkspace(workspaceId: string) {
+function selectWorkspace(workspaceId) {
   if (desktopWorkspaceStore.active === workspaceId) {
-    closeOverview()
-    return
+    closeOverview();
+    return;
   }
-  desktopWorkspaceStore.setWorkspace(workspaceId)
+  desktopWorkspaceStore.setWorkspace(workspaceId);
 }
-
 function addDesktop() {
-  desktopWorkspaceStore.createWorkspace()
+  desktopWorkspaceStore.createWorkspace();
 }
-
-function windowsOnWorkspace(workspaceId: string) {
-  let count = 0
+function windowsOnWorkspace(workspaceId) {
+  let count = 0;
   for (const win of applicationManager.windowsOpened.value.values()) {
-    const ws = win.state.workspace
+    const ws = win.state.workspace;
     if (!ws && workspaceId === desktopWorkspaceStore.active) {
-      count++
-      continue
+      count++;
+      continue;
     }
-    if (ws === workspaceId) count++
+    if (ws === workspaceId) count++;
   }
-  return count
+  return count;
 }
-
 onMounted(() => {
-  reconcileOrphanWindows()
-})
-
+  reconcileOrphanWindows();
+});
 </script>
 
 <template>
   <div
     class="nova-workspace-stack"
     :class="{
-      'nova-workspace-stack--overview': desktopWorkspaceStore.overview,
-    }"
+  'nova-workspace-stack--overview': desktopWorkspaceStore.overview
+}"
   >
     <button
       v-if="desktopWorkspaceStore.overview"
@@ -84,9 +75,8 @@ onMounted(() => {
         :key="workspaceId"
         class="nova-workspace-panel"
         :class="{
-          'nova-workspace-panel--active':
-            workspaceId === desktopWorkspaceStore.active,
-        }"
+  'nova-workspace-panel--active': workspaceId === desktopWorkspaceStore.active
+}"
         role="listitem"
         @drop="onWorkspaceDrop($event, workspaceId)"
         @dragover="onWorkspaceDragOver"
@@ -107,12 +97,11 @@ onMounted(() => {
           </DesktopContent>
           <p
             v-if="
-              desktopWorkspaceStore.overview &&
-              windowsOnWorkspace(workspaceId) === 0
-            "
+  desktopWorkspaceStore.overview && windowsOnWorkspace(workspaceId) === 0
+"
             class="nova-workspace-panel__empty"
           >
-            {{ $t('systemBar.workspaces.emptyDesktop') }}
+            {{ $t("systemBar.workspaces.emptyDesktop") }}
           </p>
           <CoreApplicationRender :workspace-filter="workspaceId" />
         </div>
@@ -130,9 +119,8 @@ onMounted(() => {
         type="button"
         class="nova-workspace-switcher__pill"
         :class="{
-          'nova-workspace-switcher__pill--active':
-            workspaceId === desktopWorkspaceStore.active,
-        }"
+  'nova-workspace-switcher__pill--active': workspaceId === desktopWorkspaceStore.active
+}"
         @click.stop="selectWorkspace(workspaceId)"
       >
         {{ desktopLabel(index) }}

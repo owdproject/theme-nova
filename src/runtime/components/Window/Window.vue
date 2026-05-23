@@ -1,15 +1,13 @@
-<script setup lang="ts">
-import { useWorkspaceEdgeDropWindowHandlers } from '@owdproject/kit-theme/runtime/composables/useWorkspaceEdgeDrop'
-
-const props = defineProps<{
-  config?: WindowConfig
-  window?: IWindowController
-  content?: any
-}>()
-
+<script setup>
+import { useWorkspaceEdgeDropWindowHandlers } from "@owdproject/kit-theme/runtime/composables/useWorkspaceEdgeDrop";
+const props = defineProps({
+  config: { type: null, required: false },
+  window: { type: null, required: false },
+  content: { type: null, required: false }
+});
 const { onDragStart, onDragEnd } = useWorkspaceEdgeDropWindowHandlers(
-  () => props.window,
-)
+  () => props.window
+);
 </script>
 
 <template>
@@ -40,7 +38,7 @@ const { onDragStart, onDragEnd } = useWorkspaceEdgeDropWindowHandlers(
   </CoreWindow>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 /* Chrome colors live in assets/styles/partials/window-chrome.scss */
 .owd-window {
   box-sizing: border-box;

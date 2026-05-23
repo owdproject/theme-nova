@@ -1,12 +1,10 @@
 <script setup>
-import { useNotificationsMenu } from '../../../composables/useNotificationsMenu'
-import { useTemplateRef } from 'vue'
-import { onClickOutside } from '@vueuse/core'
-
-const notificationsMenu = useNotificationsMenu()
-const notificationsMenuElement = useTemplateRef('notificationsMenuElement')
-
-onClickOutside(notificationsMenuElement, () => notificationsMenu.enabled.value = false)
+import { useNotificationsMenu } from "../../../composables/useNotificationsMenu";
+import { useTemplateRef } from "vue";
+import { onClickOutside } from "@vueuse/core";
+const notificationsMenu = useNotificationsMenu();
+const notificationsMenuElement = useTemplateRef("notificationsMenuElement");
+onClickOutside(notificationsMenuElement, () => notificationsMenu.enabled.value = false);
 </script>
 
 <template>
@@ -28,7 +26,7 @@ onClickOutside(notificationsMenuElement, () => notificationsMenu.enabled.value =
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .owd-system-bar__notifications-menu {
   left: 50%;
   transform: translateX(-50%);
@@ -37,15 +35,11 @@ onClickOutside(notificationsMenuElement, () => notificationsMenu.enabled.value =
   width: 400px;
   display: flex;
   flex-direction: row;
-
-  > div {
-    &:nth-child(1) {
-      width: 40%;
-    }
-
-    &:nth-child(2) {
-      width: 60%;
-    }
-  }
+}
+.owd-system-bar__notifications-menu > div:nth-child(1) {
+  width: 40%;
+}
+.owd-system-bar__notifications-menu > div:nth-child(2) {
+  width: 60%;
 }
 </style>

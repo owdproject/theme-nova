@@ -1,0 +1,31 @@
+/* Tray lives in .nova-top-bar; scoped styles in NovaTopBarTray.vue are primary. */
+.owd-desktop--nova .nova-tray-btn,
+.nova-top-bar .nova-tray-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.15s ease;
+}
+.owd-desktop--nova .nova-tray-btn:hover, .owd-desktop--nova .nova-tray-btn--active,
+.nova-top-bar .nova-tray-btn:hover,
+.nova-top-bar .nova-tray-btn--active {
+  background: rgba(255, 255, 255, 0.12);
+}
+.owd-desktop--nova .nova-tray-btn:disabled,
+.nova-top-bar .nova-tray-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.owd-desktop--nova .nova-tray-btn--accent:hover,
+.nova-top-bar .nova-tray-btn--accent:hover {
+  background: var(--nova-accent-muted, rgba(255, 255, 255, 0.12));
+}

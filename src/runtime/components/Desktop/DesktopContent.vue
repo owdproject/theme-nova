@@ -1,17 +1,15 @@
-<script setup lang="ts">
-import { useAppConfig } from 'nuxt/app'
-import { computed } from 'vue'
-
-const appConfig = useAppConfig()
-
+<script setup>
+import { useAppConfig } from "nuxt/app";
+import { computed } from "vue";
+const appConfig = useAppConfig();
 const classes = computed(() => {
-  const list = ['owd-desktop__content']
-  const pos = appConfig.desktop?.systemBar?.position
+  const list = ["owd-desktop__content"];
+  const pos = appConfig.desktop?.systemBar?.position;
   if (pos) {
-    list.push(`owd-desktop__content--system-bar-position-${pos}`)
+    list.push(`owd-desktop__content--system-bar-position-${pos}`);
   }
-  return list
-})
+  return list;
+});
 </script>
 
 <template>
@@ -20,21 +18,19 @@ const classes = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .owd-desktop__content {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-
-  &--system-bar-position-top {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-
-  &--system-bar-position-bottom {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
+}
+.owd-desktop__content--system-bar-position-top {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.owd-desktop__content--system-bar-position-bottom {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 </style>

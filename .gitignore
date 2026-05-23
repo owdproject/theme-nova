@@ -6,3 +6,7 @@ dist
 playground/.nuxt
 playground/node_modules
 ._*
+src/**/*.d.vue.ts
+src/**/*.vue.d.ts
+src/**/*.js
+!src/i18n/**/*.js

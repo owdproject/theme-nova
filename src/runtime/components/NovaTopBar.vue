@@ -1,9 +1,8 @@
-<script setup lang="ts">
-import { useDesktopShellOptions } from '@owdproject/kit-theme/runtime/composables/useDesktopShellOptions'
-import NovaStartButton from './NovaStartButton.vue'
-import NovaTopBarTray from './NovaTopBarTray.vue'
-
-const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions()
+<script setup>
+import { useDesktopShellOptions } from "@owdproject/kit-theme/runtime/composables/useDesktopShellOptions";
+import NovaStartButton from "./NovaStartButton.vue";
+import NovaTopBarTray from "./NovaTopBarTray.vue";
+const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions();
 </script>
 
 <template>
@@ -26,7 +25,7 @@ const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions()
   </header>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-top-bar {
   display: flex;
   flex-direction: row;
@@ -59,5 +58,4 @@ const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions()
   flex: 1 1 auto;
   min-width: 0;
 }
-
 </style>

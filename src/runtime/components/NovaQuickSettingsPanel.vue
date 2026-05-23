@@ -1,47 +1,38 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useBattery } from '@vueuse/core'
-import { useDesktopVolumeStore } from '@owdproject/core/runtime/stores/storeDesktopVolume'
-import { useDesktopShellIdentity } from '@owdproject/kit-theme/runtime/composables/useDesktopShellIdentity'
-import { ref, watch } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
-
-const { charging, level } = useBattery()
-const desktopVolumeStore = useDesktopVolumeStore()
-const { displayName, avatarUrl, isGuest } = useDesktopShellIdentity()
-
-const volume = ref(desktopVolumeStore.master)
+<script setup>
+import { computed } from "vue";
+import { useBattery } from "@vueuse/core";
+import { useDesktopVolumeStore } from "@owdproject/core/runtime/stores/storeDesktopVolume";
+import { useDesktopShellIdentity } from "@owdproject/kit-theme/runtime/composables/useDesktopShellIdentity";
+import { ref, watch } from "vue";
+import { useDebounceFn } from "@vueuse/core";
+const { charging, level } = useBattery();
+const desktopVolumeStore = useDesktopVolumeStore();
+const { displayName, avatarUrl, isGuest } = useDesktopShellIdentity();
+const volume = ref(desktopVolumeStore.master);
 const saveMasterVolumeDebounced = useDebounceFn(
   () => desktopVolumeStore.setMasterVolume(volume.value),
-  250,
-)
-
+  250
+);
 watch(
   () => volume.value,
-  () => saveMasterVolumeDebounced(),
-)
-
-const batteryPercent = computed(() =>
-  level.value != null ? Math.round(level.value * 100) : null,
-)
-
+  () => saveMasterVolumeDebounced()
+);
+const batteryPercent = computed(
+  () => level.value != null ? Math.round(level.value * 100) : null
+);
 const batteryIcon = computed(() => {
-  if (batteryPercent.value == null) return 'mdi:battery-unknown'
-  const tens = Math.floor(batteryPercent.value / 10) * 10
-  const suffix = charging.value ? '-charging' : ''
-  return `mdi:battery${suffix}-${tens}`
-})
-
+  if (batteryPercent.value == null) return "mdi:battery-unknown";
+  const tens = Math.floor(batteryPercent.value / 10) * 10;
+  const suffix = charging.value ? "-charging" : "";
+  return `mdi:battery${suffix}-${tens}`;
+});
 const volumeIcon = computed(() => {
-  if (volume.value <= 0) return 'mdi:volume-off'
-  if (volume.value < 35) return 'mdi:volume-low'
-  if (volume.value < 70) return 'mdi:volume-medium'
-  return 'mdi:volume-high'
-})
-
-const emit = defineEmits<{
-  close: []
-}>()
+  if (volume.value <= 0) return "mdi:volume-off";
+  if (volume.value < 35) return "mdi:volume-low";
+  if (volume.value < 70) return "mdi:volume-medium";
+  return "mdi:volume-high";
+});
+const emit = defineEmits(["close"]);
 </script>
 
 <template>
@@ -59,7 +50,7 @@ const emit = defineEmits<{
       <div class="nova-quick-settings__user-text">
         <span class="nova-quick-settings__user-name">{{ displayName }}</span>
         <span v-if="isGuest" class="nova-quick-settings__user-badge">
-          {{ $t('systemBar.tray.guest') }}
+          {{ $t("systemBar.tray.guest") }}
         </span>
       </div>
     </section>
@@ -78,16 +69,14 @@ const emit = defineEmits<{
       <Icon :name="batteryIcon" :size="20" class="nova-quick-settings__row-icon" />
       <span class="nova-quick-settings__battery-label">
         {{
-          charging
-            ? $t('systemBar.tray.batteryCharging', { percent: batteryPercent })
-            : $t('systemBar.tray.batteryLevel', { percent: batteryPercent })
+          charging ? $t("systemBar.tray.batteryCharging", { percent: batteryPercent }) : $t("systemBar.tray.batteryLevel", { percent: batteryPercent })
         }}
       </span>
     </section>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .nova-quick-settings {
   min-width: 280px;
   padding: 14px 16px;
@@ -149,14 +138,12 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   gap: 10px;
-
-  & + & {
-    margin-top: 12px;
-  }
-
-  &--static {
-    opacity: 0.9;
-  }
+}
+.nova-quick-settings__row + .nova-quick-settings__row {
+  margin-top: 12px;
+}
+.nova-quick-settings__row--static {
+  opacity: 0.9;
 }
 
 .nova-quick-settings__row-icon {

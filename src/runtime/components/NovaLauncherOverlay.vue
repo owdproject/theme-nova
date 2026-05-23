@@ -1,73 +1,63 @@
-<script setup lang="ts">
-import { computed, watch, useTemplateRef } from 'vue'
-import { onKeyStroke } from '@vueuse/core'
-import { useNovaStartMenu } from '../composables/useNovaStartMenu'
-import NovaStartSearchField from './NovaStartSearchField.vue'
-import NovaStartAppTile from './NovaStartAppTile.vue'
-
+<script setup>
+import { computed, watch, useTemplateRef } from "vue";
+import { onKeyStroke } from "@vueuse/core";
+import { useNovaStartMenu } from "../composables/useNovaStartMenu";
+import NovaStartSearchField from "./NovaStartSearchField.vue";
+import NovaStartAppTile from "./NovaStartAppTile.vue";
 const {
   open,
   searchQuery,
   filteredEntries,
   allEntries,
   close,
-  launchEntry,
-} = useNovaStartMenu()
-
-const panelRef = useTemplateRef('panelRef')
-const searchRef = useTemplateRef('searchRef')
-
+  launchEntry
+} = useNovaStartMenu();
+const panelRef = useTemplateRef("panelRef");
+const searchRef = useTemplateRef("searchRef");
 const CATEGORY_ORDER = [
-  'favorites',
-  'productivity',
-  'accessories',
-  'internet',
-  'office',
-  'games',
-  'graphics',
-  'programming',
-  'system-tools',
-  'utilities',
-  'tools',
-  'other',
-] as const
-
+  "favorites",
+  "productivity",
+  "accessories",
+  "internet",
+  "office",
+  "games",
+  "graphics",
+  "programming",
+  "system-tools",
+  "utilities",
+  "tools",
+  "other"
+];
 const groupedSections = computed(() => {
-  const groups = new Map<string, ApplicationEntryWithInherited[]>()
-
+  const groups = /* @__PURE__ */ new Map();
   for (const entry of filteredEntries.value) {
-    const key = entry.category || 'other'
-    const list = groups.get(key) ?? []
-    list.push(entry)
-    groups.set(key, list)
+    const key = entry.category || "other";
+    const list = groups.get(key) ?? [];
+    list.push(entry);
+    groups.set(key, list);
   }
-
   const keys = [...groups.keys()].sort((a, b) => {
-    const ai = CATEGORY_ORDER.indexOf(a as (typeof CATEGORY_ORDER)[number])
-    const bi = CATEGORY_ORDER.indexOf(b as (typeof CATEGORY_ORDER)[number])
-    const ar = ai === -1 ? 99 : ai
-    const br = bi === -1 ? 99 : bi
-    return ar - br
-  })
-
+    const ai = CATEGORY_ORDER.indexOf(a);
+    const bi = CATEGORY_ORDER.indexOf(b);
+    const ar = ai === -1 ? 99 : ai;
+    const br = bi === -1 ? 99 : bi;
+    return ar - br;
+  });
   return keys.map((category) => ({
     category,
-    entries: groups.get(category)!,
-  }))
-})
-
+    entries: groups.get(category)
+  }));
+});
 const showGrouped = computed(
-  () => !searchQuery.value.trim() && groupedSections.value.length > 1,
-)
-
-onKeyStroke('Escape', () => {
-  if (open.value) close()
-})
-
+  () => !searchQuery.value.trim() && groupedSections.value.length > 1
+);
+onKeyStroke("Escape", () => {
+  if (open.value) close();
+});
 watch(open, (isOpen) => {
-  if (!isOpen) return
-  requestAnimationFrame(() => searchRef.value?.focus())
-})
+  if (!isOpen) return;
+  requestAnimationFrame(() => searchRef.value?.focus());
+});
 </script>
 
 <template>
@@ -89,7 +79,7 @@ watch(open, (isOpen) => {
         <header class="nova-launcher__header">
           <div class="nova-launcher__header-row">
             <h2 class="nova-launcher__heading">
-              {{ $t('systemBar.start.panelLabel') }}
+              {{ $t("systemBar.start.panelLabel") }}
             </h2>
             <button
               type="button"
@@ -122,9 +112,7 @@ watch(open, (isOpen) => {
               aria-hidden="true"
             />
             <span>{{
-              allEntries.length === 0
-                ? $t('systemBar.start.emptyApps')
-                : $t('systemBar.start.emptySearch')
+              allEntries.length === 0 ? $t("systemBar.start.emptyApps") : $t("systemBar.start.emptySearch")
             }}</span>
           </div>
 

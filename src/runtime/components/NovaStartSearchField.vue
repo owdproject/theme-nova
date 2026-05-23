@@ -1,20 +1,16 @@
-<script setup lang="ts">
-import { useTemplateRef } from 'vue'
-
-defineProps<{
-  size?: 'default' | 'large'
-  placeholder?: string
-  ariaLabel?: string
-}>()
-
-const model = defineModel<string>({ required: true })
-const inputRef = useTemplateRef('inputRef')
-
+<script setup>
+import { useTemplateRef } from "vue";
+defineProps({
+  size: { type: String, required: false },
+  placeholder: { type: String, required: false },
+  ariaLabel: { type: String, required: false }
+});
+const model = defineModel({ type: String, ...{ required: true } });
+const inputRef = useTemplateRef("inputRef");
 function focus() {
-  inputRef.value?.focus()
+  inputRef.value?.focus();
 }
-
-defineExpose({ focus })
+defineExpose({ focus });
 </script>
 
 <template>
@@ -36,7 +32,7 @@ defineExpose({ focus })
       :placeholder="placeholder"
       :aria-label="ariaLabel ?? placeholder"
       autocomplete="off"
-      :enterkeyhint="size === 'large' ? 'search' : undefined"
+      :enterkeyhint="size === 'large' ? 'search' : void 0"
     />
   </label>
 </template>
