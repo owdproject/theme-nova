@@ -80,6 +80,8 @@ onUnmounted(() => {
 
     <NovaLauncherOverlay v-if="startMenuOpen" />
 
+    <NovaConfirmDialogs />
+
   </CoreDesktop>
 </template>
 
