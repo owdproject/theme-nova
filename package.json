@@ -1,6 +1,6 @@
 {
   "name": "@owdproject/theme-nova",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Open Web Desktop theme",
   "homepage": "https://github.com/owdproject/theme-nova#readme",
   "license": "MIT",
@@ -12,7 +12,15 @@
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
-      "import": "./dist/module.mjs"
+      "development": "./src/module.ts",
+      "import": "./dist/module.mjs",
+      "default": "./dist/module.mjs"
+    },
+    "./runtime/*": {
+      "types": "./src/runtime/*",
+      "development": "./src/runtime/*",
+      "import": "./src/runtime/*",
+      "default": "./src/runtime/*"
     }
   },
   "main": "./dist/module.mjs",
@@ -21,10 +29,9 @@
       ".": ["./dist/types.d.mts"]
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "src"],
   "nx": { "name": "theme-nova" },
   "scripts": {
-    "prepare": "nuxt-module-build build --stub",
     "prepack": "nuxt-module-build build",
     "dev": "pnpm run dev:prepare && cd playground && pnpm exec nuxt dev",
     "dev:build": "nuxt build playground",
@@ -43,7 +50,7 @@
   },
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
-    "@owdproject/app-classic-audioplayer": "^0.0.4",
+    "@owdproject/app-classic-audioplayer": "latest",
     "@owdproject/core": "3.2.0",
     "nuxt": "^4.3.0",
     "typescript": "~5.9.3"
