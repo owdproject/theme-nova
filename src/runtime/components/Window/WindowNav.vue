@@ -25,7 +25,7 @@ function onWindowNavDestroy() {
 </script>
 
 <template>
-  <CoreWindowNav
+  <DesktopWindowNav
     @dblclick="onWindowMaximize"
     @contextmenu="onNavContextMenu"
   >
@@ -65,7 +65,7 @@ function onWindowNavDestroy() {
         @click.stop="onWindowNavDestroy"
       />
     </div>
-  </CoreWindowNav>
+  </DesktopWindowNav>
 
   <ContextMenu ref="menu" :model="items" :pt="windowNavContextMenuPt" />
 </template>

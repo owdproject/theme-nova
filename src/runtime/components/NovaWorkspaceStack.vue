@@ -2,14 +2,14 @@
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
-import { useWorkspaceOverview } from "@owdproject/core/runtime/composables/useWorkspaceOverview";
+import { useWorkspaceManager } from "@owdproject/core/runtime/composables/useWorkspaceManager";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
 import { useNovaWorkspaceReconcile } from "../composables/useNovaWorkspaceReconcile";
 const applicationManager = useApplicationManager();
 const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const { reconcileOrphanWindows } = useNovaWorkspaceReconcile();
 const { t } = useI18n();
-const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceOverview();
+const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceManager();
 function desktopLabel(index) {
   return t("systemBar.workspaces.desktopN", { n: index + 1 });
 }
@@ -103,7 +103,7 @@ onMounted(() => {
           >
             {{ $t("systemBar.workspaces.emptyDesktop") }}
           </p>
-          <CoreApplicationRender :workspace-filter="workspaceId" />
+          <DesktopApplicationRender :workspace-filter="workspaceId" />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ const { onDragStart, onDragEnd } = useWorkspaceEdgeDropWindowHandlers(
 </script>
 
 <template>
-  <CoreWindow
+  <DesktopWindow
     v-bind="$props"
     v-show="window?.state?.active !== false"
     @drag:start="onDragStart"
@@ -35,7 +35,7 @@ const { onDragStart, onDragEnd } = useWorkspaceEdgeDropWindowHandlers(
         </WindowContent>
       </template>
     </Card>
-  </CoreWindow>
+  </DesktopWindow>
 </template>
 
 <style scoped>

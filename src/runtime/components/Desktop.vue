@@ -47,7 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <CoreDesktop
+  <DesktopCore
     v-bind="$props"
     :workspaces="appConfig.desktop?.workspaces"
     class="owd-desktop--nova"
@@ -72,7 +72,7 @@ onUnmounted(() => {
         <DesktopContent>
           <slot />
         </DesktopContent>
-        <CoreApplicationRender />
+        <DesktopApplicationRender />
       </template>
     </div>
 
@@ -82,7 +82,7 @@ onUnmounted(() => {
 
     <NovaConfirmDialogs />
 
-  </CoreDesktop>
+  </DesktopCore>
 </template>
 
 <style>
@@ -754,7 +754,7 @@ body.owd-has-nova-desktop .nova-start-tile--grid .nova-start-tile__meta {
 .owd-desktop--nova .owd-window.nova-explorer-frame {
   /* Caption buttons: explorer-caption-controls.scss */
   /*
-   * CoreWindow applies overflow on `.owd-window__content`; pin chrome so only
+   * DesktopWindow applies overflow on `.owd-window__content`; pin chrome so only
    * nav / content columns scroll internally.
    */
 }

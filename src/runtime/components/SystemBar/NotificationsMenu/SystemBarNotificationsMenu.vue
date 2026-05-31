@@ -13,7 +13,7 @@ onClickOutside(notificationsMenuElement, () => notificationsMenu.enabled.value =
     <SystemBarButton
         @click="notificationsMenu.enabled.value = !notificationsMenu.enabled.value"
     >
-      <CoreTime/>
+      <DesktopTime/>
     </SystemBarButton>
 
     <SystemBarMenu

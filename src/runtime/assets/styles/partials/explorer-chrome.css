@@ -82,7 +82,7 @@
 .owd-desktop--nova .owd-window.nova-explorer-frame {
   /* Caption buttons: explorer-caption-controls.scss */
   /*
-   * CoreWindow applies overflow on `.owd-window__content`; pin chrome so only
+   * DesktopWindow applies overflow on `.owd-window__content`; pin chrome so only
    * nav / content columns scroll internally.
    */
 }

@@ -92,7 +92,7 @@ export default defineNuxtModule({
     addImportsDir(resolve('./runtime/utils'))
 
     addPlugin({
-      src: resolve('./runtime/plugins/50.owd-theme-nova-dialogs.client.ts'),
+      src: resolve('./runtime/plugins/50.desktop-theme-nova-dialogs.client.ts'),
       mode: 'client',
     })
 
