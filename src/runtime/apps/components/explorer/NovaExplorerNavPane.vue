@@ -1,5 +1,5 @@
 <script setup>
-import { useDesktopExplorerStore } from "@owdproject/core/runtime/stores/storeDesktopExplorer";
+import { useExplorerStore } from "@owdproject/kit-fs/runtime/stores/storeExplorer";
 import { useRuntimeConfig } from "nuxt/app";
 import { computed, nextTick, onMounted, ref, withDefaults } from "vue";
 import Tree from "primevue/tree";
@@ -12,7 +12,7 @@ const props = defineProps({
   widthPx: { type: Number, required: false, default: 248 }
 });
 const { t } = useI18n();
-const desktopExplorerStore = useDesktopExplorerStore();
+const desktopExplorerStore = useExplorerStore();
 const runtimeConfig = useRuntimeConfig();
 const selectedTreeKey = ref("");
 const shellFolderCtxMenu = ref(null);
