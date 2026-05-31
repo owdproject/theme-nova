@@ -6,8 +6,8 @@ import {
   addImportsDir,
   addPlugin,
 } from '@nuxt/kit'
+import { defu } from 'defu'
 import { registerTailwindPath } from '@owdproject/core/runtime/utils/utilApp'
-import deepMerge from 'deepmerge'
 import Material from '@primeuix/themes/material'
 import {
   NOVA_EXPLORER_QUICK_ACCESS_SEED,
@@ -51,9 +51,8 @@ export default defineNuxtModule({
     await installModule('@owdproject/kit-theme')
 
     nuxt.options.runtimeConfig.public ??= {}
-    nuxt.options.runtimeConfig.public.desktop ??= {}
-    nuxt.options.runtimeConfig.public.desktop = deepMerge(
-      nuxt.options.runtimeConfig.public.desktop,
+    nuxt.options.runtimeConfig.public.desktop = defu(
+      nuxt.options.runtimeConfig.public.desktop ?? {},
       options,
     )
 
