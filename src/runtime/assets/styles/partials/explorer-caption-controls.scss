@@ -2,7 +2,9 @@
 .owd-desktop--nova .owd-window.nova-explorer-frame {
   .p-card-header .owd-window-nav {
     align-items: center;
-    min-height: var(--nova-window-nav-height);
+    min-height: calc(
+      var(--nova-window-nav-height) + var(--nova-window-nav-padding-top)
+    );
 
     .owd-window-nav__title {
       flex: 1 1 auto;

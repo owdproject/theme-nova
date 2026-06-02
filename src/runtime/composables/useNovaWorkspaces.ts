@@ -6,7 +6,7 @@ export function useNovaWorkspaces() {
   const appConfig = useAppConfig()
 
   const enabled = computed(
-    () => appConfig.desktop?.workspaces?.enabled === true,
+    () => appConfig?.desktop?.workspaces?.enabled === true,
   )
 
   return { enabled }

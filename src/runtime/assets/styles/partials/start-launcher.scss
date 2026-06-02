@@ -1,0 +1,188 @@
+/* Start menu UI inside the portaled launcher (GNOME-like: borderless search + icon grid). */
+body.owd-has-nova-desktop {
+  .nova-launcher .nova-start-search {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+
+    &:focus-within {
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    &__icon {
+      flex-shrink: 0;
+      color: inherit;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+
+    &__input {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.32);
+      }
+
+      &::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+      }
+    }
+
+    /* Launcher: centered query, subtle lens on the left */
+    &--launcher {
+      position: relative;
+      width: 100%;
+      margin: 0;
+      min-height: 52px;
+
+      .nova-start-search__icon {
+        position: absolute;
+        left: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.2;
+      }
+
+      .nova-start-search__input {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        padding: 8px 8px 8px 2.5rem;
+        font-size: clamp(1.375rem, 3.8vw, 1.875rem);
+        font-weight: 300;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      &:focus-within .nova-start-search__icon {
+        opacity: 0.32;
+      }
+    }
+
+    &--large:not(&--launcher) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: fit-content;
+      min-height: 52px;
+
+      .nova-start-search__icon {
+        opacity: 0.38;
+      }
+
+      .nova-start-search__input {
+        width: min(22rem, 56vw);
+        min-width: 10rem;
+        font-size: 22px;
+        font-weight: 400;
+        text-align: left;
+      }
+    }
+  }
+
+  .nova-launcher .nova-start-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    gap: 12px;
+    padding: 32px 16px;
+    margin-block: auto;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.5;
+    line-height: 1.4;
+
+    &__icon {
+      opacity: 0.35;
+    }
+  }
+
+  .nova-launcher .nova-start-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    padding: 6px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+    transition:
+      transform 0.14s cubic-bezier(0.2, 0, 0, 1),
+      background 0.14s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--nova-start-hover);
+      outline: none;
+      transform: translateY(-2px);
+
+      .nova-start-tile__icon-wrap {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    &:active {
+      background: var(--nova-start-active);
+      transform: translateY(0);
+
+      .nova-start-tile__icon-wrap {
+        background: transparent;
+      }
+    }
+
+    &__icon-wrap {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border: 0;
+      border-radius: 18px;
+      background: transparent;
+      transition:
+        background 0.14s ease,
+        transform 0.14s ease;
+
+      .iconify,
+      svg {
+        width: 48px !important;
+        height: 48px !important;
+      }
+    }
+
+    &__text {
+      display: none;
+    }
+
+    &--grid {
+      padding: 10px;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@mixin layout {
+  .owd-desktop {
+    background: var(--owd-surface-900);
+    font-family: var(--owd-font-family), serif;
+    color: var(--owd-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .owd-desktop__system-bar {
+      flex: 0 0 auto;
+      overflow: visible;
+      position: relative;
+      z-index: 10061;
+    }
+
+    .owd-desktop__content {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+  }
+
+  .owd-desktop--system-bar-position-bottom {
+    flex-direction: column-reverse;
+  }
+}

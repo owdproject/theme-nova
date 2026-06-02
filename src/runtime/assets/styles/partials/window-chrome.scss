@@ -17,6 +17,27 @@
 
   &:not(.owd-window--focused) {
     opacity: var(--nova-window-inactive-opacity);
+
+    > .p-card {
+      background: var(--nova-window-body-bg);
+      border-color: var(--nova-window-border);
+      box-shadow: var(--nova-window-shadow);
+    }
+
+    > .p-card > .p-card-header {
+      background: transparent;
+    }
+
+    .p-card-header .owd-window-nav,
+    .p-card-header .owd-window-nav.owd-window-nav--focused {
+      color: var(--nova-window-text-inactive);
+      background: var(--nova-window-body-bg) !important;
+      border-bottom-color: transparent !important;
+
+      &::before {
+        background: transparent !important;
+      }
+    }
   }
 
   > .p-card {
@@ -66,6 +87,7 @@
     opacity: 1;
 
     > .p-card {
+      background: var(--nova-window-frame-bg);
       border-color: var(--nova-window-border-focused);
       box-shadow: var(--nova-window-shadow-focused);
     }
@@ -76,15 +98,18 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: var(--nova-window-nav-height);
-    min-height: var(--nova-window-nav-height);
-    padding: 0;
+    box-sizing: border-box;
+    height: auto;
+    min-height: calc(
+      var(--nova-window-nav-height) + var(--nova-window-nav-padding-top)
+    );
+    padding: var(--nova-window-nav-padding-top) 0 0;
     font-weight: 600;
     font-size: 13px;
     letter-spacing: 0.01em;
     color: var(--nova-window-text-inactive);
-    background: var(--nova-window-header-bg);
-    border-bottom: 1px solid var(--nova-window-nav-divider);
+    background: transparent;
+    border-bottom: 1px solid transparent;
     border-radius: var(--nova-window-radius) var(--nova-window-radius) 0 0;
     box-shadow: none;
     transition:
@@ -107,6 +132,7 @@
     &--focused {
       color: var(--nova-window-text);
       background: var(--nova-window-header-focused-bg);
+      border-bottom-color: var(--nova-window-nav-divider);
 
       &::before {
         background: linear-gradient(

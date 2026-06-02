@@ -2,6 +2,7 @@
 .owd-desktop--nova {
   --nova-window-radius: var(--owd-card-border-radius, 8px);
   --nova-window-nav-height: var(--owd-system-bar-height, 32px);
+  --nova-window-nav-padding-top: 4px;
   --nova-window-control-size: 28px;
   --nova-window-control-radius: 8px;
   --nova-window-nav-padding-x: 8px;

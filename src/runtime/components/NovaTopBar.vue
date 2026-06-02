@@ -35,8 +35,6 @@ const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions();
   height: var(--owd-system-bar-height);
   padding: var(--owd-system-bar-padding) 10px;
   box-sizing: border-box;
-  background: var(--nova-shell-bar-bg, rgba(6, 10, 16, 0.92));
-  border-bottom: 1px solid var(--owd-surface-700);
   color: #f1f5f9;
   flex-shrink: 0;
   position: relative;

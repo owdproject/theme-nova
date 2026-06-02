@@ -1,23 +1,32 @@
 import {
-  defineNuxtModule,
   createResolver,
+  addComponent,
   addComponentsDir,
   installModule,
   addImportsDir,
   addPlugin,
 } from '@nuxt/kit'
-import { defu } from 'defu'
 import { registerTailwindPath } from '@owdproject/core/runtime/utils/utilApp'
+import { defineDesktopTheme } from '@owdproject/core/runtime/utils/defineDesktopTheme'
 import Material from '@primeuix/themes/material'
 import {
   NOVA_EXPLORER_QUICK_ACCESS_SEED,
   NOVA_EXPLORER_SPECIAL_FOLDERS,
 } from './explorerNav.defaults'
+import { installNovaBuiltInApps } from './runtime/apps/installBuiltInApps'
 
-export default defineNuxtModule({
+/** Pinia-heavy shell chrome: imported only from Desktop.client.vue, not global. */
+const CHROME_COMPONENT_IGNORE = [
+  'Desktop.client.vue',
+  '**/Nova*.vue',
+  '**/DockBar/**',
+  '**/SystemBar/**',
+  '**/Desktop/**',
+]
+
+export default defineDesktopTheme({
   meta: {
     name: 'owd-theme-nova',
-    configKey: 'desktop',
   },
   defaults: {
     name: 'nova',
@@ -33,6 +42,12 @@ export default defineNuxtModule({
     workspaces: {
       enabled: true,
     },
+    motion: {
+      animation: true,
+    },
+    launcher: {
+      animation: true,
+    },
     explorer: {
       quickAccess: NOVA_EXPLORER_QUICK_ACCESS_SEED,
       quickAccessExtra: [],
@@ -45,16 +60,10 @@ export default defineNuxtModule({
       },
     },
   },
-  async setup(options, nuxt) {
+  async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
     await installModule('@owdproject/kit-theme')
-
-    nuxt.options.runtimeConfig.public ??= {}
-    nuxt.options.runtimeConfig.public.desktop = defu(
-      nuxt.options.runtimeConfig.public.desktop ?? {},
-      options,
-    )
 
     nuxt.options.primevue = nuxt.options.primevue || {}
     nuxt.options.primevue.options = {
@@ -63,9 +72,17 @@ export default defineNuxtModule({
       },
     }
 
+    addComponent({
+      name: 'Desktop',
+      filePath: resolve('./runtime/components/Desktop.client.vue'),
+      global: true,
+    })
+
     addComponentsDir({
       path: resolve('./runtime/components'),
+      pathPrefix: false,
       global: true,
+      ignore: CHROME_COMPONENT_IGNORE,
     })
 
     registerTailwindPath(
@@ -95,22 +112,12 @@ export default defineNuxtModule({
       mode: 'client',
     })
 
+    nuxt.options.css.push(resolve('./runtime/assets/styles/index.scss'))
+
     if (nuxt.options.modules.includes('@owdproject/module-fs')) {
       await installModule('@owdproject/kit-explorer')
-
-      addPlugin({
-        src: resolve('./runtime/apps/plugin.ts'),
-        mode: 'client',
-      })
-
-      addComponentsDir({
-        path: resolve('./runtime/apps/components'),
-      })
-
-      registerTailwindPath(
-        nuxt,
-        resolve('./runtime/apps/components/**/*.{vue,mjs,ts}'),
-      )
     }
+
+    installNovaBuiltInApps(nuxt, import.meta.url)
   },
 })

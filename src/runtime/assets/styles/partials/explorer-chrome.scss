@@ -13,6 +13,27 @@
 
     &:not(.owd-window--focused) {
       opacity: var(--nova-window-inactive-opacity);
+
+      > .p-card {
+        background: var(--nova-explorer-surface);
+        border-color: var(--nova-explorer-border);
+        box-shadow: var(--nova-window-shadow);
+      }
+
+      > .p-card > .p-card-header {
+        background: transparent;
+      }
+
+      .p-card-header .owd-window-nav,
+      .p-card-header .owd-window-nav.owd-window-nav--focused {
+        color: var(--nova-explorer-text-inactive);
+        background: var(--nova-explorer-surface) !important;
+        border-bottom-color: transparent !important;
+
+        &::before {
+          background: transparent !important;
+        }
+      }
     }
 
     > .p-card {
@@ -60,13 +81,16 @@
       display: flex;
       align-items: center;
       width: 100%;
-      min-height: var(--nova-window-nav-height);
-      padding: 0;
+      box-sizing: border-box;
+      min-height: calc(
+        var(--nova-window-nav-height) + var(--nova-window-nav-padding-top)
+      );
+      padding: var(--nova-window-nav-padding-top) 0 0;
       font-weight: 600;
       font-size: 13px;
       color: var(--nova-explorer-text-inactive);
-      background: var(--nova-explorer-surface-elevated) !important;
-      border-bottom: 1px solid var(--nova-window-nav-divider) !important;
+      background: transparent !important;
+      border-bottom: 1px solid transparent !important;
       border-radius: var(--nova-window-radius) var(--nova-window-radius) 0 0;
       box-shadow: none;
       transition:
@@ -89,6 +113,7 @@
       &--focused {
         color: var(--nova-explorer-text) !important;
         background: var(--nova-window-header-focused-bg) !important;
+        border-bottom-color: var(--nova-window-nav-divider) !important;
 
         &::before {
           background: linear-gradient(

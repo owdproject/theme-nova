@@ -1,15 +1,25 @@
 <script setup>
-import { onMounted } from "vue";
+import { inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
 import { useWorkspaceManager } from "@owdproject/core/runtime/composables/useWorkspaceManager";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
 import { useNovaWorkspaceReconcile } from "../composables/useNovaWorkspaceReconcile";
+import { useNovaWorkspaceOverviewViewport } from "../composables/useNovaWorkspaceOverviewViewport";
+
+const shellStageRef = inject("novaShellStage");
+if (!shellStageRef) {
+  throw new Error("NovaWorkspaceStack requires provide('novaShellStage') from Desktop.client.vue");
+}
+
 const applicationManager = useApplicationManager();
 const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const { reconcileOrphanWindows } = useNovaWorkspaceReconcile();
 const { t } = useI18n();
 const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceManager();
+const { setViewportRef, innerOverviewStyle, overviewStackStyle } =
+  useNovaWorkspaceOverviewViewport(shellStageRef);
+
 function desktopLabel(index) {
   return t("systemBar.workspaces.desktopN", { n: index + 1 });
 }
@@ -54,8 +64,9 @@ onMounted(() => {
   <div
     class="nova-workspace-stack"
     :class="{
-  'nova-workspace-stack--overview': desktopWorkspaceStore.overview
-}"
+      'nova-workspace-stack--overview': desktopWorkspaceStore.overview,
+    }"
+    :style="overviewStackStyle()"
   >
     <button
       v-if="desktopWorkspaceStore.overview"
@@ -75,8 +86,9 @@ onMounted(() => {
         :key="workspaceId"
         class="nova-workspace-panel"
         :class="{
-  'nova-workspace-panel--active': workspaceId === desktopWorkspaceStore.active
-}"
+          'nova-workspace-panel--active':
+            workspaceId === desktopWorkspaceStore.active,
+        }"
         role="listitem"
         @drop="onWorkspaceDrop($event, workspaceId)"
         @dragover="onWorkspaceDragOver"
@@ -89,22 +101,34 @@ onMounted(() => {
           {{ desktopLabel(index) }}
         </span>
         <div
-          class="nova-workspace-panel__inner"
-          :data-workspace-id="workspaceId"
+          class="nova-workspace-panel__viewport"
+          :ref="(el) => setViewportRef(workspaceId, el)"
         >
-          <DesktopContent v-if="workspaceId === desktopWorkspaceStore.active">
-            <slot />
-          </DesktopContent>
-          <p
-            v-if="
-  desktopWorkspaceStore.overview && windowsOnWorkspace(workspaceId) === 0
-"
-            class="nova-workspace-panel__empty"
+          <div
+            class="nova-workspace-panel__inner"
+            :data-workspace-id="workspaceId"
+            :style="innerOverviewStyle(workspaceId)"
           >
-            {{ $t("systemBar.workspaces.emptyDesktop") }}
-          </p>
-          <DesktopApplicationRender :workspace-filter="workspaceId" />
+            <DesktopContent
+              v-if="
+                desktopWorkspaceStore.overview ||
+                workspaceId === desktopWorkspaceStore.active
+              "
+            >
+              <slot />
+            </DesktopContent>
+            <DesktopApplicationRender :workspace-filter="workspaceId" />
+          </div>
         </div>
+        <p
+          v-if="
+            desktopWorkspaceStore.overview &&
+            windowsOnWorkspace(workspaceId) === 0
+          "
+          class="nova-workspace-panel__empty"
+        >
+          {{ $t("systemBar.workspaces.emptyDesktop") }}
+        </p>
       </div>
     </div>
 
@@ -119,8 +143,9 @@ onMounted(() => {
         type="button"
         class="nova-workspace-switcher__pill"
         :class="{
-  'nova-workspace-switcher__pill--active': workspaceId === desktopWorkspaceStore.active
-}"
+          'nova-workspace-switcher__pill--active':
+            workspaceId === desktopWorkspaceStore.active,
+        }"
         @click.stop="selectWorkspace(workspaceId)"
       >
         {{ desktopLabel(index) }}

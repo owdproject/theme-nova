@@ -1,0 +1,98 @@
+/* Launcher enter/leave (see NovaLauncherOverlay + useNovaMotion). */
+
+/* Teleported to body — scope via body class set in Desktop.client.vue onMounted. */
+body.owd-has-nova-desktop[data-nova-motion='on'] {
+  .nova-launcher-enter-active,
+  .nova-launcher-leave-active {
+    transition: opacity 0.24s ease;
+  }
+
+  .nova-launcher-enter-from,
+  .nova-launcher-leave-to {
+    opacity: 0;
+  }
+
+  .nova-launcher-enter-active .nova-launcher__backdrop,
+  .nova-launcher-leave-active .nova-launcher__backdrop {
+    transition: opacity 0.24s ease;
+  }
+
+  .nova-launcher-enter-from .nova-launcher__backdrop,
+  .nova-launcher-leave-to .nova-launcher__backdrop {
+    opacity: 0;
+  }
+
+  .nova-launcher-enter-active .nova-launcher__panel,
+  .nova-launcher-leave-active .nova-launcher__panel {
+    transition:
+      opacity 0.28s cubic-bezier(0.2, 0, 0, 1),
+      transform 0.28s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .nova-launcher-enter-from .nova-launcher__panel,
+  .nova-launcher-leave-to .nova-launcher__panel {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+
+  .nova-launcher-enter-active .nova-launcher__grid > li,
+  .nova-launcher-leave-active .nova-launcher__grid > li {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .nova-launcher-enter-from .nova-launcher__grid > li,
+  .nova-launcher-leave-to .nova-launcher__grid > li {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  @for $i from 1 through 24 {
+    .nova-launcher-enter-active .nova-launcher__grid > li:nth-child(#{$i}) {
+      transition-delay: #{($i - 1) * 18}ms;
+    }
+  }
+
+  .nova-launcher--static {
+    &.nova-launcher-enter-active,
+    &.nova-launcher-leave-active,
+    &.nova-launcher-enter-active .nova-launcher__backdrop,
+    &.nova-launcher-leave-active .nova-launcher__backdrop,
+    &.nova-launcher-enter-active .nova-launcher__panel,
+    &.nova-launcher-leave-active .nova-launcher__panel,
+    &.nova-launcher-enter-active .nova-launcher__grid > li,
+    &.nova-launcher-leave-active .nova-launcher__grid > li {
+      transition: none !important;
+      transition-delay: 0ms !important;
+    }
+
+    &.nova-launcher-enter-from,
+    &.nova-launcher-leave-to,
+    &.nova-launcher-enter-from .nova-launcher__backdrop,
+    &.nova-launcher-leave-to .nova-launcher__backdrop,
+    &.nova-launcher-enter-from .nova-launcher__panel,
+    &.nova-launcher-leave-to .nova-launcher__panel,
+    &.nova-launcher-enter-from .nova-launcher__grid > li,
+    &.nova-launcher-leave-to .nova-launcher__grid > li {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.owd-has-nova-desktop[data-nova-motion='on'] {
+    .nova-launcher-enter-active,
+    .nova-launcher-leave-active,
+    .nova-launcher-enter-active .nova-launcher__backdrop,
+    .nova-launcher-leave-active .nova-launcher__backdrop,
+    .nova-launcher-enter-active .nova-launcher__panel,
+    .nova-launcher-leave-active .nova-launcher__panel,
+    .nova-launcher-enter-active .nova-launcher__grid > li,
+    .nova-launcher-leave-active .nova-launcher__grid > li {
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+}

@@ -1,10 +1,13 @@
 <script setup>
 import { inject, useSlots, computed } from "vue";
+import ContextMenu from "primevue/contextmenu";
 import NavIcon from "@owdproject/kit-fs/runtime/components/explorer/NavIcon.vue";
-import ButtonWindowNavMinimize from "../../../components/Button/ButtonWindowNavMinimize.vue";
-import ButtonWindowNavMaximize from "../../../components/Button/ButtonWindowNavMaximize.vue";
-import ButtonWindowNavClose from "../../../components/Button/ButtonWindowNavClose.vue";
+import ButtonWindowNavMinimize from "../../../../components/Button/ButtonWindowNavMinimize.vue";
+import ButtonWindowNavMaximize from "../../../../components/Button/ButtonWindowNavMaximize.vue";
+import ButtonWindowNavClose from "../../../../components/Button/ButtonWindowNavClose.vue";
+import { useWindowNavContextMenu } from '../../../../composables/useWindowNavContextMenu'
 const windowController = inject("windowController");
+const { menu, items, onNavContextMenu } = useWindowNavContextMenu(windowController);
 const slots = useSlots();
 const hasCustomTitle = computed(() => typeof slots.title === "function");
 function onWindowMinimize() {
@@ -22,7 +25,10 @@ function onWindowNavDestroy() {
 </script>
 
 <template>
-  <DesktopWindowNav @dblclick="onWindowMaximize">
+  <DesktopWindowNav
+    @dblclick="onWindowMaximize"
+    @contextmenu="onNavContextMenu"
+  >
     <slot name="prepend" />
 
     <slot v-if="hasCustomTitle" name="title" />
@@ -36,7 +42,7 @@ function onWindowNavDestroy() {
       <div v-if="windowController?.title" class="owd-window-nav__title">
         <div
           class="owd-window-nav__title-inner truncate"
-          v-text="windowController.title"
+          v-text="windowController?.title"
         />
       </div>
     </template>
@@ -61,26 +67,36 @@ function onWindowNavDestroy() {
       />
     </div>
   </DesktopWindowNav>
+
+  <ContextMenu ref="menu" :model="items" />
 </template>
 
 <style scoped>
+.owd-window-nav {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--nova-window-nav-height, 32px);
+}
 .owd-window-nav__btn-group {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--nova-window-nav-gap, 4px);
-  padding: 0 var(--nova-window-nav-padding-x, 8px);
+  gap: var(--nova-window-nav-gap, 2px);
+  padding: 0;
+  margin: 0;
 }
 .owd-window-nav__title {
   display: flex;
   align-items: center;
   flex: 1 1 auto;
   min-width: 0;
-  padding: 0 8px;
-  text-align: left;
-}
-.owd-window-nav__title-inner {
-  margin: 0;
-  max-width: 100%;
+  padding-left: 6px;
+  gap: var(--owd-gap, 4px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

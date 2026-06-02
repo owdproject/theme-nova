@@ -1,5 +1,8 @@
 @use './partials/accent.scss';
 @use './partials/teleport-shell.scss';
+@use './partials/launcher-motion.scss';
+@use './partials/motion.scss';
+@use './partials/start-launcher.scss';
 @use './partials/window-tokens.scss';
 @use './partials/explorer-tokens.scss';
 @use './partials/explorer-shell.scss';
@@ -10,9 +13,11 @@
 @use './partials/window-nav-contextmenu.scss';
 @use './partials/shell.scss';
 @use './partials/workspaces.scss';
+@use './partials/terminal.scss';
 @use './partials/tray.scss';
 @use './partials/start.scss';
 @use './partials/system-bar.scss';
+@use './partials/desktop-core.scss' as desktop-core;
 
 :root {
   --owd-font-family: 'Cantarell';
@@ -86,3 +91,5 @@ label .p-checkbox {
     margin-top: -3px;
   }
 }
+
+@include desktop-core.layout;

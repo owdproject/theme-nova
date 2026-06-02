@@ -1,0 +1,32 @@
+/* Global motion off — launcher (see launcher-motion.scss) + window focus transitions. */
+
+body.owd-has-nova-desktop[data-nova-motion='off'] {
+  .owd-desktop--nova {
+    .owd-window.resizable-component:not(.nova-explorer-frame),
+    .owd-window.nova-explorer-frame {
+      transition: none !important;
+
+      > .p-card {
+        transition: none !important;
+      }
+
+      .p-card-header .owd-window-nav {
+        transition: none !important;
+
+        &::before {
+          transition: none !important;
+        }
+      }
+
+      .owd-window-nav__button {
+        transition: none !important;
+
+        .owd-window-nav__glyph,
+        .owd-window-nav__glyph-icon,
+        :deep(.iconify) {
+          transition: none !important;
+        }
+      }
+    }
+  }
+}

@@ -5,20 +5,23 @@ import { useDesktopVolumeStore } from "@owdproject/core/runtime/stores/storeDesk
 import { useDesktopShellIdentity } from "@owdproject/kit-theme/runtime/composables/useDesktopShellIdentity";
 import { ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
+import { useNovaSettingsApp } from "../composables/useNovaSettingsApp";
+
 const { charging, level } = useBattery();
+const { open: openSettings } = useNovaSettingsApp();
 const desktopVolumeStore = useDesktopVolumeStore();
 const { displayName, avatarUrl, isGuest } = useDesktopShellIdentity();
 const volume = ref(desktopVolumeStore.master);
 const saveMasterVolumeDebounced = useDebounceFn(
   () => desktopVolumeStore.setMasterVolume(volume.value),
-  250
+  250,
 );
 watch(
   () => volume.value,
-  () => saveMasterVolumeDebounced()
+  () => saveMasterVolumeDebounced(),
 );
 const batteryPercent = computed(
-  () => level.value != null ? Math.round(level.value * 100) : null
+  () => level.value != null ? Math.round(level.value * 100) : null,
 );
 const batteryIcon = computed(() => {
   if (batteryPercent.value == null) return "mdi:battery-unknown";
@@ -33,6 +36,11 @@ const volumeIcon = computed(() => {
   return "mdi:volume-high";
 });
 const emit = defineEmits(["close"]);
+
+async function onOpenSettings() {
+  emit("close");
+  await openSettings();
+}
 </script>
 
 <template>
@@ -73,6 +81,16 @@ const emit = defineEmits(["close"]);
         }}
       </span>
     </section>
+
+    <button
+      type="button"
+      class="nova-quick-settings__open-app"
+      @click="onOpenSettings"
+    >
+      <Icon name="mdi:cog-outline" :size="18" />
+      <span>{{ $t("apps.settings.openFull") }}</span>
+      <Icon name="mdi:chevron-right" :size="18" class="nova-quick-settings__open-app-chevron" />
+    </button>
   </div>
 </template>
 
@@ -167,5 +185,33 @@ const emit = defineEmits(["close"]);
 
 .nova-quick-settings__battery-label {
   font-size: 13px;
+}
+
+.nova-quick-settings__open-app {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.nova-quick-settings__open-app:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nova-quick-settings__open-app-chevron {
+  margin-left: auto;
+  opacity: 0.5;
 }
 </style>

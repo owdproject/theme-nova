@@ -1,4 +1,9 @@
 .owd-desktop--nova {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+
   .nova-shell__stage {
     position: relative;
     flex: 1 1 auto;
@@ -120,8 +125,10 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
       gap: 16px;
-      align-content: start;
+      align-content: center;
       justify-content: center;
+      justify-items: center;
+      min-height: 100%;
       padding: 56px 20px 96px;
       overflow-x: hidden;
       overflow-y: auto;
@@ -132,14 +139,15 @@
     .nova-workspace-panel {
       position: relative;
       inset: auto;
+      display: flex;
+      flex-direction: column;
       pointer-events: auto;
       border-radius: 14px;
       border: 1px solid var(--owd-surface-700, #1d293d);
       background: var(--owd-surface-900, #0c1218);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-      min-height: 180px;
-      max-height: min(52vh, 420px);
-      aspect-ratio: 16 / 10;
+      min-height: 200px;
+      max-height: min(56vh, 480px);
     }
 
     .nova-workspace-panel--active {
@@ -163,22 +171,29 @@
       pointer-events: none;
     }
 
+    .nova-workspace-panel__viewport {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
     .nova-workspace-panel__inner {
       position: relative;
-      border-radius: inherit;
-      overflow: hidden;
-      transform: scale(0.52);
-      transform-origin: top center;
-      width: 192.31%;
-      height: 192.31%;
-      margin-left: -46.15%;
-      min-height: 200px;
+      flex-shrink: 0;
+      overflow: visible;
+      pointer-events: none;
     }
 
     .nova-workspace-panel__empty {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;

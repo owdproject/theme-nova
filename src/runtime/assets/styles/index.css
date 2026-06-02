@@ -1,4 +1,5 @@
 @charset "UTF-8";
+
 /* Default accent (ocean) — also applied when data-nova-accent is unset */
 .owd-desktop--nova,
 body.owd-has-nova-desktop {

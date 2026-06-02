@@ -2,7 +2,7 @@
   "name": "@owdproject/theme-nova",
   "version": "0.0.2",
   "description": "Open Web Desktop theme",
-  "homepage": "https://github.com/owdproject/theme-nova#readme",
+  "homepage": "https://github.com/owdproject/theme-nova",
   "license": "MIT",
   "author": {
     "name": "Open Web Desktop Team",
@@ -26,11 +26,18 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": ["./dist/types.d.mts"]
+      ".": [
+        "./dist/types.d.mts"
+      ]
     }
   },
-  "files": ["dist", "src"],
-  "nx": { "name": "theme-nova" },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "nx": {
+    "name": "theme-nova"
+  },
   "scripts": {
     "prepack": "nuxt-module-build build",
     "dev": "pnpm run dev:prepare && cd playground && pnpm exec nuxt dev",
@@ -40,26 +47,30 @@
     "validate": "desktop validate ."
   },
   "dependencies": {
-    "@nuxt/kit": "^4.3.0",
+    "@nuxt/kit": "^4.4.6",
     "@primeuix/themes": "^2.0.3",
-    "@owdproject/kit-explorer": "^0.0.1",
-    "@owdproject/kit-fs": "^0.0.1",
-    "@owdproject/kit-theme": "^0.0.1",
-    "defu": "^6.1.4",
+    "primevue": "^4.5.5",
+    "@owdproject/kit-explorer": "^0.0.4",
+    "@owdproject/kit-theme": "^0.0.4",
+    "defu": "^6.1.7",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
-    "@owdproject/app-classic-audioplayer": "latest",
-    "@owdproject/core": "^3.3.0",
-    "nuxt": "^4.3.0",
-    "typescript": "~5.9.3"
+    "@owdproject/core": "^3.3.1",
+    "@owdproject/app-about": "^0.1.3",
+    "@owdproject/app-terminal": "^0.1.3",
+    "@owdproject/module-fs": "^0.0.6",
+    "@owdproject/app-classic-audioplayer": "^0.0.4",
+    "@owdproject/app-classic-videoplayer": "^0.0.4",
+    "nuxt": "^4.4.6",
+    "typescript": "~6.0.3"
   },
   "peerDependencies": {
     "@owdproject/core": "^3.3.0",
-    "@owdproject/kit-explorer": "^0.0.1",
-    "@owdproject/kit-fs": "^0.0.1",
-    "@owdproject/kit-theme": "^0.0.1",
-    "nuxt": "^4.0.0"
+    "@owdproject/kit-explorer": "^0.0.4",
+    "@owdproject/kit-theme": "^0.0.4",
+    "@owdproject/module-fs": "^0.0.6",
+    "nuxt": "^4.4.4"
   }
 }

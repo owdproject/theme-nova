@@ -1,9 +1,10 @@
 <script setup>
 import { useTemplateRef } from "vue";
-defineProps({
+const props = defineProps({
   size: { type: String, required: false },
+  launcher: { type: Boolean, default: false },
   placeholder: { type: String, required: false },
-  ariaLabel: { type: String, required: false }
+  ariaLabel: { type: String, required: false },
 });
 const model = defineModel({ type: String, ...{ required: true } });
 const inputRef = useTemplateRef("inputRef");
@@ -16,11 +17,14 @@ defineExpose({ focus });
 <template>
   <label
     class="nova-start-search"
-    :class="{ 'nova-start-search--large': size === 'large' }"
+    :class="{
+      'nova-start-search--large': size === 'large',
+      'nova-start-search--launcher': launcher,
+    }"
   >
     <Icon
       name="mdi:magnify"
-      :size="size === 'large' ? 22 : 18"
+      :size="launcher ? 26 : size === 'large' ? 28 : 20"
       class="nova-start-search__icon"
       aria-hidden="true"
     />

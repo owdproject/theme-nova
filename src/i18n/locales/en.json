@@ -18,7 +18,9 @@
       "emptySearch": "No matching apps"
     },
     "settings": {
-      "label": "Quick settings"
+      "label": "Quick settings",
+      "motion": "Animations",
+      "motionHint": "Launcher and window focus transitions"
     },
     "workspaces": {
       "overview": "Workspaces overview",
@@ -91,6 +93,41 @@
     }
   },
   "apps": {
+    "settings": {
+      "title": "Settings",
+      "openFull": "All settings…",
+      "subtitle": "Personalize appearance, sound, and desktop behavior.",
+      "navLabel": "Settings sections",
+      "sections": {
+        "appearance": "Appearance",
+        "sound": "Sound",
+        "desktop": "Desktop"
+      },
+      "appearance": {
+        "accentTitle": "Accent color",
+        "accentDesc": "Choose the highlight color for windows, launcher, and controls.",
+        "motionTitle": "Animations",
+        "motionDesc": "Launcher open/close and transitions when a window becomes active.",
+        "motionLabel": "Enable animations",
+        "motionHint": "Fade and scale the app launcher; animate opacity and shadow on focused windows."
+      },
+      "sound": {
+        "title": "Volume",
+        "desc": "Master output level for the desktop session."
+      },
+      "desktop": {
+        "workspacesTitle": "Virtual desktops",
+        "workspacesDesc": "Workspaces let you group windows across multiple desktops.",
+        "workspacesState": "Status",
+        "workspacesHint": "Use the tray icon or edge gestures to switch and manage desktops.",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "aboutTitle": "About",
+        "aboutDesc": "Version information and third-party components.",
+        "version": "Version",
+        "openAbout": "Open About"
+      }
+    },
     "explorer": {
       "address": "Address",
       "menu": {

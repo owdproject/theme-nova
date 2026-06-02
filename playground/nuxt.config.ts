@@ -6,8 +6,6 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'no_prefix',
   },
-  devtools: { enabled: true },
-  compatibilityDate: 'latest',
   ssr: false,
   experimental: {
     viteEnvironmentApi: true,
