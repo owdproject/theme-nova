@@ -10,7 +10,13 @@ import NovaConfirmDialogs from "./NovaConfirmDialogs.vue";
 import NovaLauncherOverlay from "./NovaLauncherOverlay.vue";
 import NovaTopBar from "./NovaTopBar.vue";
 import NovaWorkspaceEdgeHints from "./NovaWorkspaceEdgeHints.vue";
+import NovaWindowSnapHints from "./NovaWindowSnapHints.vue";
 import NovaWorkspaceStack from "./NovaWorkspaceStack.vue";
+import { useDesktopWorkArea } from "@owdproject/kit-theme/runtime/composables/useDesktopWorkArea";
+import {
+  provideDesktopShellStage,
+  provideDesktopWorkArea,
+} from "@owdproject/kit-theme/runtime/composables/provideDesktopShellStage";
 import { useNovaStartMenu } from "../composables/useNovaStartMenu";
 import { useNovaAccentTheme } from "../composables/useNovaAccentTheme";
 import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
@@ -31,6 +37,9 @@ const { overview: workspaceOverview } = storeToRefs(desktopWorkspaceStore);
 const isOverviewEnabled = computed(() => workspaceOverview.value === true);
 const shellStageRef = ref(null);
 provide("novaShellStage", shellStageRef);
+const { workArea } = useDesktopWorkArea(shellStageRef);
+provideDesktopShellStage(shellStageRef);
+provideDesktopWorkArea(workArea);
 
 const BODY_SHELL_CLASS = "owd-has-nova-desktop";
 
@@ -73,6 +82,7 @@ onUnmounted(() => {
     <NovaTopBar />
 
     <NovaWorkspaceEdgeHints v-if="workspacesEnabled" />
+    <NovaWindowSnapHints />
 
     <div ref="shellStageRef" class="nova-shell__stage">
       <Background />

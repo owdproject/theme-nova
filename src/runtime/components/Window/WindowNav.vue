@@ -5,7 +5,9 @@ import ButtonWindowNavMinimize from "../Button/ButtonWindowNavMinimize.vue";
 import ButtonWindowNavMaximize from "../Button/ButtonWindowNavMaximize.vue";
 import ButtonWindowNavClose from "../Button/ButtonWindowNavClose.vue";
 import { useWindowNavContextMenu } from "../../composables/useWindowNavContextMenu";
+import { useToggleWindowMaximize } from "@owdproject/kit-theme/runtime/composables/useToggleWindowMaximize";
 const windowController = inject("windowController");
+const toggleWindowMaximize = useToggleWindowMaximize();
 const { menu, items, onNavContextMenu } = useWindowNavContextMenu(windowController);
 const windowNavContextMenuPt = {
   root: { class: "nova-window-nav-context-menu" }
@@ -15,8 +17,7 @@ function onWindowMinimize() {
   windowController.actions.minimize();
 }
 function onWindowMaximize() {
-  if (!windowController?.instanced) return;
-  windowController.actions.toggleMaximize();
+  toggleWindowMaximize(windowController);
 }
 function onWindowNavDestroy() {
   if (!windowController?.instanced) return;
