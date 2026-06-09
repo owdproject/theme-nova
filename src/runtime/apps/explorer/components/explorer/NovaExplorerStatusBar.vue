@@ -1,5 +1,5 @@
 <script setup>
-import ExplorerViewModeSwitch from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerViewModeSwitch.vue";
+import ExplorerViewModeSwitch from "@owdproject/kit-primevue/runtime/components/explorer/ViewModeSwitch.vue";
 defineProps({
   count: { type: Number, required: true },
   fsExplorer: { type: null, required: true }

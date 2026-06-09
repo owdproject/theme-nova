@@ -1,11 +1,13 @@
 <script setup>
-import ExplorerTabStripBase from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerTabStripBase.vue";
+import ExplorerTabStripBase from "@owdproject/kit-primevue/runtime/components/explorer/TabStripBase.vue";
 import { useI18n } from "vue-i18n";
+
 defineProps({
   tabs: { type: Array, required: true },
-  activeTabId: { type: String, required: true }
+  activeTabId: { type: String, required: true },
 });
-const emit = defineEmits(["select", "add", "close"]);
+
+const emit = defineEmits(["select", "close"]);
 const { t } = useI18n();
 </script>
 
@@ -14,35 +16,39 @@ const { t } = useI18n();
     class="nova-explorer-tab-strip"
     :tabs="tabs"
     :active-tab-id="activeTabId"
+    :show-new-tab="false"
     :aria-label="t('apps.explorer.tabs.ariaLabel')"
-    :new-tab-aria-label="t('apps.explorer.tabs.newTab')"
     :close-tab-aria-label="t('apps.explorer.tabs.closeTab')"
     @select="emit('select', $event)"
-    @add="emit('add')"
     @close="emit('close', $event)"
   />
 </template>
 
 <style scoped>
 @charset "UTF-8";
-/* Tab row below caption (GNOME Files–style), not in the window control strip. */
 .nova-explorer-tab-strip {
-  border-bottom: 1px solid var(--nova-explorer-border-subtle);
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
 }
+
 .nova-explorer-tab-strip :deep([data-part='tabstrip-root']) {
   display: flex;
   align-items: stretch;
   flex: 1;
   min-width: 0;
   gap: 2px;
-  padding: 4px 8px 0;
-  overflow-x: auto;
-  scrollbar-width: none;
+  padding: 0;
+  overflow: visible;
   background: transparent;
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab']) {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 6px;
   max-width: 200px;
   min-height: 30px;
@@ -59,6 +65,7 @@ const { t } = useI18n();
   cursor: default;
   transition: background 0.12s ease, color 0.12s ease;
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab'])[aria-selected=true] {
   border-color: var(--nova-explorer-border-subtle);
   border-bottom-color: transparent;
@@ -66,18 +73,22 @@ const { t } = useI18n();
   color: var(--nova-explorer-text);
   box-shadow: inset 0 2px 0 var(--nova-explorer-accent-line);
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab']):hover {
   background: color-mix(in srgb, var(--nova-explorer-text) 8%, transparent);
   color: var(--nova-explorer-text);
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab'])[aria-selected=true]:hover {
   background: var(--nova-explorer-surface);
 }
+
 .nova-explorer-tab-strip :deep(.explorer-tab-strip-base__tab-label) {
   flex: 1;
   min-width: 0;
   text-align: left;
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab-close']) {
   display: inline-flex;
   align-items: center;
@@ -93,30 +104,14 @@ const { t } = useI18n();
   line-height: 1;
   opacity: 0.65;
 }
+
 .nova-explorer-tab-strip :deep([data-part='tab-close']):hover {
   opacity: 1;
   background: var(--nova-window-control-hover);
 }
-.nova-explorer-tab-strip :deep([data-part='tab-new']) {
-  position: sticky;
-  right: 2px;
-  z-index: 2;
-  margin-left: auto;
-  flex-shrink: 0;
-  width: 30px;
-  margin-bottom: 2px;
-  padding: 0;
-  border: 1px solid var(--nova-explorer-border-subtle);
-  border-radius: var(--nova-window-control-radius, 8px);
-  background: color-mix(in srgb, var(--nova-explorer-surface) 80%, transparent);
-  color: var(--nova-explorer-text-muted);
-  font-size: 18px;
-  line-height: 1;
-  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-}
-.nova-explorer-tab-strip :deep([data-part='tab-new']):hover {
-  background: var(--nova-window-control-hover);
-  color: var(--nova-explorer-text);
-  border-color: var(--nova-explorer-border);
+
+.nova-explorer-tab-strip :deep(.explorer-tab-strip-base__close--reserved) {
+  visibility: hidden;
+  pointer-events: none;
 }
 </style>

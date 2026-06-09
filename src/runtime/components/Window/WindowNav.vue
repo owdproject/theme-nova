@@ -5,7 +5,7 @@ import ButtonWindowNavMinimize from "../Button/ButtonWindowNavMinimize.vue";
 import ButtonWindowNavMaximize from "../Button/ButtonWindowNavMaximize.vue";
 import ButtonWindowNavClose from "../Button/ButtonWindowNavClose.vue";
 import { useWindowNavContextMenu } from "../../composables/useWindowNavContextMenu";
-import { useToggleWindowMaximize } from "@owdproject/kit-theme/runtime/composables/useToggleWindowMaximize";
+import { useToggleWindowMaximize } from "@owdproject/core/runtime/composables/useToggleWindowMaximize";
 const windowController = inject("windowController");
 const toggleWindowMaximize = useToggleWindowMaximize();
 const { menu, items, onNavContextMenu } = useWindowNavContextMenu(windowController);

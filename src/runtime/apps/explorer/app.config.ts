@@ -11,6 +11,7 @@ export default {
     main: {
       component: () => import('./components/Window/WindowExplorer.vue'),
       resizable: true,
+      maximizable: true,
       size: {
         width: 720,
         height: 520,

@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import ContextMenu from 'primevue/contextmenu'
 import type { IWindowController } from '@owdproject/core'
 import type { MenuItem } from 'primevue/menuitem'
-import { useToggleWindowMaximize } from '@owdproject/kit-theme/runtime/composables/useToggleWindowMaximize'
+import { useToggleWindowMaximize } from '@owdproject/core/runtime/composables/useToggleWindowMaximize'
 
 export function useWindowNavContextMenu(
   windowController: IWindowController | undefined,

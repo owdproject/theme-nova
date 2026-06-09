@@ -1,27 +1,48 @@
 <script setup>
 import { useSlots, computed, useAttrs } from "vue";
-import Body from "@owdproject/kit-fs/runtime/components/explorer/Body.vue";
-import NovaExplorerFrameNav from "./NovaExplorerFrameNav.vue";
+import Body from "@owdproject/kit-primevue/runtime/components/explorer/Body.vue";
+import NovaWindowTabChrome from "../../../../components/Window/NovaWindowTabChrome.vue";
+
 const props = defineProps({
   window: { type: Object, required: false },
   content: { type: null, required: false },
   chromePadding: { type: Boolean, required: false, default: true },
-  frameClass: { type: String, required: false }
+  frameClass: { type: String, required: false },
+  newTabAriaLabel: { type: String, required: false },
+  showDefaultNewTab: { type: Boolean, required: false, default: true },
 });
+
+defineEmits([
+  "drag:start",
+  "drag:move",
+  "drag:end",
+  "resize:start",
+  "resize:move",
+  "resize:end",
+  "add-tab",
+]);
+
 defineOptions({ inheritAttrs: false });
+
 const attrs = useAttrs();
 const windowRootClass = computed(
-  () => [attrs.class, props.frameClass].filter(Boolean)
+  () => [attrs.class, props.frameClass].filter(Boolean),
 );
 const slots = useSlots();
 const hasHeaderBelowNavSlot = computed(
-  () => typeof slots["header-below-nav"] === "function"
+  () => typeof slots["header-below-nav"] === "function",
+);
+const hasTabChromeTabs = computed(
+  () => typeof slots["tab-chrome-tabs"] === "function",
 );
 const cardRootClass = computed(
-  () => [
-    "p-card--border",
-    props.chromePadding === false ? "kit-fs-frame-card--tight" : ""
-  ].filter(Boolean).join(" ")
+  () =>
+    [
+      "p-card--border",
+      props.chromePadding === false ? "kit-fs-frame-card--tight" : "",
+    ]
+      .filter(Boolean)
+      .join(" "),
 );
 </script>
 
@@ -31,21 +52,32 @@ const cardRootClass = computed(
     :window="props.window"
     :content="props.content"
     v-show="props.window?.state?.active ?? true"
+    @drag:start="$emit('drag:start', $event)"
+    @drag:move="$emit('drag:move', $event)"
+    @drag:end="$emit('drag:end', $event)"
+    @resize:start="$emit('resize:start', $event)"
+    @resize:move="$emit('resize:move', $event)"
+    @resize:end="$emit('resize:end', $event)"
   >
     <Card :pt:root="cardRootClass">
       <template #header>
         <div class="kit-fs-frame__header-stack">
-          <NovaExplorerFrameNav>
-            <template #prepend>
-              <slot name="nav-prepend" />
+          <NovaWindowTabChrome
+            v-if="hasTabChromeTabs"
+            :new-tab-aria-label="newTabAriaLabel"
+            :show-default-new-tab="showDefaultNewTab"
+            @add-tab="$emit('add-tab')"
+          >
+            <template v-if="$slots['tab-chrome-leading']" #leading>
+              <slot name="tab-chrome-leading" />
             </template>
-            <template v-if="$slots['nav-title']" #title>
-              <slot name="nav-title" />
+            <template #tabs>
+              <slot name="tab-chrome-tabs" />
             </template>
-            <template #append>
-              <slot name="nav-append" />
+            <template v-if="$slots['tab-chrome-controls']" #controls>
+              <slot name="tab-chrome-controls" />
             </template>
-          </NovaExplorerFrameNav>
+          </NovaWindowTabChrome>
           <div
             v-if="hasHeaderBelowNavSlot"
             class="kit-fs-frame__header-below-nav"
@@ -117,6 +149,10 @@ const cardRootClass = computed(
   height: auto;
 }
 .owd-window.resizable-component :deep(> .p-card) > .p-card-body > .p-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
   height: 100%;
 }
 </style>

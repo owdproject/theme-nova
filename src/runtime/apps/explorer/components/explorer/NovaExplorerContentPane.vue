@@ -1,9 +1,8 @@
 <script setup>
-import DataTable from "primevue/datatable";
 import NovaExplorerItemContextMenu from "./NovaExplorerItemContextMenu.vue";
 import NovaExplorerFileIcon from "./NovaExplorerFileIcon.vue";
 import { computed, inject } from "vue";
-import { explorerEntryAbsolutePath } from "@owdproject/core/runtime/utils/explorerEntryPath";
+import { explorerEntryAbsolutePath } from "@owdproject/module-fs/runtime/utils/utilExplorerEntryPath";
 const props = defineProps({
   window: { type: Object, required: true },
   fsExplorer: { type: null, required: true }
@@ -20,13 +19,13 @@ const openPathInNewTab = inject(
 
 <template>
   <div class="nova-explorer-content-pane">
-    <DataTable class="nova-explorer-content-pane__table h-full">
-      <KitFsExplorerSelectableArea
+    <div class="nova-explorer-content-pane__table h-full">
+      <DesktopExplorerSelectableArea
         v-if="!String(window.meta.path ?? '').startsWith('http')"
         :fs-explorer="fsExplorer"
         :drop-enabled="!isWebUrl"
       >
-        <KitFsExplorerFileEntry
+        <DesktopExplorerFileEntry
           v-for="fileName of fsExplorer.fsEntries.value"
           :key="fileName"
           :data-filename="fileName"
@@ -60,14 +59,14 @@ const openPathInNewTab = inject(
               :layout="layout"
             />
           </template>
-        </KitFsExplorerFileEntry>
-      </KitFsExplorerSelectableArea>
+        </DesktopExplorerFileEntry>
+      </DesktopExplorerSelectableArea>
       <iframe
         v-else
         class="nova-explorer-content-pane__iframe"
         :src="window.meta.path ?? ''"
       />
-    </DataTable>
+    </div>
   </div>
 </template>
 
@@ -78,6 +77,7 @@ const openPathInNewTab = inject(
   min-width: 0;
   min-height: 0;
   overflow: auto;
+  background: var(--nova-explorer-surface);
 }
 
 .nova-explorer-content-pane__iframe {
@@ -87,7 +87,11 @@ const openPathInNewTab = inject(
 }
 
 .nova-explorer-content-pane__table {
-  background: transparent;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  background: var(--nova-explorer-surface);
 }
 
 /* Denser grid than the old “airy” pass — still slightly roomier than kit-fs base */

@@ -69,6 +69,11 @@ defineEmits(["back", "forward", "up", "refresh"]);
   width: var(--nova-window-control-size, 28px);
   height: var(--nova-window-control-size, 28px);
   border-radius: var(--nova-window-control-radius, 8px);
+  cursor: pointer;
+}
+
+.nova-explorer-nav-row :deep(.p-button:disabled) {
+  cursor: default;
 }
 
 .nova-explorer-nav-row :deep(.p-button:hover) {

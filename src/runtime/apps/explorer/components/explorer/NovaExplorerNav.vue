@@ -1,6 +1,6 @@
 <script setup>
 import { inject, useSlots, computed } from "vue";
-import NavIcon from "@owdproject/kit-fs/runtime/components/explorer/NavIcon.vue";
+import NavIcon from "@owdproject/kit-primevue/runtime/components/explorer/NavIcon.vue";
 import ButtonWindowNavMinimize from "../../../../components/Button/ButtonWindowNavMinimize.vue";
 import ButtonWindowNavMaximize from "../../../../components/Button/ButtonWindowNavMaximize.vue";
 import ButtonWindowNavClose from "../../../../components/Button/ButtonWindowNavClose.vue";

@@ -1,5 +1,5 @@
 <script setup>
-import ExplorerChromeBandBase from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerChromeBandBase.vue";
+import ExplorerChromeBandBase from "@owdproject/kit-primevue/runtime/components/explorer/ChromeBandBase.vue";
 import NovaExplorerBreadcrumbBar from "./NovaExplorerBreadcrumbBar.vue";
 import NovaExplorerNavRow from "./NovaExplorerNavRow.vue";
 defineProps({

@@ -1,11 +1,11 @@
 <script setup>
-import { useDesktopWindowDragHandlersInjected } from "@owdproject/kit-theme/runtime/composables/useDesktopWindowDragHandlers";
+import { useWindowDragHandlers } from "@owdproject/core/runtime/composables/useWindowDragHandlers";
 const props = defineProps({
   config: { type: null, required: false },
   window: { type: null, required: false },
   content: { type: null, required: false }
 });
-const { onDragStart, onDragEnd } = useDesktopWindowDragHandlersInjected(
+const { onDragStart, onDragEnd } = useWindowDragHandlers(
   () => props.window
 );
 </script>

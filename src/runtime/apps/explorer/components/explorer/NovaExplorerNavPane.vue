@@ -1,5 +1,5 @@
 <script setup>
-import { useExplorerStore } from "@owdproject/kit-fs/runtime/stores/storeExplorer";
+import { useExplorerStore } from "@owdproject/module-fs/runtime/stores/storeExplorer";
 import { useRuntimeConfig } from "nuxt/app";
 import { computed, nextTick, onMounted, ref, withDefaults } from "vue";
 import Tree from "primevue/tree";
@@ -83,9 +83,13 @@ function fallbackMountLabel(mountPath) {
   if (!last) return mountPath;
   return last.charAt(0).toUpperCase() + last.slice(1);
 }
+function volumeNavPath(mountPath) {
+  return mountPath === "/home" ? "/" : mountPath;
+}
 const volumeEntries = computed(
   () => Object.keys(fsMounts.value).filter((p) => !isHiddenMountPoint(p)).sort((a, b) => a.localeCompare(b)).map((path) => ({
     path,
+    navPath: volumeNavPath(path),
     label: explorerMountLabels.value[path] ?? fallbackMountLabel(path),
     icon: "mdi:harddisk"
   }))
@@ -126,7 +130,7 @@ const treeNodes = computed(() => [
       label: v.label,
       icon: v.icon,
       data: {
-        path: v.path
+        path: v.navPath
       },
       leaf: true
     }))

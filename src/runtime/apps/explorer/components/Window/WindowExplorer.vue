@@ -1,17 +1,18 @@
 <script setup>
+import { computed, watch } from "vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useI18n } from "vue-i18n";
-import { createExplorerWindowMenuItems } from "@owdproject/kit-explorer/runtime/composables/useExplorerWindowMenu";
+import { createExplorerWindowMenuItems } from "@owdproject/module-fs/runtime/composables/useExplorerWindowMenu";
 import NovaExplorerShell from "../explorer/NovaExplorerShell.vue";
+
 const props = defineProps({
   window: { type: Object, required: true }
 });
+
 const { t } = useI18n();
 const confirm = useConfirm();
-const explorerMenu = createExplorerWindowMenuItems(
-  () => props.window,
-  t,
-  () => confirm.require({
+function onAbout() {
+  confirm.require({
     group: "about",
     header: "About",
     acceptProps: {
@@ -23,9 +24,20 @@ const explorerMenu = createExplorerWindowMenuItems(
     },
     accept: () => {
     }
-  })
+  });
+}
+
+const explorerMenu = computed(() =>
+  createExplorerWindowMenuItems(() => props.window, t, onAbout)
 );
-props.window.setMenu(explorerMenu);
+
+watch(
+  explorerMenu,
+  (menu) => {
+    props.window.setMenu(menu);
+  },
+  { deep: true, immediate: true },
+);
 </script>
 
 <template>

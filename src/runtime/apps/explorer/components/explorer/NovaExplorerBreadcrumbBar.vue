@@ -1,5 +1,5 @@
 <script setup>
-import ExplorerBreadcrumbBase from "@owdproject/kit-explorer/runtime/components/explorer/ExplorerBreadcrumbBase.vue";
+import ExplorerBreadcrumbBase from "@owdproject/kit-primevue/runtime/components/explorer/BreadcrumbBase.vue";
 import { useI18n } from "vue-i18n";
 const props = defineProps({
   path: { type: String, required: true }
@@ -71,7 +71,7 @@ const { t } = useI18n();
   font: inherit;
   font-size: 12px;
   font-weight: 600;
-  cursor: default;
+  cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

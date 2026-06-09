@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import ContextMenu from "primevue/contextmenu";
-import { explorerEntryAbsolutePath } from "@owdproject/core/runtime/utils/explorerEntryPath";
+import { explorerEntryAbsolutePath } from "@owdproject/module-fs/runtime/utils/utilExplorerEntryPath";
 const { t } = useI18n();
 const props = defineProps({
   fileName: { type: String, required: true },
