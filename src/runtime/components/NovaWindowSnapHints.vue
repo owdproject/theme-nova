@@ -1,5 +1,5 @@
 <script setup>
-import WindowSnapHintsBase from '@owdproject/core/runtime/components/Desktop/Window/DesktopWindowSnapHintsBase.vue'
+import WindowSnapHintsBase from '@owdproject/core/runtime/components/window/WindowSnapHintsBase.vue'
 
 const zoneIcons = {
   maximize: "mdi:window-maximize",
