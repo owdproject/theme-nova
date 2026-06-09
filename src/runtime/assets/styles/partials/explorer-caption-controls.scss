@@ -1,45 +1,7 @@
-/* Explorer caption — always-white controls (glyphs + app icon) */
+/* Explorer caption — tab chrome row + WM controls */
 .owd-desktop--nova .owd-window.nova-explorer-frame {
-  .p-card-header .owd-window-nav {
-    align-items: center;
-    min-height: calc(
-      var(--nova-window-nav-height) + var(--nova-window-nav-padding-top)
-    );
-
-    .owd-window-nav__title {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding-left: 10px;
-      text-align: left;
-
-      .owd-window-nav__title-inner {
-        margin: 0;
-        font-weight: 600;
-        font-size: 13px;
-        color: var(--nova-explorer-caption-control);
-      }
-    }
-
-    .owd-window-nav__icon {
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      padding-left: 8px;
-
-      :deep(.iconify),
-      :deep(svg) {
-        margin: 0;
-        vertical-align: middle;
-        width: 18px !important;
-        height: 18px !important;
-        min-width: 18px;
-        min-height: 18px;
-        color: var(--nova-explorer-caption-control) !important;
-        opacity: 1 !important;
-      }
-    }
-
-    .owd-window-nav__btn-group--append {
+  .p-card-header .nova-window-tab-chrome__nav.owd-window-nav {
+    .nova-window-tab-chrome__controls.owd-window-nav__btn-group--append {
       position: relative;
       z-index: 3;
       flex-shrink: 0;
@@ -66,7 +28,7 @@
       .owd-window-nav__glyph {
         color: var(--nova-explorer-caption-control) !important;
         opacity: 1 !important;
-        font-family: system-ui, sans-serif;
+        font-family: var(--owd-font-family), system-ui, sans-serif;
       }
 
       .owd-window-nav__glyph-icon,
@@ -96,7 +58,6 @@
       }
     }
 
-    /* Fallback if kit-fs chrome buttons are still mounted */
     .p-button--window-nav-minimize,
     .p-button--window-nav-maximize,
     .p-button--window-nav-close {

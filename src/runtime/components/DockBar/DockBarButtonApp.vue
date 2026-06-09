@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from "vue";
+import DockBarButton from "./DockBarButton.vue";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
 const props = defineProps({
   application: { type: null, required: true }

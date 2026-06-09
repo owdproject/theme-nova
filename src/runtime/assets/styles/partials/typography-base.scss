@@ -1,0 +1,17 @@
+/*
+ * Global Cantarell stack — overrides Tailwind preflight ui-sans-serif on html/body
+ * and ensures portaled launcher UI (body.owd-has-nova-desktop) matches desktop windows.
+ */
+html,
+body,
+body.owd-has-nova-desktop,
+.owd-desktop {
+  font-family: var(--owd-font-family), system-ui, sans-serif;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}

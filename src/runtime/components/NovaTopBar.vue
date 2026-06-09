@@ -1,5 +1,5 @@
 <script setup>
-import { useDesktopShellOptions } from "@owdproject/kit-theme/runtime/composables/useDesktopShellOptions";
+import { useDesktopShellOptions } from "@owdproject/core/runtime/composables/useDesktopShellOptions";
 import NovaStartButton from "./NovaStartButton.vue";
 import NovaTopBarTray from "./NovaTopBarTray.vue";
 const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions();
@@ -36,10 +36,14 @@ const { systemBarEnabled, startButtonEnabled } = useDesktopShellOptions();
   padding: var(--owd-system-bar-padding) 10px;
   box-sizing: border-box;
   color: #f1f5f9;
+  background: var(--nova-shell-bar-bg, rgba(6, 10, 16, 0.92));
+  border-bottom: 1px solid var(--owd-surface-700, #1d293d);
+  backdrop-filter: blur(12px);
   flex-shrink: 0;
   position: relative;
   z-index: 10061;
   overflow: visible;
+  transition: background 0.2s ease;
 }
 
 .nova-top-bar__start {

@@ -3,11 +3,18 @@
 $nova-shell-roots: '.owd-desktop--nova', 'body.owd-has-nova-desktop';
 
 #{$nova-shell-roots} {
+  font-family: var(--owd-font-family), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   --nova-start-search-radius: 0;
   --nova-start-hover: rgba(255, 255, 255, 0.08);
   --nova-start-active: rgba(255, 255, 255, 0.12);
   --nova-launcher-divider: rgba(255, 255, 255, 0.07);
   --nova-launcher-pad-x: clamp(20px, 4vw, 40px);
+  --nova-launcher-chrome-size: 56px;
+  --nova-launcher-chrome-icon: 40px;
+  --nova-launcher-chrome-opacity: 0.9;
   --owd-color: #e8eef6;
 }
 
@@ -74,27 +81,53 @@ $nova-shell-roots: '.owd-desktop--nova', 'body.owd-has-nova-desktop';
     margin-inline: auto;
   }
 
+  .nova-launcher__header-chrome {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--nova-launcher-chrome-size, 52px);
+    height: var(--nova-launcher-chrome-size, 52px);
+    color: inherit;
+    opacity: var(--nova-launcher-chrome-opacity, 0.62);
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+
+    .iconify,
+    svg {
+      width: var(--nova-launcher-chrome-icon, 34px) !important;
+      height: var(--nova-launcher-chrome-icon, 34px) !important;
+    }
+
+    &--search {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+  }
+
   .nova-launcher__close {
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: var(--nova-launcher-chrome-size, 52px);
+    height: var(--nova-launcher-chrome-size, 52px);
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: 8px;
+    border-radius: 10px;
     background: transparent;
     color: inherit;
     cursor: pointer;
-    opacity: 0.42;
+    opacity: var(--nova-launcher-chrome-opacity, 0.62);
     transition:
       opacity 0.15s ease,
       background 0.15s ease;
 
     &:hover {
-      opacity: 0.88;
+      opacity: 1;
       background: var(--nova-start-hover);
     }
 
@@ -107,6 +140,12 @@ $nova-shell-roots: '.owd-desktop--nova', 'body.owd-has-nova-desktop';
       outline: none;
       opacity: 1;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
+    .iconify,
+    svg {
+      width: var(--nova-launcher-chrome-icon, 34px) !important;
+      height: var(--nova-launcher-chrome-icon, 34px) !important;
     }
   }
 

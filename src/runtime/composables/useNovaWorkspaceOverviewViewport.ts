@@ -5,7 +5,7 @@ import { useDesktopWorkspaceStore } from '@owdproject/core/runtime/stores/storeD
 import {
   computeScaleToFit,
   useWorkspaceOverviewLiveScale,
-} from '@owdproject/kit-theme/runtime/composables/useWorkspaceOverviewLiveScale'
+} from '@owdproject/core/runtime/composables/useWorkspaceOverviewLiveScale'
 
 const FIT_PADDING = 0.94
 
@@ -39,6 +39,23 @@ export function useNovaWorkspaceOverviewViewport(
     layoutTick.value = layoutEpoch
   }
 
+  function attachViewportObserver(workspaceId: string, node: HTMLElement) {
+    if (typeof ResizeObserver === 'undefined') return
+
+    const prev = viewportObservers.get(workspaceId)
+    if (prev) prev.disconnect()
+
+    const ro = new ResizeObserver(() => bumpLayout())
+    ro.observe(node)
+    viewportObservers.set(workspaceId, ro)
+  }
+
+  function attachAllViewportObservers() {
+    for (const [workspaceId, node] of Object.entries(viewportById.value)) {
+      attachViewportObserver(workspaceId, node)
+    }
+  }
+
   function setViewportRef(workspaceId: string, el: unknown) {
     const prev = viewportObservers.get(workspaceId)
     if (prev) {
@@ -53,13 +70,8 @@ export function useNovaWorkspaceOverviewViewport(
     const next = { ...viewportById.value }
     if (node) {
       next[workspaceId] = node
-      if (
-        typeof ResizeObserver !== 'undefined' &&
-        desktopWorkspaceStore.overview
-      ) {
-        const ro = new ResizeObserver(() => bumpLayout())
-        ro.observe(node)
-        viewportObservers.set(workspaceId, ro)
+      if (desktopWorkspaceStore.overview) {
+        attachViewportObserver(workspaceId, node)
       }
     } else {
       delete next[workspaceId]
@@ -73,17 +85,25 @@ export function useNovaWorkspaceOverviewViewport(
     viewportObservers.clear()
   }
 
+  function scheduleOverviewLayoutRefresh() {
+    void nextTick(() => {
+      refreshStageSize()
+      attachAllViewportObservers()
+      bumpLayout()
+      requestAnimationFrame(() => {
+        refreshStageSize()
+        bumpLayout()
+      })
+    })
+  }
+
   watch(
     () => desktopWorkspaceStore.overview,
     (open) => {
       if (open) {
-        void nextTick(() => {
-          refreshStageSize()
-          bumpLayout()
-        })
+        scheduleOverviewLayoutRefresh()
       } else {
         disconnectViewportObservers()
-        viewportById.value = {}
       }
     },
   )
@@ -98,6 +118,46 @@ export function useNovaWorkspaceOverviewViewport(
 
   onScopeDispose(disconnectViewportObservers)
 
+  function resolvePanelSize(workspaceId: string): {
+    width: number
+    height: number
+  } {
+    const panelEl = viewportById.value[workspaceId]
+    const width =
+      panelEl?.clientWidth ??
+      (workspaceId === sampleViewportId.value ? panelW.value : 0)
+    const height =
+      panelEl?.clientHeight ??
+      (workspaceId === sampleViewportId.value ? panelH.value : 0)
+
+    return { width, height }
+  }
+
+  function computeThumbScale(
+    panelWidth: number,
+    panelHeight: number,
+    stageWidth: number,
+    stageHeight: number,
+  ): number {
+    if (panelWidth > 0 && panelHeight > 0) {
+      return (
+        computeScaleToFit(panelWidth, panelHeight, stageWidth, stageHeight) *
+        FIT_PADDING
+      )
+    }
+
+    const sampleW = panelW.value
+    const sampleH = panelH.value
+    if (sampleW > 0 && sampleH > 0) {
+      return (
+        computeScaleToFit(sampleW, sampleH, stageWidth, stageHeight) *
+        FIT_PADDING
+      )
+    }
+
+    return 0.2
+  }
+
   function overviewStackStyle(): CSSProperties | undefined {
     if (!desktopWorkspaceStore.overview) return undefined
 
@@ -106,12 +166,12 @@ export function useNovaWorkspaceOverviewViewport(
     const { width: stageWidth, height: stageHeight } = stageSize.value
     if (stageWidth <= 0 || stageHeight <= 0) return undefined
 
-    const pw = panelW.value
-    const ph = panelH.value
-    const scale =
-      pw > 0 && ph > 0
-        ? computeScaleToFit(pw, ph, stageWidth, stageHeight) * FIT_PADDING
-        : 1
+    const scale = computeThumbScale(
+      panelW.value,
+      panelH.value,
+      stageWidth,
+      stageHeight,
+    )
 
     return {
       '--nova-workspace-thumb-scale': String(scale),
@@ -120,9 +180,7 @@ export function useNovaWorkspaceOverviewViewport(
     } as CSSProperties
   }
 
-  function innerOverviewStyle(
-    workspaceId: string,
-  ): CSSProperties | undefined {
+  function resolveOverviewScale(workspaceId: string): number | undefined {
     if (!desktopWorkspaceStore.overview) return undefined
 
     void layoutTick.value
@@ -130,23 +188,43 @@ export function useNovaWorkspaceOverviewViewport(
     const { width: stageWidth, height: stageHeight } = stageSize.value
     if (stageWidth <= 0 || stageHeight <= 0) return undefined
 
-    const panelEl = viewportById.value[workspaceId]
-    const pw =
-      panelEl?.clientWidth ??
-      (workspaceId === sampleViewportId.value ? panelW.value : 0)
-    const ph =
-      panelEl?.clientHeight ??
-      (workspaceId === sampleViewportId.value ? panelH.value : 0)
+    const { width: pw, height: ph } = resolvePanelSize(workspaceId)
+    return computeThumbScale(pw, ph, stageWidth, stageHeight)
+  }
 
-    if (pw <= 0 || ph <= 0) return undefined
+  function scaleShellStyle(
+    workspaceId: string,
+  ): CSSProperties | undefined {
+    if (!desktopWorkspaceStore.overview) return undefined
 
-    const scale =
-      computeScaleToFit(pw, ph, stageWidth, stageHeight) * FIT_PADDING
+    const { width: stageWidth, height: stageHeight } = stageSize.value
+    if (stageWidth <= 0 || stageHeight <= 0) return undefined
+
+    const scale = resolveOverviewScale(workspaceId)
+    if (scale === undefined) return undefined
+
+    return {
+      width: `${stageWidth * scale}px`,
+      height: `${stageHeight * scale}px`,
+      flexShrink: 0,
+    }
+  }
+
+  function innerOverviewStyle(
+    workspaceId: string,
+  ): CSSProperties | undefined {
+    if (!desktopWorkspaceStore.overview) return undefined
+
+    const { width: stageWidth, height: stageHeight } = stageSize.value
+    if (stageWidth <= 0 || stageHeight <= 0) return undefined
+
+    const scale = resolveOverviewScale(workspaceId)
+    if (scale === undefined) return undefined
 
     return {
       width: `${stageWidth}px`,
       height: `${stageHeight}px`,
-      transform: `scale(${scale})`,
+      transform: `translate(-50%, -50%) scale(${scale})`,
       transformOrigin: 'center center',
     }
   }
@@ -154,6 +232,7 @@ export function useNovaWorkspaceOverviewViewport(
   return {
     stageSize,
     setViewportRef,
+    scaleShellStyle,
     innerOverviewStyle,
     overviewStackStyle,
     refreshStageSize,

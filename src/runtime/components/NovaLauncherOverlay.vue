@@ -55,6 +55,12 @@ watch(open, (isOpen) => {
         <div ref="panelRef" class="nova-launcher__panel">
           <header class="nova-launcher__header" @click.stop>
             <div class="nova-launcher__header-inner">
+              <span
+                class="nova-launcher__header-chrome nova-launcher__header-chrome--search"
+                aria-hidden="true"
+              >
+                <Icon name="mdi:magnify" :size="40" />
+              </span>
               <NovaStartSearchField
                 ref="searchRef"
                 v-model="searchQuery"
@@ -70,7 +76,7 @@ watch(open, (isOpen) => {
                 :aria-label="$t('systemBar.start.close')"
                 @click="close()"
               >
-                <Icon name="mdi:close" :size="20" aria-hidden="true" />
+                <Icon name="mdi:close" :size="40" aria-hidden="true" />
               </button>
             </div>
           </header>

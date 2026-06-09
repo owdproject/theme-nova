@@ -12,6 +12,7 @@ export default {
     main: {
       component: () => import('./components/Window/WindowSettings.vue'),
       resizable: true,
+      maximizable: true,
       size: {
         width: 1080,
         height: 720,

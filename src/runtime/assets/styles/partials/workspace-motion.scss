@@ -1,0 +1,90 @@
+/* Workspace overview — pointer + opacity motion (see useNovaMotion). */
+
+body.owd-has-nova-desktop {
+  .nova-workspace-stack--overview .nova-workspace-panel {
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 1px var(--nova-accent-muted, rgba(26, 108, 175, 0.55)),
+        0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+  }
+}
+
+body.owd-has-nova-desktop[data-nova-motion='on'] {
+  .nova-workspace-stack--overview {
+    .nova-workspace-stack__backdrop {
+      animation: nova-workspace-backdrop-in 0.22s ease both;
+    }
+
+    .nova-workspace-panel {
+      --nova-workspace-panel-opacity: 0.76;
+      transition: opacity 0.18s ease;
+      animation: nova-workspace-panel-fade-in 0.24s ease both;
+
+      &--active {
+        --nova-workspace-panel-opacity: 1;
+      }
+
+      &:not(.nova-workspace-panel--active) {
+        opacity: var(--nova-workspace-panel-opacity);
+      }
+
+      &:hover,
+      &:focus-visible {
+        opacity: 1;
+      }
+    }
+
+    @for $i from 1 through 8 {
+      .nova-workspace-panel:nth-child(#{$i}) {
+        animation-delay: #{($i - 1) * 36}ms;
+      }
+    }
+  }
+
+  @keyframes nova-workspace-backdrop-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes nova-workspace-panel-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: var(--nova-workspace-panel-opacity, 1);
+    }
+  }
+}
+
+body.owd-has-nova-desktop[data-nova-motion='off'] {
+  .nova-workspace-stack--overview {
+    .nova-workspace-stack__backdrop,
+    .nova-workspace-panel {
+      animation: none;
+      transition: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.owd-has-nova-desktop[data-nova-motion='on'] {
+    .nova-workspace-stack--overview {
+      .nova-workspace-stack__backdrop,
+      .nova-workspace-panel {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useBattery } from "@vueuse/core";
 import { useDesktopVolumeStore } from "@owdproject/core/runtime/stores/storeDesktopVolume";
-import { useDesktopShellIdentity } from "@owdproject/kit-theme/runtime/composables/useDesktopShellIdentity";
+import { useDesktopShellIdentity } from "@owdproject/core/runtime/composables/useDesktopShellIdentity";
 import { ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 import { useNovaSettingsApp } from "../composables/useNovaSettingsApp";
@@ -65,7 +65,14 @@ async function onOpenSettings() {
 
     <section class="nova-quick-settings__row" :aria-label="$t('systemBar.tray.volume')">
       <Icon :name="volumeIcon" :size="20" class="nova-quick-settings__row-icon" />
-      <Slider v-model="volume" :min="0" :max="100" class="nova-quick-settings__slider" />
+      <div class="nova-quick-settings__slider-wrap">
+        <Slider
+          v-model="volume"
+          :min="0"
+          :max="100"
+          class="nova-prime-slider"
+        />
+      </div>
       <span class="nova-quick-settings__value">{{ volume }}%</span>
     </section>
 
@@ -169,9 +176,11 @@ async function onOpenSettings() {
   opacity: 0.85;
 }
 
-.nova-quick-settings__slider {
+.nova-quick-settings__slider-wrap {
   flex: 1;
   min-width: 0;
+  /* Inset track end so the thumb at 100% stays clear of the % label. */
+  padding-inline-end: 10px;
 }
 
 .nova-quick-settings__value {

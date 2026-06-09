@@ -6,95 +6,119 @@
 .nova-explorer-popup-menu.p-menu,
 .nova-explorer-popup-menu.p-tieredmenu {
   font-family: var(--owd-font-family);
-  font-size: 13px !important;
-  line-height: 1.35;
-  min-width: 200px;
+  font-size: 12px !important;
+  line-height: 1.3;
+  min-width: 168px;
   padding: 0 !important;
   background: var(--nova-start-surface, rgba(12, 18, 28, 0.96)) !important;
-  color: var(--nova-explorer-text) !important;
-  border: 1px solid var(--nova-explorer-border) !important;
+  color: var(--nova-window-text, #e8eef6) !important;
+  border: 1px solid var(--nova-explorer-border, var(--nova-window-border, #1d293d)) !important;
   border-radius: var(--nova-window-radius, 8px) !important;
-  box-shadow: var(--nova-window-shadow) !important;
+  box-shadow: var(--nova-window-shadow, 0 8px 24px rgba(0, 0, 0, 0.32)) !important;
 }
 
 .nova-explorer-popup-menu.p-menu {
   .p-menu-list {
-    padding: 4px !important;
-    gap: 2px !important;
+    padding: 2px !important;
+    gap: 1px !important;
   }
 
   .p-menu-item-link {
-    min-height: 32px;
-    padding: 6px 12px !important;
-    border-radius: 6px;
-    gap: 10px !important;
+    min-height: 26px;
+    padding: 4px 10px !important;
+    border-radius: 4px;
+    gap: 8px !important;
+    color: inherit !important;
+  }
+
+  .p-menu-item-label {
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    color: inherit !important;
   }
 
   .p-menu-item-icon {
-    color: var(--nova-explorer-text-muted) !important;
+    color: var(--nova-explorer-text-muted, var(--nova-window-text-muted)) !important;
   }
 
   .p-menu-item.p-focus .p-menu-item-content,
   .p-menu-item:not(.p-disabled) .p-menu-item-content:hover {
     background: var(--nova-accent-muted) !important;
-    color: var(--nova-explorer-text) !important;
+    color: var(--nova-window-text, #e8eef6) !important;
   }
 
   .p-menu-item.p-focus .p-menu-item-icon,
   .p-menu-item:not(.p-disabled) .p-menu-item-content:hover .p-menu-item-icon {
-    color: var(--nova-explorer-accent) !important;
+    color: var(--nova-explorer-accent, var(--nova-window-accent-line)) !important;
   }
 
   .p-menu-separator {
-    margin: 4px 6px;
-    border-block-start-color: var(--nova-explorer-border-subtle) !important;
+    margin: 2px 4px;
+    border-block-start-color: var(--nova-explorer-border-subtle, rgba(255, 255, 255, 0.12)) !important;
   }
 }
 
 .nova-explorer-popup-menu.p-tieredmenu {
-  min-width: 220px;
+  min-width: 180px;
+  max-width: min(280px, calc(100vw - 24px));
 
   .p-tieredmenu-root-list,
   .p-tieredmenu-submenu {
-    padding: 4px !important;
-    gap: 2px !important;
+    padding: 2px !important;
+    gap: 1px !important;
   }
 
   .p-tieredmenu-submenu {
+    font-size: 12px !important;
     background: var(--nova-start-surface, rgba(12, 18, 28, 0.96)) !important;
-    border: 1px solid var(--nova-explorer-border) !important;
+    color: var(--nova-window-text, #e8eef6) !important;
+    border: 1px solid var(--nova-explorer-border, var(--nova-window-border, #1d293d)) !important;
     border-radius: var(--nova-window-radius, 8px) !important;
-    box-shadow: var(--nova-window-shadow) !important;
+    box-shadow: var(--nova-window-shadow, 0 8px 24px rgba(0, 0, 0, 0.32)) !important;
+  }
+
+  .p-tieredmenu-item-content {
+    color: var(--nova-window-text, #e8eef6) !important;
   }
 
   .p-tieredmenu-item-link {
-    min-height: 32px;
-    padding: 6px 12px !important;
-    border-radius: 6px;
-    gap: 10px !important;
+    min-height: 26px;
+    padding: 4px 10px !important;
+    border-radius: 4px;
+    gap: 8px !important;
+    color: inherit !important;
+  }
+
+  .p-tieredmenu-item-label {
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    color: inherit !important;
   }
 
   .p-tieredmenu-item-icon {
-    color: var(--nova-explorer-text-muted) !important;
+    color: var(--nova-explorer-text-muted, var(--nova-window-text-muted)) !important;
   }
 
   .p-tieredmenu-submenu-icon {
-    color: var(--nova-explorer-text-muted) !important;
+    color: var(--nova-explorer-text-muted, var(--nova-window-text-muted)) !important;
+    font-size: 0.75rem !important;
   }
 
   .p-tieredmenu-item:not(.p-disabled) > .p-tieredmenu-item-content:hover,
   .p-tieredmenu-item.p-focus > .p-tieredmenu-item-content {
     background: var(--nova-accent-muted) !important;
-    color: var(--nova-explorer-text) !important;
+    color: var(--nova-window-text, #e8eef6) !important;
   }
 
   .p-tieredmenu-item:not(.p-disabled):hover .p-tieredmenu-item-icon,
-  .p-tieredmenu-item.p-focus .p-tieredmenu-item-icon {
-    color: var(--nova-explorer-accent) !important;
+  .p-tieredmenu-item.p-focus .p-tieredmenu-item-icon,
+  .p-tieredmenu-item:not(.p-disabled):hover .p-tieredmenu-submenu-icon,
+  .p-tieredmenu-item.p-focus .p-tieredmenu-submenu-icon {
+    color: var(--nova-explorer-accent, var(--nova-window-accent-line)) !important;
   }
 
   .p-tieredmenu-separator {
-    margin: 4px 6px;
-    border-block-start-color: var(--nova-explorer-border-subtle) !important;
+    margin: 2px 4px;
+    border-block-start-color: var(--nova-explorer-border-subtle, rgba(255, 255, 255, 0.12)) !important;
   }
 }

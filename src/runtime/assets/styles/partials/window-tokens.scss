@@ -8,7 +8,7 @@
   --nova-window-nav-padding-x: 8px;
   --nova-window-nav-gap: 2px;
 
-  /* frame / header / body backgrounds are defined per accent in accent.scss */
+  /* frame / header / body: opaque hex in accent.scss; glass rgba + blur when html[data-nova-motion='on'] (window-motion.scss) */
   --nova-window-text: var(--owd-color, #e8eef6);
   --nova-window-text-muted: rgba(200, 212, 228, 0.52);
   --nova-window-text-inactive: rgba(200, 212, 228, 0.42);

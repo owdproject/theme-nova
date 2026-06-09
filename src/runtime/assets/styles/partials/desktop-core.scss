@@ -1,7 +1,7 @@
 @mixin layout {
   .owd-desktop {
     background: var(--owd-surface-900);
-    font-family: var(--owd-font-family), serif;
+    font-family: var(--owd-font-family), system-ui, sans-serif;
     color: var(--owd-color);
     overflow: hidden;
     display: flex;

@@ -1,9 +1,9 @@
 <script setup>
+import { useNovaAccentTheme } from "../../../../composables/useNovaAccentTheme";
 import {
-  useNovaAccentTheme,
   NOVA_ACCENT_ORDER,
   NOVA_ACCENT_META,
-} from "../../../../composables/useNovaAccentTheme";
+} from "../../../../utils/novaAccent";
 import { useNovaMotion } from "../../../../composables/useNovaMotion";
 
 const { accentId, setAccent } = useNovaAccentTheme();

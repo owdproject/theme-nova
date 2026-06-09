@@ -6,8 +6,10 @@ import {
   addImportsDir,
   addPlugin,
 } from '@nuxt/kit'
-import { registerTailwindPath } from '@owdproject/core/runtime/utils/utilApp'
-import { defineDesktopTheme } from '@owdproject/core/runtime/utils/defineDesktopTheme'
+import { defu } from 'defu'
+import { defineDesktopTheme } from '@owdproject/core'
+import { registerThemeTailwindPath } from '@owdproject/kit-primevue/kit/registerTailwindPath'
+import { novaAccentBootstrapScript } from './runtime/utils/novaAccent'
 import Material from '@primeuix/themes/material'
 import {
   NOVA_EXPLORER_QUICK_ACCESS_SEED,
@@ -22,6 +24,7 @@ const CHROME_COMPONENT_IGNORE = [
   '**/DockBar/**',
   '**/SystemBar/**',
   '**/Desktop/**',
+  '**/Deprecated/**',
 ]
 
 export default defineDesktopTheme({
@@ -63,7 +66,8 @@ export default defineDesktopTheme({
   async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
-    await installModule('@owdproject/kit-theme')
+    await installModule('@owdproject/kit-primevue')
+    registerThemeTailwindPath(nuxt, import.meta.url)
 
     nuxt.options.primevue = nuxt.options.primevue || {}
     nuxt.options.primevue.options = {
@@ -85,11 +89,6 @@ export default defineDesktopTheme({
       ignore: CHROME_COMPONENT_IGNORE,
     })
 
-    registerTailwindPath(
-      nuxt,
-      resolve('./runtime/components/**/*.{vue,mjs,ts}'),
-    )
-
     nuxt.hook('i18n:registerModule', (register) => {
       register({
         langDir: resolve('./i18n'),
@@ -107,16 +106,47 @@ export default defineDesktopTheme({
     addImportsDir(resolve('./runtime/stores'))
     addImportsDir(resolve('./runtime/utils'))
 
-    addPlugin({
-      src: resolve('./runtime/plugins/50.desktop-theme-nova-dialogs.client.ts'),
-      mode: 'client',
-    })
+    nuxt.options.fonts = defu(
+      {
+        families: [
+          {
+            name: 'Cantarell',
+            provider: 'google',
+            weights: [300, 400, 600, 700],
+          },
+        ],
+      },
+      nuxt.options.fonts ?? {},
+    )
 
     nuxt.options.css.push(resolve('./runtime/assets/styles/index.scss'))
 
-    if (nuxt.options.modules.includes('@owdproject/module-fs')) {
-      await installModule('@owdproject/kit-explorer')
+    const head = nuxt.options.app.head ?? {}
+    const existingScripts = Array.isArray(head.script)
+      ? head.script
+      : head.script
+        ? [head.script]
+        : []
+
+    nuxt.options.app.head = {
+      ...head,
+      htmlAttrs: defu({ 'data-nova-accent': 'ocean' }, head.htmlAttrs ?? {}),
+      script: [
+        {
+          key: 'nova-accent-bootstrap',
+          innerHTML: novaAccentBootstrapScript,
+          tagPosition: 'head',
+          type: 'text/javascript',
+        },
+        ...existingScripts,
+      ],
     }
+
+    addPlugin({
+      src: resolve('./runtime/plugins/nova-accent.client.ts'),
+      mode: 'client',
+      order: 1,
+    })
 
     installNovaBuiltInApps(nuxt, import.meta.url)
   },

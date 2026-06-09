@@ -1,5 +1,7 @@
 <script setup>
 import { computed } from "vue";
+import DockBarButtonApp from "./DockBarButtonApp.vue";
+import DockBarButtonMenu from "./DockBarButtonMenu.vue";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
 import { useNovaWorkspaces } from "../../composables/useNovaWorkspaces";

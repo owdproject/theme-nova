@@ -1,0 +1,61 @@
+/* PrimeVue Slider — Nova track + thumb (quick settings, settings app). */
+
+$nova-shell-roots: '.owd-desktop--nova', 'body.owd-has-nova-desktop';
+
+#{$nova-shell-roots} {
+  .nova-prime-slider.p-slider {
+    display: block;
+    position: relative;
+    min-width: 0;
+    width: 100%;
+    margin-block: 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+
+    &.p-slider-horizontal {
+      height: 6px;
+    }
+
+    .p-slider-range {
+      inset-block-start: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--owd-primary-color, #1a6caf);
+    }
+
+    &.p-slider-horizontal .p-slider-handle {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #e8eef6;
+      border: 0;
+      box-sizing: border-box;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      inset-block-start: 50%;
+      margin-block-start: -7px;
+      margin-inline-start: -7px;
+      transition:
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+
+      &::before {
+        display: none !important;
+        content: none !important;
+        box-shadow: none !important;
+      }
+
+      &:hover,
+      &:focus-visible,
+      &:focus:hover {
+        background: #fff;
+        /* Material preset adds a 10px primary glow — disable it. */
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45) !important;
+        transform: scale(1.05);
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+}

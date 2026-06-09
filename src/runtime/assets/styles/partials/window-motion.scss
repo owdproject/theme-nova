@@ -1,0 +1,76 @@
+/*
+ * Window glass — only when Enable animations is on (`html[data-nova-motion='on']`).
+ * Motion off: opaque hex tokens from accent.scss (no overrides here).
+ */
+
+@mixin nova-window-glass-tokens(
+  $frame,
+  $header,
+  $focused,
+  $body
+) {
+  --nova-window-frame-bg: #{$frame};
+  --nova-window-header-bg: #{$header};
+  --nova-window-header-focused-bg: #{$focused};
+  --nova-window-body-bg: #{$body};
+  --p-card-background: #{$frame};
+  --p-content-background: #{$frame};
+}
+
+html[data-nova-motion='on']:not([data-nova-accent]),
+html[data-nova-motion='on'][data-nova-accent='ocean'] {
+  @include nova-window-glass-tokens(
+    rgba(6, 10, 16, 0.72),
+    rgba(6, 10, 16, 0.68),
+    rgba(14, 24, 38, 0.78),
+    rgba(10, 14, 22, 0.75)
+  );
+}
+
+html[data-nova-motion='on'][data-nova-accent='ember'] {
+  @include nova-window-glass-tokens(
+    rgba(14, 6, 8, 0.72),
+    rgba(14, 6, 8, 0.68),
+    rgba(38, 14, 20, 0.78),
+    rgba(28, 10, 16, 0.75)
+  );
+}
+
+html[data-nova-motion='on'][data-nova-accent='forest'] {
+  @include nova-window-glass-tokens(
+    rgba(6, 12, 9, 0.72),
+    rgba(6, 12, 9, 0.68),
+    rgba(14, 32, 22, 0.78),
+    rgba(10, 24, 16, 0.75)
+  );
+}
+
+html[data-nova-motion='on'][data-nova-accent='violet'] {
+  @include nova-window-glass-tokens(
+    rgba(10, 6, 16, 0.72),
+    rgba(10, 6, 16, 0.68),
+    rgba(24, 14, 38, 0.78),
+    rgba(18, 10, 28, 0.75)
+  );
+}
+
+html[data-nova-motion='on'] .owd-desktop--nova {
+  --nova-window-backdrop-blur: 16px;
+
+  .owd-window.resizable-component:not(.nova-explorer-frame) > .p-card,
+  .owd-window.nova-explorer-frame > .p-card {
+    backdrop-filter: blur(var(--nova-window-backdrop-blur)) saturate(1.12);
+    -webkit-backdrop-filter: blur(var(--nova-window-backdrop-blur)) saturate(1.12);
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      backdrop-filter 0.2s ease;
+  }
+
+  .owd-window.resizable-component:not(.nova-explorer-frame) .owd-window__content,
+  .owd-window.nova-explorer-frame .owd-window__content {
+    backdrop-filter: blur(12px) saturate(1.08);
+    -webkit-backdrop-filter: blur(12px) saturate(1.08);
+  }
+}

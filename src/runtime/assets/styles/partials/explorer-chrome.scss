@@ -70,16 +70,24 @@
     }
 
     > .p-card > .p-card-body {
+      display: flex;
+      flex-direction: column;
       flex: 1 1 auto;
       min-height: 0;
       padding: 0;
       background: var(--nova-explorer-surface);
+
+      > .p-card-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        height: 100%;
+      }
     }
 
     .p-card-header .owd-window-nav {
       position: relative;
-      display: flex;
-      align-items: center;
       width: 100%;
       box-sizing: border-box;
       min-height: calc(
@@ -125,6 +133,45 @@
       }
     }
 
+    /* Tab chrome uses CSS grid — do not inherit flex from legacy single-row nav */
+    .p-card-header .nova-window-tab-chrome__nav.owd-window-nav {
+      display: grid;
+      align-items: stretch;
+
+      &.nova-window-tab-chrome__nav--tabs-only {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      &.nova-window-tab-chrome__nav--with-leading {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+      }
+
+      &.nova-window-tab-chrome__nav--tabs-only .nova-window-tab-chrome__tabs {
+        grid-column: 1;
+      }
+
+      &.nova-window-tab-chrome__nav--tabs-only .nova-window-tab-chrome__controls {
+        grid-column: 2;
+      }
+
+      &.nova-window-tab-chrome__nav--with-leading .nova-window-tab-chrome__leading {
+        grid-column: 1;
+      }
+
+      &.nova-window-tab-chrome__nav--with-leading .nova-window-tab-chrome__tabs {
+        grid-column: 2;
+      }
+
+      &.nova-window-tab-chrome__nav--with-leading .nova-window-tab-chrome__controls {
+        grid-column: 3;
+      }
+    }
+
+    .p-card-header .owd-window-nav:not(.nova-window-tab-chrome__nav) {
+      display: flex;
+      align-items: center;
+    }
+
     /* Caption buttons: explorer-caption-controls.scss */
 
     /*
@@ -134,7 +181,9 @@
     .owd-window__content {
       display: flex;
       flex-direction: column;
+      flex: 1 1 auto;
       min-height: 0;
+      height: 100%;
       overflow: hidden !important;
       color: var(--nova-explorer-text);
       background: var(--nova-explorer-surface);
@@ -159,7 +208,10 @@
     }
 
     .nova-explorer-shell {
-      flex: 1;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      height: 100%;
       min-height: 0;
       overflow: hidden;
       background: var(--nova-explorer-surface);

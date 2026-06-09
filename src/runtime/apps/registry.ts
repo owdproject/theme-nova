@@ -8,7 +8,7 @@ import type { Nuxt } from '@nuxt/schema'
  * - `components/` — window UI
  *
  * Apps with `autoload: true` are wired in theme `module.ts` without listing them in
- * `desktop.config.ts` `apps`.
+ * `desktop.config.ts` `apps`. Explorer expects `@owdproject/module-fs` in `modules`.
  */
 export type NovaThemeBuiltInApp = {
   name: string
@@ -21,6 +21,8 @@ export const NOVA_THEME_BUILTIN_APPS: NovaThemeBuiltInApp[] = [
   {
     name: 'explorer',
     autoload: true,
-    when: (nuxt) => nuxt.options.modules.includes('@owdproject/module-fs'),
+    when: (nuxt) =>
+      (nuxt.options.runtimeConfig.public.desktop as { modules?: string[] })
+        ?.modules?.some((m) => String(m).includes('module-fs')) ?? false,
   },
 ]

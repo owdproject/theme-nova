@@ -1,4 +1,5 @@
 <script setup>
+import DockBarButton from "./DockBarButton.vue";
 import { useNovaStartMenu } from "../../composables/useNovaStartMenu";
 const { open, toggle } = useNovaStartMenu();
 </script>

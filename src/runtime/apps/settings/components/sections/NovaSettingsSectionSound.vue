@@ -34,12 +34,14 @@ const volumeIcon = computed(() => {
       </header>
       <div class="nova-settings-group__content nova-settings-volume">
         <Icon :name="volumeIcon" :size="32" class="nova-settings-volume__icon" />
-        <Slider
-          v-model="volume"
-          :min="0"
-          :max="100"
-          class="nova-settings-volume__slider"
-        />
+        <div class="nova-settings-volume__slider-wrap">
+          <Slider
+            v-model="volume"
+            :min="0"
+            :max="100"
+            class="nova-prime-slider"
+          />
+        </div>
         <span class="nova-settings-volume__value">{{ volume }}%</span>
       </div>
     </section>
@@ -64,23 +66,7 @@ const volumeIcon = computed(() => {
 
 .nova-settings-volume__slider {
   width: 100%;
-  min-width: 0;
-
-  :deep(.p-slider) {
-    display: block;
-    width: 100%;
-  }
-
-  :deep(.p-slider-range) {
-    height: 6px;
-    border-radius: 999px;
-  }
-
-  :deep(.p-slider-handle) {
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-block-start: -0.4rem;
-  }
+  margin-inline-end: 8px;
 }
 
 .nova-settings-volume__value {
@@ -101,7 +87,7 @@ const volumeIcon = computed(() => {
     row-gap: 12px;
   }
 
-  .nova-settings-volume__slider {
+  .nova-settings-volume__slider-wrap {
     grid-column: 1 / -1;
   }
 

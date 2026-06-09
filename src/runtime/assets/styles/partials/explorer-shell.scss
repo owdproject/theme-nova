@@ -1,4 +1,9 @@
 .nova-explorer-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+
   :deep(.nova-explorer-content-pane) {
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--nova-explorer-text) 28%, transparent)
@@ -15,9 +20,4 @@
     background: color-mix(in srgb, var(--nova-explorer-text) 28%, transparent);
   }
 
-  :deep(.p-datatable) {
-    border: none;
-    box-shadow: none;
-    background: transparent;
-  }
 }

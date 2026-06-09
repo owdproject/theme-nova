@@ -23,8 +23,9 @@ defineExpose({ focus });
     }"
   >
     <Icon
+      v-if="!launcher"
       name="mdi:magnify"
-      :size="launcher ? 26 : size === 'large' ? 28 : 20"
+      :size="size === 'large' ? 28 : 20"
       class="nova-start-search__icon"
       aria-hidden="true"
     />

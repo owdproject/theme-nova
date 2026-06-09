@@ -199,6 +199,10 @@
 
   .owd-window__content,
   .owd-window__content--centered {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
     color: var(--nova-window-text);
     background: var(--nova-window-body-bg);
 

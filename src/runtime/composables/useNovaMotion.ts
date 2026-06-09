@@ -32,7 +32,9 @@ function defaultFromConfig(): boolean {
 
 function syncMotionAttribute(enabled: boolean) {
   if (!import.meta.client) return
-  document.body.setAttribute('data-nova-motion', enabled ? 'on' : 'off')
+  const value = enabled ? 'on' : 'off'
+  document.documentElement.setAttribute('data-nova-motion', value)
+  document.body.setAttribute('data-nova-motion', value)
 }
 
 function hydratePreference() {

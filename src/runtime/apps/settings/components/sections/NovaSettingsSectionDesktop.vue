@@ -1,13 +1,9 @@
 <script setup>
 import { computed } from "vue";
 import { useRuntimeConfig } from "nuxt/app";
-import { useAppConfig } from "nuxt/app";
-import { useNovaWorkspaces } from "../../../../composables/useNovaWorkspaces";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
 
 const runtimeConfig = useRuntimeConfig();
-const appConfig = useAppConfig();
-const { enabled: workspacesEnabled } = useNovaWorkspaces();
 const applicationManager = useApplicationManager();
 
 const coreVersion = computed(
@@ -21,32 +17,6 @@ async function openAbout() {
 
 <template>
   <div class="nova-settings-section">
-    <section class="nova-settings-group">
-      <header class="nova-settings-group__head">
-        <h2 class="nova-settings-group__title">
-          {{ $t("apps.settings.desktop.workspacesTitle") }}
-        </h2>
-        <p class="nova-settings-group__desc">
-          {{ $t("apps.settings.desktop.workspacesDesc") }}
-        </p>
-      </header>
-      <div class="nova-settings-group__content">
-        <p class="nova-settings-stat">
-          <span class="nova-settings-stat__label">{{
-            $t("apps.settings.desktop.workspacesState")
-          }}</span>
-          <span class="nova-settings-stat__value">{{
-            workspacesEnabled
-              ? $t("apps.settings.desktop.enabled")
-              : $t("apps.settings.desktop.disabled")
-          }}</span>
-        </p>
-        <p v-if="appConfig.desktop?.workspaces?.enabled" class="nova-settings-note">
-          {{ $t("apps.settings.desktop.workspacesHint") }}
-        </p>
-      </div>
-    </section>
-
     <section class="nova-settings-group">
       <header class="nova-settings-group__head">
         <h2 class="nova-settings-group__title">

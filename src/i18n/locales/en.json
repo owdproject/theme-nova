@@ -27,6 +27,10 @@
       "switcher": "Virtual desktops",
       "desktopN": "Desktop {n}",
       "addDesktop": "Add desktop",
+      "removeDesktop": "Remove desktop {n}",
+      "removeDesktopConfirmTitle": "Remove desktop?",
+      "removeDesktopConfirmMessage": "Move {count} windows to {target} and remove this desktop.",
+      "removeDesktopBlocked": "At least two desktops are required",
       "closeOverview": "Close workspaces overview",
       "emptyDesktop": "No open windows",
       "dropToDesktop": "Release to move to {name}"
@@ -34,6 +38,7 @@
     "tray": {
       "more": "More tray actions",
       "workspaces": "Workspaces",
+      "workspacesActive": "Desktop {n} of {total}. Open workspaces overview",
       "volume": "Volume",
       "account": "Account and quick settings",
       "battery": "Battery",
@@ -116,12 +121,6 @@
         "desc": "Master output level for the desktop session."
       },
       "desktop": {
-        "workspacesTitle": "Virtual desktops",
-        "workspacesDesc": "Workspaces let you group windows across multiple desktops.",
-        "workspacesState": "Status",
-        "workspacesHint": "Use the tray icon or edge gestures to switch and manage desktops.",
-        "enabled": "Enabled",
-        "disabled": "Disabled",
         "aboutTitle": "About",
         "aboutDesc": "Version information and third-party components.",
         "version": "Version",
@@ -183,6 +182,9 @@
         "smallIcons": "Small Icons",
         "list": "List",
         "details": "Details"
+      },
+      "view": {
+        "showHiddenFiles": "Hidden items"
       },
       "sortBy": {
         "name": "Name",

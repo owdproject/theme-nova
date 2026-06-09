@@ -1,24 +1,45 @@
 <script setup>
-import { inject, onMounted } from "vue";
+import { computed, onMounted, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import Background from "./Background/Background.vue";
+import DesktopContent from "./Desktop/DesktopContent.vue";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
+import { useDesktopDialogs } from "@owdproject/core/runtime/composables/useDesktopDialogs";
 import { useWorkspaceManager } from "@owdproject/core/runtime/composables/useWorkspaceManager";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
+import { countWindowsOnWorkspace } from "@owdproject/core/runtime/utils/utilWorkspaceWindows";
 import { useNovaWorkspaceReconcile } from "../composables/useNovaWorkspaceReconcile";
 import { useNovaWorkspaceOverviewViewport } from "../composables/useNovaWorkspaceOverviewViewport";
+import { useNovaWorkspacePanelLongPress } from "../composables/useNovaWorkspacePanelLongPress";
 
-const shellStageRef = inject("novaShellStage");
-if (!shellStageRef) {
-  throw new Error("NovaWorkspaceStack requires provide('novaShellStage') from Desktop.client.vue");
-}
+const props = defineProps({
+  stageRef: {
+    type: Object,
+    default: null,
+  },
+});
+
+const shellStageRef = toRef(props, "stageRef");
 
 const applicationManager = useApplicationManager();
 const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const { reconcileOrphanWindows } = useNovaWorkspaceReconcile();
 const { t } = useI18n();
-const { onWorkspaceDragOver, onWorkspaceDrop } = useWorkspaceManager();
-const { setViewportRef, innerOverviewStyle, overviewStackStyle } =
+const dialogs = useDesktopDialogs();
+const { onWorkspaceDragOver, onWorkspaceDrop, removeWorkspace } =
+  useWorkspaceManager();
+const { setViewportRef, scaleShellStyle, innerOverviewStyle, overviewStackStyle } =
   useNovaWorkspaceOverviewViewport(shellStageRef);
+const {
+  dismissReveal,
+  onPanelPointerDown,
+  onPanelPointerEnd,
+  isRevealActive,
+} = useNovaWorkspacePanelLongPress();
+
+const canRemoveWorkspace = computed(
+  () => desktopWorkspaceStore.list.length > 2,
+);
 
 function desktopLabel(index) {
   return t("systemBar.workspaces.desktopN", { n: index + 1 });
@@ -44,16 +65,34 @@ function addDesktop() {
   desktopWorkspaceStore.createWorkspace();
 }
 function windowsOnWorkspace(workspaceId) {
-  let count = 0;
-  for (const win of applicationManager.windowsOpened.value.values()) {
-    const ws = win.state.workspace;
-    if (!ws && workspaceId === desktopWorkspaceStore.active) {
-      count++;
-      continue;
-    }
-    if (ws === workspaceId) count++;
+  return countWindowsOnWorkspace(
+    applicationManager.apps.values(),
+    workspaceId,
+    desktopWorkspaceStore.active,
+  );
+}
+async function onRemoveWorkspace(workspaceId, index) {
+  if (!canRemoveWorkspace.value) return;
+
+  const fallbackId = desktopWorkspaceStore.resolveWorkspaceFallback(workspaceId);
+  if (!fallbackId) return;
+
+  const count = windowsOnWorkspace(workspaceId);
+  if (count > 0) {
+    const fallbackIndex = desktopWorkspaceStore.list.indexOf(fallbackId);
+    const accepted = await dialogs.confirm({
+      title: t("systemBar.workspaces.removeDesktopConfirmTitle"),
+      message: t("systemBar.workspaces.removeDesktopConfirmMessage", {
+        count,
+        target: desktopLabel(fallbackIndex),
+      }),
+      danger: true,
+    });
+    if (!accepted) return;
   }
-  return count;
+
+  removeWorkspace(workspaceId);
+  dismissReveal();
 }
 onMounted(() => {
   reconcileOrphanWindows();
@@ -73,7 +112,10 @@ onMounted(() => {
       type="button"
       class="nova-workspace-stack__backdrop"
       :aria-label="t('systemBar.workspaces.closeOverview')"
-      @click="closeOverview"
+      @click="
+        dismissReveal();
+        closeOverview();
+      "
     />
 
     <div
@@ -88,11 +130,23 @@ onMounted(() => {
         :class="{
           'nova-workspace-panel--active':
             workspaceId === desktopWorkspaceStore.active,
+          'nova-workspace-panel--reveal-remove': isRevealActive(workspaceId),
         }"
         role="listitem"
+        :tabindex="desktopWorkspaceStore.overview ? 0 : -1"
         @drop="onWorkspaceDrop($event, workspaceId)"
         @dragover="onWorkspaceDragOver"
+        @pointerdown="onPanelPointerDown(workspaceId, $event)"
+        @pointerup="onPanelPointerEnd"
+        @pointercancel="onPanelPointerEnd"
+        @pointerleave="onPanelPointerEnd"
         @click="onWorkspacePanelClick(workspaceId, $event)"
+        @keydown.enter.prevent="
+          desktopWorkspaceStore.overview && selectWorkspace(workspaceId)
+        "
+        @keydown.space.prevent="
+          desktopWorkspaceStore.overview && selectWorkspace(workspaceId)
+        "
       >
         <span
           v-if="desktopWorkspaceStore.overview"
@@ -100,24 +154,42 @@ onMounted(() => {
         >
           {{ desktopLabel(index) }}
         </span>
+        <button
+          v-if="desktopWorkspaceStore.overview && canRemoveWorkspace"
+          type="button"
+          class="nova-workspace-panel__remove"
+          :aria-label="t('systemBar.workspaces.removeDesktop', { n: index + 1 })"
+          @click.stop="onRemoveWorkspace(workspaceId, index)"
+        >
+          <Icon name="mdi:close" :size="16" aria-hidden="true" />
+        </button>
         <div
           class="nova-workspace-panel__viewport"
           :ref="(el) => setViewportRef(workspaceId, el)"
         >
           <div
-            class="nova-workspace-panel__inner"
-            :data-workspace-id="workspaceId"
-            :style="innerOverviewStyle(workspaceId)"
+            class="nova-workspace-panel__scale"
+            :style="scaleShellStyle(workspaceId)"
           >
-            <DesktopContent
-              v-if="
-                desktopWorkspaceStore.overview ||
-                workspaceId === desktopWorkspaceStore.active
-              "
+            <div
+              class="nova-workspace-panel__inner"
+              :data-workspace-id="workspaceId"
+              :style="innerOverviewStyle(workspaceId)"
             >
-              <slot />
-            </DesktopContent>
-            <DesktopApplicationRender :workspace-filter="workspaceId" />
+              <Background
+                v-if="desktopWorkspaceStore.overview"
+                class="nova-workspace-panel__bg"
+              />
+              <DesktopContent
+                v-if="
+                  desktopWorkspaceStore.overview ||
+                  workspaceId === desktopWorkspaceStore.active
+                "
+              >
+                <slot />
+              </DesktopContent>
+              <DesktopApplicationRender :workspace-filter="workspaceId" />
+            </div>
           </div>
         </div>
         <p

@@ -4,6 +4,8 @@
 @use './partials/motion.scss';
 @use './partials/start-launcher.scss';
 @use './partials/window-tokens.scss';
+@use './partials/window-tab-chrome.scss';
+@use './partials/window-motion.scss';
 @use './partials/explorer-tokens.scss';
 @use './partials/explorer-shell.scss';
 @use './partials/explorer-prime-overlays.scss';
@@ -13,16 +15,18 @@
 @use './partials/window-nav-contextmenu.scss';
 @use './partials/shell.scss';
 @use './partials/workspaces.scss';
+@use './partials/workspace-motion.scss';
 @use './partials/terminal.scss';
 @use './partials/tray.scss';
+@use './partials/prime-slider.scss';
 @use './partials/start.scss';
 @use './partials/system-bar.scss';
 @use './partials/desktop-core.scss' as desktop-core;
+@use './partials/typography-base.scss';
 
 :root {
   --owd-font-family: 'Cantarell';
   --owd-color: #e8eef6;
-  --owd-background-color: var(--owd-surface-900);
   --owd-card-border-radius: 8px;
 
   --owd-hover-background-color: 255, 255, 255, 0.05;

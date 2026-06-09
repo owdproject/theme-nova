@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useAppConfig } from "nuxt/app";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
@@ -12,13 +12,8 @@ import NovaTopBar from "./NovaTopBar.vue";
 import NovaWorkspaceEdgeHints from "./NovaWorkspaceEdgeHints.vue";
 import NovaWindowSnapHints from "./NovaWindowSnapHints.vue";
 import NovaWorkspaceStack from "./NovaWorkspaceStack.vue";
-import { useDesktopWorkArea } from "@owdproject/kit-theme/runtime/composables/useDesktopWorkArea";
-import {
-  provideDesktopShellStage,
-  provideDesktopWorkArea,
-} from "@owdproject/kit-theme/runtime/composables/provideDesktopShellStage";
+import { useDesktopWorkArea } from "@owdproject/core/runtime/composables/useDesktopWorkArea";
 import { useNovaStartMenu } from "../composables/useNovaStartMenu";
-import { useNovaAccentTheme } from "../composables/useNovaAccentTheme";
 import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
 import { useNovaMotion } from "../composables/useNovaMotion";
 
@@ -32,24 +27,16 @@ const { enabled: workspacesEnabled } = useNovaWorkspaces();
 useNovaMotion();
 
 const appConfig = useAppConfig();
+const dockBarEnabled = computed(
+  () => appConfig?.desktop?.dockBar?.enabled !== false,
+);
 const desktopWorkspaceStore = useDesktopWorkspaceStore();
 const { overview: workspaceOverview } = storeToRefs(desktopWorkspaceStore);
 const isOverviewEnabled = computed(() => workspaceOverview.value === true);
 const shellStageRef = ref(null);
-provide("novaShellStage", shellStageRef);
-const { workArea } = useDesktopWorkArea(shellStageRef);
-provideDesktopShellStage(shellStageRef);
-provideDesktopWorkArea(workArea);
+useDesktopWorkArea(shellStageRef);
 
 const BODY_SHELL_CLASS = "owd-has-nova-desktop";
-
-watch(
-  accentId,
-  (id) => {
-    document.body.setAttribute("data-nova-accent", id);
-  },
-  { immediate: true },
-);
 
 watch(startMenuOpen, (isOpen) => {
   if (isOpen && workspaceOverview.value) {
@@ -67,8 +54,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.body.classList.remove(BODY_SHELL_CLASS);
-  document.body.removeAttribute("data-nova-accent");
   document.body.removeAttribute("data-nova-motion");
+  document.documentElement.removeAttribute("data-nova-motion");
 });
 </script>
 
@@ -77,7 +64,6 @@ onUnmounted(() => {
     v-bind="$props"
     class="owd-desktop--nova"
     :class="{ 'owd-desktop--overview-enabled': isOverviewEnabled }"
-    :data-nova-accent="accentId"
   >
     <NovaTopBar />
 
@@ -87,7 +73,7 @@ onUnmounted(() => {
     <div ref="shellStageRef" class="nova-shell__stage">
       <Background />
 
-      <NovaWorkspaceStack v-if="workspacesEnabled">
+      <NovaWorkspaceStack v-if="workspacesEnabled" :stage-ref="shellStageRef">
         <slot />
       </NovaWorkspaceStack>
 
@@ -99,7 +85,7 @@ onUnmounted(() => {
       </template>
     </div>
 
-    <DockBar v-if="appConfig?.desktop?.dockBar?.enabled" />
+    <DockBar v-if="dockBarEnabled" />
 
     <NovaLauncherOverlay />
 

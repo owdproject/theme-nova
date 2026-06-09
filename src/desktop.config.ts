@@ -1,3 +1,5 @@
+import { defineDesktopConfig } from '@owdproject/core'
+
 export default defineDesktopConfig({
     name: 'nova',
     compatibility: '3.0.0-alpha.0',
