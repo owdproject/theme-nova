@@ -29,7 +29,7 @@ const CHROME_COMPONENT_IGNORE = [
 
 export default defineDesktopTheme({
   meta: {
-    name: 'owd-theme-nova',
+    name: 'desktop-theme-nova',
   },
   defaults: {
     name: 'nova',
