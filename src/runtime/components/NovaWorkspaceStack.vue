@@ -188,7 +188,7 @@ onMounted(() => {
               >
                 <slot />
               </DesktopContent>
-              <DesktopApplicationRender :workspace-filter="workspaceId" />
+              <DesktopCoreApplicationRender :workspace-filter="workspaceId" />
             </div>
           </div>
         </div>

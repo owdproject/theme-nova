@@ -6,7 +6,10 @@
 
 <style scoped>
 .owd-window__content--centered {
-  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .owd-window__content--padded {
   padding: var(--owd-card-body-padding);
