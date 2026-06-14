@@ -74,8 +74,13 @@
       height: auto;
       padding: 0;
       background: var(--nova-window-body-bg);
+      display: flex;
+      flex-direction: column;
 
       > .p-card-content {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
         height: 100%;
         min-height: 0;
         color: var(--nova-window-text);
