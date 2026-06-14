@@ -19,7 +19,7 @@ const { onDragStart, onDragEnd } = useWindowDragHandlers(
   >
     <Card border rounded :pt:body="{ class: 'p-0' }">
       <template #header>
-        <DesktopWindowNav>
+        <DesktopCoreWindowNav>
           <template #prepend>
             <slot name="nav-prepend" />
           </template>
@@ -27,12 +27,12 @@ const { onDragStart, onDragEnd } = useWindowDragHandlers(
           <template #append>
             <slot name="nav-append" />
           </template>
-        </DesktopWindowNav>
+        </DesktopCoreWindowNav>
       </template>
       <template #content>
-        <DesktopWindowContent>
+        <DesktopCoreWindowContent>
           <slot />
-        </DesktopWindowContent>
+        </DesktopCoreWindowContent>
       </template>
     </Card>
   </DesktopCoreWindow>
