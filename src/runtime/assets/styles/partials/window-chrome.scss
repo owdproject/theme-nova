@@ -202,8 +202,7 @@
     }
   }
 
-  .owd-window__content,
-  .owd-window__content--centered {
+  .owd-window__content {
     min-height: 0;
     height: 100%;
     color: var(--nova-window-text);
@@ -216,6 +215,13 @@
     a:hover {
       color: var(--owd-primary-hover-color);
     }
+  }
+
+  .owd-window__content--centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .p-button.p-button-primary,
