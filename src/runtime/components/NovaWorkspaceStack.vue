@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import Background from "./Background/Background.vue";
+import Background from "./Background/DesktopBackground.vue";
 import DesktopContent from "./Desktop/DesktopContent.vue";
 import { useApplicationManager } from "@owdproject/core/runtime/composables/useApplicationManager";
 import { useDesktopDialogs } from "@owdproject/core/runtime/composables/useDesktopDialogs";
