@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useAppConfig } from "nuxt/app";
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
-import Background from "./Background/Background.vue";
+import Background from "./Background/DesktopBackground.vue";
 import DesktopContent from "./Desktop/DesktopContent.vue";
 import DockBar from "./DockBar/DockBar.vue";
 import NovaConfirmDialogs from "./NovaConfirmDialogs.vue";
@@ -81,7 +81,7 @@ onUnmounted(() => {
         <DesktopContent>
           <slot />
         </DesktopContent>
-        <DesktopApplicationRender />
+        <DesktopCoreApplicationRender />
       </template>
     </div>
 

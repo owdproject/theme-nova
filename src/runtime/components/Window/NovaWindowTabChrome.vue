@@ -56,7 +56,7 @@ function onNewTab() {
 </script>
 
 <template>
-  <DesktopWindowNav
+  <DesktopCoreWindowNav
     class="nova-window-tab-chrome__nav"
     :class="navGridClass"
     @dblclick="onWindowMaximize"
@@ -115,7 +115,7 @@ function onNewTab() {
         />
       </slot>
     </div>
-  </DesktopWindowNav>
+  </DesktopCoreWindowNav>
 
   <ContextMenu ref="menu" :model="items" :pt="windowNavContextMenuPt" />
 </template>

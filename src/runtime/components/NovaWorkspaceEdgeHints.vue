@@ -1,5 +1,5 @@
 <script setup>
-import WorkspaceEdgeHintsBase from '@owdproject/core/runtime/components/workspace/WorkspaceEdgeHintsBase.vue'
+import WorkspaceEdgeHintsBase from '@owdproject/core/runtime/components/workspace/DesktopCoreWorkspaceEdgeHintsBase.vue'
 import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
 
 const { enabled: workspacesEnabled } = useNovaWorkspaces();

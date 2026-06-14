@@ -3,7 +3,7 @@ import NovaSettingsShell from '../NovaSettingsShell.vue'
 </script>
 
 <template>
-  <Window>
+  <DesktopWindow>
     <NovaSettingsShell />
-  </Window>
+  </DesktopWindow>
 </template>
