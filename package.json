@@ -59,12 +59,14 @@
     "@owdproject/app-about": "workspace:*",
     "@owdproject/core": "workspace:*",
     "@owdproject/module-fs": "workspace:*",
+    "@owdproject/kit-tailwind": "workspace:*",
     "nuxt": "^4.4.6",
     "typescript": "catalog:"
   },
   "peerDependencies": {
     "@owdproject/core": "^3.3.0",
-    "@owdproject/kit-primevue": "^0.0.1",
+    "@owdproject/kit-primevue": "^0.1.0",
+    "@owdproject/kit-tailwind": "^0.1.0",
     "@owdproject/module-fs": "^0.0.6",
     "nuxt": "^4.4.4"
   }

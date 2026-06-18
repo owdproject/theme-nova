@@ -8,7 +8,7 @@ import {
 } from '@nuxt/kit'
 import { defu } from 'defu'
 import { defineDesktopTheme } from '@owdproject/core'
-import { registerThemeTailwindPath } from '@owdproject/kit-primevue/kit/registerTailwindPath'
+import { registerThemeTailwindPath } from '@owdproject/kit-tailwind/kit/registerTailwindPath'
 import { novaAccentBootstrapScript } from './runtime/utils/novaAccent'
 import Material from '@primeuix/themes/material'
 import {
