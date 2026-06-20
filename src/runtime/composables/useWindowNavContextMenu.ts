@@ -1,4 +1,5 @@
 import { computed, ref } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ContextMenu from 'primevue/contextmenu'
 import type { IWindowController } from '@owdproject/core'
@@ -7,7 +8,11 @@ import { useToggleWindowMaximize } from '@owdproject/core/runtime/composables/us
 
 export function useWindowNavContextMenu(
   windowController: IWindowController | undefined,
-) {
+): {
+  menu: Ref<any>
+  items: ComputedRef<MenuItem[]>
+  onNavContextMenu: (event: MouseEvent) => void
+} {
   const { t } = useI18n()
   const menu = ref<InstanceType<typeof ContextMenu> | null>(null)
 
