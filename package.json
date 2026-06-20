@@ -1,6 +1,6 @@
 {
   "name": "@owdproject/theme-nova",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Open Web Desktop theme",
   "homepage": "https://github.com/owdproject/theme-nova",
   "license": "MIT",
@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
-    "@owdproject/app-about": "workspace:*",
     "@owdproject/core": "workspace:*",
     "@owdproject/module-fs": "workspace:*",
     "@owdproject/kit-tailwind": "workspace:*",
