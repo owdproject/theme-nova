@@ -2,13 +2,15 @@ import {
   createResolver,
   addComponent,
   addComponentsDir,
-  installModule,
   addImportsDir,
   addPlugin,
 } from '@nuxt/kit'
 import { defu } from 'defu'
 import { defineDesktopTheme } from '@owdproject/core'
-import { registerThemeTailwindPath } from '@owdproject/kit-tailwind/kit/registerTailwindPath'
+import {
+  registerTailwindPath,
+  registerThemeTailwindPath,
+} from '@owdproject/kit-tailwind/kit/registerTailwindPath'
 import { novaAccentBootstrapScript } from './runtime/utils/novaAccent'
 import Material from '@primeuix/themes/material'
 import {
@@ -30,6 +32,9 @@ const CHROME_COMPONENT_IGNORE = [
 export default defineDesktopTheme({
   meta: {
     name: 'desktop-theme-nova',
+  },
+  moduleDependencies: {
+    '@owdproject/kit-primevue': {},
   },
   defaults: {
     name: 'nova',
@@ -66,15 +71,15 @@ export default defineDesktopTheme({
   async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
-    await installModule('@owdproject/kit-primevue')
-    registerThemeTailwindPath(nuxt, import.meta.url)
-
     nuxt.options.primevue = nuxt.options.primevue || {}
     nuxt.options.primevue.options = {
       theme: {
         preset: Material,
       },
     }
+
+    registerThemeTailwindPath(nuxt, import.meta.url)
+    registerTailwindPath(nuxt, resolve('./runtime/pages/**/*.{vue,mjs,ts}'))
 
     addComponent({
       name: 'Desktop',

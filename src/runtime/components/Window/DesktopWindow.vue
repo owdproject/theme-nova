@@ -30,9 +30,9 @@ const { onDragStart, onDragEnd } = useWindowDragHandlers(
         </DesktopWindowNav>
       </template>
       <template #content>
-        <DesktopCoreWindowContent>
+        <DesktopWindowContent>
           <slot />
-        </DesktopCoreWindowContent>
+        </DesktopWindowContent>
       </template>
     </Card>
   </DesktopCoreWindow>
