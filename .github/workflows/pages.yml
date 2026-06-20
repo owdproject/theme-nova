@@ -26,6 +26,30 @@ jobs:
           path: client
           submodules: recursive
 
+      - name: Checkout kit-tailwind
+        uses: actions/checkout@v4
+        with:
+          repository: owdproject/kit-tailwind
+          path: client/packages/kit-tailwind
+
+      - name: Checkout kit-primevue
+        uses: actions/checkout@v4
+        with:
+          repository: owdproject/kit-primevue
+          path: client/packages/kit-primevue
+
+      - name: Checkout module-fs
+        uses: actions/checkout@v4
+        with:
+          repository: owdproject/module-fs
+          path: client/packages/module-fs
+
+      - name: Checkout app-about
+        uses: actions/checkout@v4
+        with:
+          repository: owdproject/app-about
+          path: client/apps/app-about
+
       - name: Overlay this theme-nova repo
         uses: actions/checkout@v4
         with:
