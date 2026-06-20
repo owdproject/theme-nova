@@ -61,7 +61,7 @@
     "@owdproject/module-fs": "workspace:*",
     "@owdproject/kit-tailwind": "workspace:*",
     "nuxt": "^4.4.6",
-    "typescript": "catalog:"
+    "typescript": "~6.0.3"
   },
   "peerDependencies": {
     "@owdproject/core": "^3.3.0",
