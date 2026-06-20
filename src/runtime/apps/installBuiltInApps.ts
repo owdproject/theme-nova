@@ -18,7 +18,7 @@ export function installNovaBuiltInApps(nuxt: Nuxt, themeRoot: string) {
     const appRoot = resolve(`./runtime/apps/${app.name}`)
 
     addPlugin({
-      src: resolve(appRoot, 'plugin.ts'),
+      src: resolve(appRoot, 'plugin'),
       mode: 'client',
       name: `owd-nova-${app.name}`,
     })

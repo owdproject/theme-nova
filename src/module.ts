@@ -143,7 +143,7 @@ export default defineDesktopTheme({
     }
 
     addPlugin({
-      src: resolve('./runtime/plugins/nova-accent.client.ts'),
+      src: resolve('./runtime/plugins/nova-accent.client'),
       mode: 'client',
       order: 1,
     })
