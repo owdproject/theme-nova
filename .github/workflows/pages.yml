@@ -19,36 +19,49 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout OWD client (workspace deps)
+        uses: actions/checkout@v4
+        with:
+          repository: owdproject/client
+          path: client
+          submodules: recursive
 
-      - uses: actions/setup-node@v6
+      - name: Overlay this theme-nova repo
+        uses: actions/checkout@v4
+        with:
+          path: client/themes/theme-nova
+
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - run: npm i -g --force corepack@latest && corepack enable
 
-      - name: Install dependencies
-        run: npx nypm@latest i
+      - name: Install monorepo dependencies
+        working-directory: client
+        run: pnpm install --no-frozen-lockfile
 
       - name: Prepare module and playground
-        run: npm run dev:prepare
+        working-directory: client/themes/theme-nova
+        run: pnpm run dev:prepare
 
       - name: Generate static playground
-        run: npm run dev:generate
+        working-directory: client/themes/theme-nova
+        run: pnpm run dev:generate
         env:
           NUXT_APP_BASE_URL: /theme-nova/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: playground/.output/public
+          path: client/themes/theme-nova/playground/.output/public
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

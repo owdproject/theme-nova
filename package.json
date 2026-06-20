@@ -1,6 +1,6 @@
 {
   "name": "@owdproject/theme-nova",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Open Web Desktop theme",
   "homepage": "https://github.com/owdproject/theme-nova",
   "license": "MIT",
@@ -64,7 +64,7 @@
     "typescript": "~6.0.3"
   },
   "peerDependencies": {
-    "@owdproject/core": "^3.3.0",
+    "@owdproject/core": "^3.4.0",
     "@owdproject/kit-primevue": "^0.1.0",
     "@owdproject/kit-tailwind": "^0.1.0",
     "@owdproject/module-fs": "^0.0.6",
