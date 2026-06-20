@@ -1,0 +1,119 @@
+/*
+ * YouTube client polish for Nova — theme-only overrides.
+ * Uses plain selectors (:deep does not work outside Vue SFCs).
+ */
+.owd-desktop--nova .youtube-app {
+  .youtube-home__toolbar {
+    border-bottom: none !important;
+  }
+
+  .youtube-home__featured {
+    border-right: none !important;
+  }
+
+  .youtube-home__wordmark {
+    font-weight: 900;
+  }
+
+  .youtube-home__search {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    gap: 0 !important;
+    max-width: 36rem;
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-radius: 999px;
+    overflow: hidden;
+    background: color-mix(in srgb, currentColor 4%, transparent);
+
+    .p-inputtext {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 2.5rem;
+      padding-left: 1rem !important;
+      padding-right: 0.75rem !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+
+      &:enabled:focus,
+      &:focus {
+        border: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+    }
+
+    .youtube-home__play-btn.p-button {
+      flex: 0 0 4rem;
+      width: 4rem !important;
+      min-width: 4rem !important;
+      height: 2.5rem !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      --p-button-danger-background: color-mix(in srgb, currentColor 10%, transparent);
+      --p-button-danger-hover-background: color-mix(in srgb, currentColor 16%, transparent);
+      --p-button-danger-active-background: color-mix(in srgb, currentColor 20%, transparent);
+      --p-button-danger-border-color: transparent;
+      --p-button-danger-hover-border-color: transparent;
+      --p-button-danger-active-border-color: transparent;
+      --p-button-danger-color: color-mix(in srgb, currentColor 72%, transparent);
+
+      &:hover,
+      &:active,
+      &:focus-visible {
+        border: 0 !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      .iconify,
+      svg {
+        width: 1.375rem !important;
+        height: 1.375rem !important;
+        font-size: 1.375rem !important;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .youtube-home__search-error {
+    .p-message.p-message-simple {
+      margin: 0;
+      padding: 0 0.25rem;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      outline: 0;
+    }
+
+    .p-message-text {
+      color: #f87171;
+      font-size: 0.75rem;
+      line-height: 1.35;
+    }
+
+    .p-message-close-button {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  .youtube-home__search-field:has(.youtube-home__search-error) .youtube-home__search {
+    border-color: color-mix(in srgb, #f87171 55%, transparent);
+  }
+}
+
+/* Beat Nova window-chrome focus ring inside the unified search pill */
+.owd-desktop--nova .owd-window.resizable-component:not(.nova-explorer-frame) .youtube-app {
+  .youtube-home__search .p-inputtext:focus,
+  .youtube-home__search .p-inputtext:enabled:focus {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
