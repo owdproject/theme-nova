@@ -4,6 +4,7 @@ import {
   addComponentsDir,
   addImportsDir,
   addPlugin,
+  installModule,
 } from '@nuxt/kit'
 import { defu } from 'defu'
 import { defineDesktopTheme } from '@owdproject/core'
@@ -32,9 +33,6 @@ const CHROME_COMPONENT_IGNORE = [
 export default defineDesktopTheme({
   meta: {
     name: 'desktop-theme-nova',
-  },
-  moduleDependencies: {
-    '@owdproject/kit-primevue': {},
   },
   defaults: {
     name: 'nova',
@@ -77,6 +75,8 @@ export default defineDesktopTheme({
         preset: Material,
       },
     }
+
+    await installModule('@owdproject/kit-primevue')
 
     registerThemeTailwindPath(nuxt, import.meta.url)
     registerTailwindPath(nuxt, resolve('./runtime/pages/**/*.{vue,mjs,ts}'))
