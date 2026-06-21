@@ -48,7 +48,12 @@ function onWindowNavDestroy() {
     </div>
 
     <div class="owd-window-nav__btn-group owd-window-nav__btn-group--append">
-      <slot name="append" />
+      <div
+        v-if="$slots.append"
+        class="owd-window-nav__btn-group owd-window-nav__btn-group--append-inner"
+      >
+        <slot name="append" />
+      </div>
 
       <ButtonWindowNavMinimize
         v-if="!windowController?.instanced || windowController?.isMinimizable"

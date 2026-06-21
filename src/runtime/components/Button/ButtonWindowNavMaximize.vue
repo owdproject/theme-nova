@@ -7,7 +7,7 @@ const icon = computed(
 </script>
 
 <template>
-  <ButtonWindowNav title="Maximize" class="owd-window-nav__button--maximize">
+  <DesktopWindowNavButton title="Maximize" class="owd-window-nav__button--maximize">
     <Icon :name="icon" :size="14" />
-  </ButtonWindowNav>
+  </DesktopWindowNavButton>
 </template>

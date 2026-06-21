@@ -158,6 +158,13 @@
     padding: 0 var(--nova-window-nav-padding-x);
   }
 
+  .owd-window-nav__btn-group--append-inner {
+    gap: var(--nova-window-nav-gap);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
   .owd-window-nav__button {
     width: var(--nova-window-control-size);
     height: var(--nova-window-control-size);

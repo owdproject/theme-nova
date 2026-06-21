@@ -8,6 +8,12 @@ const props = defineProps({
 
 <template>
   <DesktopWindow v-bind="$props">
+    <template #nav-prepend>
+      <slot name="nav-prepend" />
+    </template>
+    <template #nav-append>
+      <slot name="nav-append" />
+    </template>
     <iframe :src="src" />
   </DesktopWindow>
 </template>
