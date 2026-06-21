@@ -89,13 +89,14 @@ function onWindowNavDestroy() {
 .owd-window-nav__title {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   flex: 1 1 auto;
   min-width: 0;
   padding: 0 8px;
-  text-align: center;
+  text-align: left;
 }
 .owd-window-nav__title-inner {
-  margin: 0 auto;
+  margin: 0;
   max-width: 100%;
 }
 </style>
