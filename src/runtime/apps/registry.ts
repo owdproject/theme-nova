@@ -1,4 +1,5 @@
 import type { Nuxt } from '@nuxt/schema'
+import { hasDesktopModule } from '@owdproject/core'
 
 /**
  * Built-in Nova theme apps under `runtime/apps/<name>/`.
@@ -21,8 +22,6 @@ export const NOVA_THEME_BUILTIN_APPS: NovaThemeBuiltInApp[] = [
   {
     name: 'explorer',
     autoload: true,
-    when: (nuxt) =>
-      (nuxt.options.runtimeConfig.public.desktop as { modules?: string[] })
-        ?.modules?.some((m) => String(m).includes('module-fs')) ?? false,
+    when: (nuxt) => hasDesktopModule(nuxt, 'module-fs'),
   },
 ]
