@@ -1,12 +1,8 @@
 <script setup>
 import { useNovaAccentTheme } from "../../../../composables/useNovaAccentTheme";
-import {
-  NOVA_ACCENT_ORDER,
-  NOVA_ACCENT_META,
-} from "../../../../utils/novaAccent";
 import { useNovaMotion } from "../../../../composables/useNovaMotion";
 
-const { accentId, setAccent } = useNovaAccentTheme();
+const { accentId, setAccent, availableAccents, accentMeta } = useNovaAccentTheme();
 const { enabled: motionEnabled, setEnabled: setMotionEnabled } = useNovaMotion();
 
 function accentLabel(id) {
@@ -16,7 +12,7 @@ function accentLabel(id) {
 
 <template>
   <div class="nova-settings-section">
-    <section class="nova-settings-group">
+    <section v-if="availableAccents.length > 1" class="nova-settings-group">
       <header class="nova-settings-group__head">
         <h2 class="nova-settings-group__title">
           {{ $t("apps.settings.appearance.accentTitle") }}
@@ -31,7 +27,7 @@ function accentLabel(id) {
         :aria-label="$t('apps.settings.appearance.accentTitle')"
       >
         <button
-          v-for="id in NOVA_ACCENT_ORDER"
+          v-for="id in availableAccents"
           :key="id"
           type="button"
           role="radio"
@@ -41,7 +37,7 @@ function accentLabel(id) {
           @click="setAccent(id)"
         >
           <span class="nova-settings-accent__swatch" :data-accent="id">
-            <Icon :name="NOVA_ACCENT_META[id].icon" :size="32" />
+            <Icon :name="accentMeta[id]?.icon || 'mdi:waves'" :size="32" />
           </span>
           <span class="nova-settings-accent__label">{{
             $t(accentLabel(id))

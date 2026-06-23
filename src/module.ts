@@ -12,7 +12,6 @@ import {
   registerTailwindPath,
   registerThemeTailwindPath,
 } from '@owdproject/kit-tailwind/kit/registerTailwindPath'
-import { novaAccentBootstrapScript } from './runtime/utils/novaAccent'
 import Material from '@primeuix/themes/material'
 import {
   NOVA_EXPLORER_QUICK_ACCESS_SEED,
@@ -133,13 +132,18 @@ export default defineDesktopTheme({
         ? [head.script]
         : []
 
+    const novaConfig = (_options as any).nova || {}
+    const accentDefault = novaConfig.accents?.default ?? 'ocean'
+    const accentList = novaConfig.accents?.list ?? ['ocean', 'ember', 'forest', 'violet']
+    const bootstrapScript = `(function(){var el=document.documentElement,a=${JSON.stringify(accentList)},d=${JSON.stringify(accentDefault)};try{var s=localStorage.getItem("owd-nova-accent");if(s&&a.indexOf(s)!==-1){el.dataset.novaAccent=s}else{el.dataset.novaAccent=d}}catch(e){el.dataset.novaAccent=d}try{var m=localStorage.getItem("owd-nova-motion");el.dataset.novaMotion=m==='false'?'off':'on'}catch(e){el.dataset.novaMotion='on'}})();`
+
     nuxt.options.app.head = {
       ...head,
-      htmlAttrs: defu({ 'data-nova-accent': 'ocean' }, head.htmlAttrs ?? {}),
+      htmlAttrs: defu({ 'data-nova-accent': accentDefault }, head.htmlAttrs ?? {}),
       script: [
         {
           key: 'nova-accent-bootstrap',
-          innerHTML: novaAccentBootstrapScript,
+          innerHTML: bootstrapScript,
           tagPosition: 'head',
           type: 'text/javascript',
         },

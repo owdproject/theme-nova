@@ -1,20 +1,34 @@
+import { computed } from 'vue'
+import { useAppConfig } from 'nuxt/app'
 import {
-  NOVA_ACCENT_META,
-  NOVA_ACCENT_ORDER,
   novaAccentId,
-  type NovaAccentId,
 } from '../utils/novaAccent'
 
-/** Read/write Nova accent palette (ocean / ember / forest / violet). */
+/** Read/write Nova accent palette (ocean / ember / forest / violet / custom). */
 export function useNovaAccentTheme() {
+  const appConfig = useAppConfig()
+
+  const config = computed(() => appConfig.desktop?.nova?.accents)
+
+  const defaultAccent = computed(() => config.value?.default ?? 'ocean')
+  const availableAccents = computed(() => config.value?.list ?? ['ocean', 'ember', 'forest', 'violet'])
+  const accentMeta = computed(() => config.value?.meta ?? {
+    ocean: { id: 'ocean', icon: 'mdi:waves' },
+    ember: { id: 'ember', icon: 'mdi:fire' },
+    forest: { id: 'forest', icon: 'mdi:pine-tree' },
+    violet: { id: 'violet', icon: 'mdi:flower' },
+  })
+
   function cycleAccent() {
-    const index = NOVA_ACCENT_ORDER.indexOf(novaAccentId.value)
-    const next = NOVA_ACCENT_ORDER[(index + 1) % NOVA_ACCENT_ORDER.length]
+    const list = availableAccents.value
+    if (list.length === 0) return
+    const index = list.indexOf(novaAccentId.value)
+    const next = list[index === -1 ? 0 : (index + 1) % list.length]
     novaAccentId.value = next
   }
 
-  function setAccent(id: NovaAccentId) {
-    if (NOVA_ACCENT_ORDER.includes(id)) {
+  function setAccent(id: string) {
+    if (availableAccents.value.includes(id)) {
       novaAccentId.value = id
     }
   }
@@ -23,6 +37,8 @@ export function useNovaAccentTheme() {
     accentId: novaAccentId,
     cycleAccent,
     setAccent,
-    meta: NOVA_ACCENT_META,
+    defaultAccent,
+    availableAccents,
+    accentMeta,
   }
 }

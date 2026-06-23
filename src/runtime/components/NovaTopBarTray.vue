@@ -6,7 +6,6 @@ import { useDesktopVolumeStore } from "@owdproject/core/runtime/stores/storeDesk
 import { useDesktopWorkspaceStore } from "@owdproject/core/runtime/stores/storeDesktopWorkspace";
 import { useNovaQuickSettings } from "../composables/useNovaQuickSettings";
 import { useNovaAccentTheme } from "../composables/useNovaAccentTheme";
-import { NOVA_ACCENT_META } from "../utils/novaAccent";
 import { useNovaTrayClock } from "../composables/useNovaTrayClock";
 import { useNovaStartMenu } from "../composables/useNovaStartMenu";
 import { useNovaWorkspaces } from "../composables/useNovaWorkspaces";
@@ -19,7 +18,7 @@ const {
   close: closeQuickSettings,
   toggle: toggleQuickSettings
 } = useNovaQuickSettings();
-const { accentId, cycleAccent } = useNovaAccentTheme();
+const { accentId, cycleAccent, availableAccents, accentMeta } = useNovaAccentTheme();
 const { open: startMenuOpen } = useNovaStartMenu();
 const { enabled: workspacesEnabled } = useNovaWorkspaces();
 const { isCompact, isNarrow, isMedium } = useNovaTrayLayout();
@@ -29,7 +28,7 @@ const panelRef = useTemplateRef("panelRef");
 const { time, dateLabel } = useNovaTrayClock();
 const { charging, level, isSupported: batterySupported } = useBattery();
 const desktopVolumeStore = useDesktopVolumeStore();
-const accentIcon = computed(() => NOVA_ACCENT_META[accentId.value].icon);
+const accentIcon = computed(() => accentMeta.value[accentId.value]?.icon || "mdi:waves");
 const batteryPercent = computed(
   () => level.value != null ? Math.round(level.value * 100) : null
 );
@@ -188,6 +187,7 @@ function onAccentClick() {
       </button>
 
       <button
+        v-if="availableAccents.length > 1"
         type="button"
         class="nova-tray-btn nova-tray-btn--accent"
         :aria-label="$t('systemBar.tray.cycleAccent', { accent: $t(`systemBar.tray.accents.${accentId}`) })"
